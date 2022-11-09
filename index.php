@@ -27,25 +27,33 @@
     <title>Document</title>
     <!-- <link rel="stylesheet" href="css/bootstrap.min.css"> -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-Zenh87qX5JnK2Jl0vWa8Ck2rdkQ2Bzep5IDxbcnCeuOxjzrPF/et3URy9Bv1WTRi" crossorigin="anonymous">
+    <link rel="stylesheet" href="stylehome.css">
+    <script src="jshome.js"></script>
 </head>
-<body>
+<body onload="navbar()">
     <form>
-        <nav class="navbar navbar-expand-lg bg-white p-3 position-fixed position-absolute top-0 w-100" style="z-index: 5;">
+        <nav class="navbar navbar-expand-lg bg-white p-0 position-fixed position-absolute top-0 w-100 border-bottom" style="z-index: 5;">
             <div class="container-fluid">
-                <a class="navbar-brand" href="index.php"><h4>Optik Primadona</h4></a>
+                <a class="navbar-brand" href="index.php"><h4 class="m-0">Optik Primadona</h4></a>
                 <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
                 <span class="navbar-toggler-icon"></span>
                 </button>
                 <div class="collapse navbar-collapse" id="navbarSupportedContent">
                 <ul class="navbar-nav me-auto mb-2 mb-lg-0">
-                    <li class="nav-item">
-                        <a class="nav-link active" aria-current="page" href="#">Pencarian produk</a>
-                        <ul>
-                            
-                        </ul>
-                    </li>
-                    <li class="nav-item">
-                    <a class="nav-link" href="#">Link</a>
+                    <li class="nav-item brand">
+                        <a class="nav-link active" aria-current="page" href="#">Brand</a>
+                        <div class="isibrand bg-light position-fixed position-absolute p-3 border" style="left: 220px; top: 40px; display: none;">
+                            <ul>
+                            <?php
+                                $brand = mysqli_query($conn, "SELECT * FROM brand");
+                                while($row = mysqli_fetch_array($brand)){
+                                    echo "<li>";
+                                    echo "<a href='#' class='text-dark'>".$row["br_name"]."</a>";
+                                    echo "</li>";
+                                }
+                            ?>
+                            </ul>
+                        </div>
                     </li>
                     <li class="nav-item dropdown">
                     <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
@@ -172,4 +180,5 @@
     <script src="script/bootstrap.bundle.min.js"></script>
     <script src="script/jquery-3.6.1.min.js"></script>
 </body>
+
 </html>
