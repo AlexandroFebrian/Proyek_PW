@@ -27,6 +27,23 @@
                 }
             }
         }
+
+        if(isset($_GET["harga-minimum"])){
+            if($_GET["harga-minimum"] != ""){
+                $query .= "AND kc_price >= ".$_GET["harga-minimum"]." ";
+            }
+        }
+        if(isset($_GET["harga-minimum"]) && isset($_GET["harga-maximum"])){
+            if(($_GET["harga-minimum"] != "" && $_GET["harga-maximum"] != "") || ($_GET["harga-minimum"] == "" && $_GET["harga-maximum"] != "")){
+                $query .= "AND ";
+            }
+        }
+        if(isset($_GET["harga-maximum"])){
+            if($_GET["harga-maximum"] != ""){
+                $query .= "kc_price <= ".$_GET["harga-maximum"]." ";
+            }
+
+        }
     }
 
     $query .= "GROUP BY co_kc_id";
@@ -86,76 +103,78 @@
                         </ul>
                     </li>
                 </ul>
-                <!-- <form class="d-flex" role="search">
-                    <input class="form-control me-2" type="search" placeholder="Search" aria-label="Search">
-                    <button class="btn btn-outline-success" type="submit">Search</button>
-                </form> -->
                 </div>
             </div>
         </nav>
 
-        <div class="row justify-content-center mt-3">
-            <div class="col-4">
-                <ul class="pagination d-flex justify-content-center">
-                    <li class="page-item">
-                    <a class="page-link" href='product.php?page=<?php if ($page - 1 > 0) echo $page - 1; else echo "1";?>' aria-label="Previous">
-                        <span aria-hidden="true">&laquo;</span>
-                    </a>
-                    </li>
-                    <?php
-                        if ($page < 5 && $maxpage > 5) {
-                    ?>
-                        <li class="page-item"><a class="page-link" href="product.php?page=1">1</a></li>
-                        <li class="page-item"><a class="page-link" href="product.php?page=2">2</a></li>
-                        <li class="page-item"><a class="page-link" href="product.php?page=3">3</a></li>
-                        <li class="page-item"><a class="page-link" href="product.php?page=4">4</a></li>
-                        <li class="page-item"><a class="page-link" href="product.php?page=5">5</a></li>
-                        <li class="page-item"><a class="page-link">...</a></li>
-                        <li class="page-item"><a class="page-link" href="product.php?page=<?=$maxpage?>"><?=$maxpage?></a></li>
-                    <?php
-                        } else if ($maxpage <= 5) {
-                            for ($i = 0; $i < $maxpage; $i++) {
-                    ?>
-                        <li class="page-item"><a class="page-link" href="product.php?page=<?=$i + 1?>"><?=$i + 1?></a></li>
-                    <?php
-                            }
-                        } else if ($page > 4 && $page < $maxpage - 3) {
-                    ?>
-                        <li class="page-item"><a class="page-link" href="product.php?page=1">1</a></li>
-                        <li class="page-item"><a class="page-link">...</a></li>
-                        <li class="page-item"><a class="page-link" href='product.php?page=<?=$page - 1?>'><?= $page - 1 ?></a></li>
-                        <li class="page-item"><a class="page-link" href='product.php?page=<?=$page?>'><?= $page ?></a></li>
-                        <li class="page-item"><a class="page-link" href='product.php?page=<?=$page + 1?>'><?= $page + 1 ?></a></li>
-                        <li class="page-item"><a class="page-link">...</a></li>
-                        <li class="page-item"><a class="page-link" href="product.php?page=<?=$maxpage?>"><?=$maxpage?></a></li>
-                    <?php
-                        } else {
-                    ?>
-                        <li class="page-item"><a class="page-link" href="product.php?page=1">1</a></li>
-                        <li class="page-item"><a class="page-link">...</a></li>
-                        <li class="page-item"><a class="page-link" href="product.php?page=<?=$maxpage-4?>"><?=$maxpage-4?></a></li>
-                        <li class="page-item"><a class="page-link" href="product.php?page=<?=$maxpage-3?>"><?=$maxpage-3?></a></li>
-                        <li class="page-item"><a class="page-link" href="product.php?page=<?=$maxpage-2?>"><?=$maxpage-2?></a></li>
-                        <li class="page-item"><a class="page-link" href="product.php?page=<?=$maxpage-1?>"><?=$maxpage-1?></a></li>
-                        <li class="page-item"><a class="page-link" href="product.php?page=<?=$maxpage?>"><?=$maxpage?></a></li>
-                    <?php
-                        }
-                    ?>
-                    <a class="page-link" href='product.php?page=<?php if ($page + 1 < $maxpage) echo $page + 1; else echo $maxpage;?>' aria-label="Next">
-                        <span aria-hidden="true">&raquo;</span>
-                    </a>
-                    </li>
-                </ul>
-            </div>
-        </div>
+        
+        <div class="container-fluid pt-4">
 
-        <div class="container-fluid pt-3">
+            <!-- TOMBOL GANTI PAGE ATAS -->
+            <div class="row justify-content-center">
+                <div class="col-4">
+                    <ul class="pagination d-flex justify-content-center">
+                        <li class="page-item">
+                        <a class="page-link" href='product.php?page=<?php if ($page - 1 > 0) echo $page - 1; else echo "1";?>' aria-label="Previous">
+                            <span aria-hidden="true">&laquo;</span>
+                        </a>
+                        </li>
+                        <?php
+                            if ($page < 5 && $maxpage > 5) {
+                        ?>
+                            <li class="page-item"><a class="page-link" href="product.php?page=1">1</a></li>
+                            <li class="page-item"><a class="page-link" href="product.php?page=2">2</a></li>
+                            <li class="page-item"><a class="page-link" href="product.php?page=3">3</a></li>
+                            <li class="page-item"><a class="page-link" href="product.php?page=4">4</a></li>
+                            <li class="page-item"><a class="page-link" href="product.php?page=5">5</a></li>
+                            <li class="page-item"><a class="page-link">...</a></li>
+                            <li class="page-item"><a class="page-link" href="product.php?page=<?=$maxpage?>"><?=$maxpage?></a></li>
+                        <?php
+                            } else if ($maxpage <= 5) {
+                                for ($i = 0; $i < $maxpage; $i++) {
+                        ?>
+                            <li class="page-item"><a class="page-link" href="product.php?page=<?=$i + 1?>"><?=$i + 1?></a></li>
+                        <?php
+                                }
+                            } else if ($page > 4 && $page < $maxpage - 3) {
+                        ?>
+                            <li class="page-item"><a class="page-link" href="product.php?page=1">1</a></li>
+                            <li class="page-item"><a class="page-link">...</a></li>
+                            <li class="page-item"><a class="page-link" href='product.php?page=<?=$page - 1?>'><?= $page - 1 ?></a></li>
+                            <li class="page-item"><a class="page-link" href='product.php?page=<?=$page?>'><?= $page ?></a></li>
+                            <li class="page-item"><a class="page-link" href='product.php?page=<?=$page + 1?>'><?= $page + 1 ?></a></li>
+                            <li class="page-item"><a class="page-link">...</a></li>
+                            <li class="page-item"><a class="page-link" href="product.php?page=<?=$maxpage?>"><?=$maxpage?></a></li>
+                        <?php
+                            } else {
+                        ?>
+                            <li class="page-item"><a class="page-link" href="product.php?page=1">1</a></li>
+                            <li class="page-item"><a class="page-link">...</a></li>
+                            <li class="page-item"><a class="page-link" href="product.php?page=<?=$maxpage-4?>"><?=$maxpage-4?></a></li>
+                            <li class="page-item"><a class="page-link" href="product.php?page=<?=$maxpage-3?>"><?=$maxpage-3?></a></li>
+                            <li class="page-item"><a class="page-link" href="product.php?page=<?=$maxpage-2?>"><?=$maxpage-2?></a></li>
+                            <li class="page-item"><a class="page-link" href="product.php?page=<?=$maxpage-1?>"><?=$maxpage-1?></a></li>
+                            <li class="page-item"><a class="page-link" href="product.php?page=<?=$maxpage?>"><?=$maxpage?></a></li>
+                        <?php
+                            }
+                        ?>
+                        <a class="page-link" href='product.php?page=<?php if ($page + 1 < $maxpage) echo $page + 1; else echo $maxpage;?>' aria-label="Next">
+                            <span aria-hidden="true">&raquo;</span>
+                        </a>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+
+            <!-- FILTER WIDTH KECIL -->
             <div class="d-lg-none d-block">
                 <h1>test</h1>
             </div>    
 
             <div class="row">
                 <div class="col-1 col-lg-1"></div>
+
+                <!-- FILTER WIDTH BESAR -->
                 <div class="col-lg-2 d-lg-block d-none">
                     <h2 class="mt-2 ms-3">Filter</h2>
                     <div class="border">
@@ -168,13 +187,24 @@
                                 </h2>
                                 <div id="panelsStayOpen-collapseOne" class="accordion-collapse collapse border-bottom rounded-0" aria-labelledby="panelsStayOpen-headingOne" data-bs-parent="#accordionpanelsStayOpenExample">
                                     <div class="accordion-body">
+                                        <!-- MUNCULIN BRAND -->
                                         <ul>
                                             <?php
                                                 $filter_brand = mysqli_query($conn, "SELECT * FROM brand");
 
                                                 while($row = mysqli_fetch_array($filter_brand)){
                                             ?>        
-                                                <li><input type="checkbox" name='<?= $row["br_id"] ?>' value='<?= $row["br_id"] ?>' class="me-2" id='<?= $row["br_id"] ?>' style="width: 20px; height: 20px"><label for='<?= $row["br_id"] ?>'><?= $row["br_name"] ?></label></li>
+                                                <li>
+                                                    <input type="checkbox" name='<?= $row["br_id"] ?>' value='<?= $row["br_id"] ?>' class="me-2" id='<?= $row["br_id"] ?>' style="width: 20px; height: 20px" 
+                                                    <?php
+                                                        //BIAR BISA TETEP KECENTANG SETELAH REFRESH PAGE
+                                                        if(isset($_GET[$row["br_id"]])){
+                                                            echo "checked='checked'";
+                                                        } 
+                                                    ?>
+                                                    >
+                                                    <label for='<?= $row["br_id"] ?>'><?= $row["br_name"] ?></label>
+                                                </li>
                                                 
                                             <?php
                                                 }
@@ -194,13 +224,33 @@
                                     <div class="accordion-body">
                                         <div>
                                             <button class="p-2 px-3 border border-1" style="margin-right: -5px" type="input" >Rp</button>
-                                            <input type="text" name="harga-minimum" placeholder="Harga Minimum" class="p-2 w-70 border border-1">
+                                            <input type="number" min="0" name="harga-minimum" placeholder="Harga Minimum" class="p-2 w-70 border border-1"
+                                            <?php
+                                                //BIAR HARGA TETAP ADA SETELAH REFRESH
+                                                if(isset($_GET["harga-minimum"])){
+                                                    if($_GET["harga-minimum"] != ""){
+                                                        echo "value='".$_GET["harga-minimum"]."'";
+                                                    }
+
+                                                }
+                                            ?>
+                                            >
 
                                         </div>
                                         <br>
                                         <div>
                                             <button class="p-2 px-3 border border-1" style="margin-right: -5px" type="input" >Rp</button>
-                                            <input type="text" name="harga-maximum" placeholder="Harga Maximum" class="p-2 w-70">
+                                            <input type="number" min="0" name="harga-maximum" placeholder="Harga Maximum" class="p-2 w-70" 
+                                            <?php
+                                                //BIAR HARGA TETAP ADA SETELAH REFRESH
+                                                if(isset($_GET["harga-maximum"])){
+                                                    if($_GET["harga-maximum"] != ""){
+                                                        echo "value='".$_GET["harga-maximum"]."'";
+                                                    }
+
+                                                }
+                                            ?>
+                                            >
 
                                         </div>
                                     </div>
@@ -210,12 +260,10 @@
 
                         <button type="submit" class="btn w-100 h-100 border-top rounded-0" name="apply-filter">Apply</button>
                         
-                        
-                        <!-- <select name="filter-brand" id="">
-                            <option value="-">-</option>
-                        </select> -->
                     </div>
                 </div>
+
+                <!-- PRINT ITEM -->
                 <div class="col-lg-8 col-10">
                     <div class="row">
                         <?php
@@ -248,8 +296,12 @@
                     </div>
 
                 </div>
+
+
                 <div class="col-1 col-lg-1"></div>
             </div>
+
+            <!-- TOMBOL GANTI PAGE BAWAH -->
             <div class="row justify-content-center">
                 <div class="col-4">
                     <ul class="pagination d-flex justify-content-center">
