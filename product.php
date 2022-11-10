@@ -171,11 +171,11 @@
                 <h1>test</h1>
             </div>    
 
-            <div class="row">
-                <div class="col-1 col-lg-1"></div>
+            <div class="row d-flex justify-content-center">
+                <!-- <div class="col-1 col-lg-1"></div> -->
 
                 <!-- FILTER WIDTH BESAR -->
-                <div class="col-lg-2 d-lg-block d-none">
+                <div class="d-xxl-block d-none" style="width: 320px;">
                     <h2 class="mt-2 ms-3">Filter</h2>
                     <div class="border">
                         <div class="accordion accordion-flush" id="accordionFlushExample">
@@ -264,7 +264,7 @@
                 </div>
 
                 <!-- PRINT ITEM -->
-                <div class="col-lg-8 col-10">
+                <div class="" style="width: 1000px;">
                     <div class="row">
                         <?php
                             for ($i = ($page - 1) * 30; $i < $page * 30; $i++) {
@@ -275,7 +275,7 @@
                                     $co_link = $result[$i]["co_link"];
                                     $br_name = $result[$i]["br_name"];
                         ?>
-                                    <div class="col-xxl-4 col-md-6 col-12 d-flex justify-content-center">
+                                    <div class="col-xxl-4 col-lg-4 col-6 d-flex justify-content-center">
                                         <a href='<?= "detail.php?id=" . $kc_id ?>' class="text-black text-decoration-none">
                                             <div class="card text-center" style="width: 18rem; border: none;">
                                                 <img src='<?= $co_link ?>' class="card-img-top">
@@ -298,7 +298,7 @@
                 </div>
 
 
-                <div class="col-1 col-lg-1"></div>
+                <!-- <div class="col-1 col-lg-1"></div> -->
             </div>
 
             <!-- TOMBOL GANTI PAGE BAWAH -->
