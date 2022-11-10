@@ -1,22 +1,24 @@
 <?php
     require_once("Connection.php");
 
+    $result = [];
+    $tempresult = mysqli_query($conn, "SELECT * FROM kacamata JOIN color ON kc_id = co_kc_id JOIN brand ON kc_br_id = br_id GROUP BY co_kc_id");
+    while ($row = mysqli_fetch_array($tempresult)) {
+        $result[] = $row;
+    }
+
     $page = 1;
+    $maxpage = intval(count($result) / 30) + 1;
     if (isset($_GET["page"])) {
         $page = $_GET["page"];
     }
 
     if ($page < 1) {
         header("Location: index.php?page=1");
-    } else if ($page > 54) {
-        header("Location: index.php?page=54");
+    } else if ($page > $maxpage) {
+        header("Location: index.php?page=$maxpage");
     }
-
-    $result = [];
-    $tempresult = mysqli_query($conn, "SELECT * FROM kacamata JOIN color ON kc_id = co_kc_id JOIN brand ON kc_br_id = br_id GROUP BY co_kc_id");
-    while ($row = mysqli_fetch_array($tempresult)) {
-        $result[] = $row;
-    }
+?>
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -118,7 +120,7 @@
                         </a>
                         </li>
                         <?php
-                            if ($page < 5) {
+                            if ($page < 5 && $maxpage > 5) {
                         ?>
                             <li class="page-item"><a class="page-link" href="index.php?page=1">1</a></li>
                             <li class="page-item"><a class="page-link" href="index.php?page=2">2</a></li>
@@ -126,9 +128,15 @@
                             <li class="page-item"><a class="page-link" href="index.php?page=4">4</a></li>
                             <li class="page-item"><a class="page-link" href="index.php?page=5">5</a></li>
                             <li class="page-item"><a class="page-link">...</a></li>
-                            <li class="page-item"><a class="page-link" href="index.php?page=54">54</a></li>
+                            <li class="page-item"><a class="page-link" href="index.php?page=<?=$maxpage?>"><?=$maxpage?></a></li>
                         <?php
-                            } else if ($page > 4 && $page < 51) {
+                            } else if ($maxpage <= 5) {
+                                for ($i = 0; $i < $maxpage; $i++) {
+                        ?>
+                            <li class="page-item"><a class="page-link" href="index.php?page=<?=$i + 1?>"><?=$i + 1?></a></li>
+                        <?php
+                                }
+                            } else if ($page > 4 && $page < $maxpage - 3) {
                         ?>
                             <li class="page-item"><a class="page-link" href="index.php?page=1">1</a></li>
                             <li class="page-item"><a class="page-link">...</a></li>
@@ -136,21 +144,21 @@
                             <li class="page-item"><a class="page-link" href='index.php?page=<?=$page?>'><?= $page ?></a></li>
                             <li class="page-item"><a class="page-link" href='index.php?page=<?=$page + 1?>'><?= $page + 1 ?></a></li>
                             <li class="page-item"><a class="page-link">...</a></li>
-                            <li class="page-item"><a class="page-link" href="index.php?page=54">54</a></li>
+                            <li class="page-item"><a class="page-link" href="index.php?page=<?=$maxpage?>"><?=$maxpage?></a></li>
                         <?php
                             } else {
                         ?>
                             <li class="page-item"><a class="page-link" href="index.php?page=1">1</a></li>
                             <li class="page-item"><a class="page-link">...</a></li>
-                            <li class="page-item"><a class="page-link" href="index.php?page=50">50</a></li>
-                            <li class="page-item"><a class="page-link" href="index.php?page=51">51</a></li>
-                            <li class="page-item"><a class="page-link" href="index.php?page=52">52</a></li>
-                            <li class="page-item"><a class="page-link" href="index.php?page=53">53</a></li>
-                            <li class="page-item"><a class="page-link" href="index.php?page=54">54</a></li>
+                            <li class="page-item"><a class="page-link" href="index.php?page=<?=$maxpage-4?>"><?=$maxpage-4?></a></li>
+                            <li class="page-item"><a class="page-link" href="index.php?page=<?=$maxpage-3?>"><?=$maxpage-3?></a></li>
+                            <li class="page-item"><a class="page-link" href="index.php?page=<?=$maxpage-2?>"><?=$maxpage-2?></a></li>
+                            <li class="page-item"><a class="page-link" href="index.php?page=<?=$maxpage-1?>"><?=$maxpage-1?></a></li>
+                            <li class="page-item"><a class="page-link" href="index.php?page=<?=$maxpage?>"><?=$maxpage?></a></li>
                         <?php
                             }
                         ?>
-                        <a class="page-link" href='index.php?page=<?php if ($page + 1 < 54) echo $page + 1; else echo "54";?>' aria-label="Next">
+                        <a class="page-link" href='index.php?page=<?php if ($page + 1 < $maxpage) echo $page + 1; else echo $maxpage;?>' aria-label="Next">
                             <span aria-hidden="true">&raquo;</span>
                         </a>
                         </li>
