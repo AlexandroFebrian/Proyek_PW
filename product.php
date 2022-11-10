@@ -65,7 +65,7 @@
 
         
 
-        <div class="container-fluid" style="margin-top: 73px;">
+        <div class="container-fluid pt-3" style="margin-top: 73px;">
             <div class="d-lg-none d-block">
                 <h1>test</h1>
             </div>    
