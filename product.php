@@ -1,24 +1,22 @@
 <?php
     require_once("Connection.php");
 
-    $result = [];
-    $tempresult = mysqli_query($conn, "SELECT * FROM kacamata JOIN color ON kc_id = co_kc_id JOIN brand ON kc_br_id = br_id GROUP BY co_kc_id");
-    while ($row = mysqli_fetch_array($tempresult)) {
-        $result[] = $row;
-    }
-
     $page = 1;
-    $maxpage = intval(count($result) / 30) + 1;
     if (isset($_GET["page"])) {
         $page = $_GET["page"];
     }
 
     if ($page < 1) {
         header("Location: index.php?page=1");
-    } else if ($page > $maxpage) {
-        header("Location: index.php?page=$maxpage");
+    } else if ($page > 54) {
+        header("Location: index.php?page=54");
     }
-?>
+
+    $result = [];
+    $tempresult = mysqli_query($conn, "SELECT * FROM kacamata JOIN color ON kc_id = co_kc_id JOIN brand ON kc_br_id = br_id GROUP BY co_kc_id");
+    while ($row = mysqli_fetch_array($tempresult)) {
+        $result[] = $row;
+    }
 ?>
 <!DOCTYPE html>
 <html lang="en">
