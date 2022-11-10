@@ -7,8 +7,26 @@
     
     if(isset($_GET["apply-filter"])){
         $filter_brand = mysqli_query($conn, "SELECT * FROM brand");
+        
+        $tempfilter = [];
+        while($row = mysqli_fetch_array($filter_brand)){
+            if(isset($_GET[$row["br_id"]])){
+                $tempfilter[] = $row;
+            }
+        }
 
-        while($row = mysqli_fetch_array())
+        if(sizeof($tempfilter) > 0){
+            $query .= "WHERE ";
+
+            for($i = 0; $i < sizeof($tempfilter); $i++){
+                $query .= "br_id = '".$tempfilter[$i]["br_id"]."'";
+                if($i != sizeof($tempfilter)-1){
+                    $query .= " OR ";
+                }else{
+                    $query .= " ";
+                }
+            }
+        }
     }
 
     $query .= "GROUP BY co_kc_id";
