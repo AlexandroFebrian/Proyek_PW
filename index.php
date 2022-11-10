@@ -8,7 +8,7 @@
     }
 
     $page = 1;
-    $maxpage = intval(count($result) / 30);
+    $maxpage = intval(count($result) / 30) + 1;
     if (isset($_GET["page"])) {
         $page = $_GET["page"];
     }
