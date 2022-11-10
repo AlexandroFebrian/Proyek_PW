@@ -1,22 +1,17 @@
 <?php
     require_once("Connection.php");
     
+    if (isset($_POST["search-btn"])) {
+        $br_name = $_POST["search-val"];
+        $co_id = explode('-', $_POST["search-val"]);
+        $co_id = $co_id[count($co_id) - 1];
+        header("Location: product.php?br_name=$br_name&co_id=$co_id");
+    }
+
     $result = [];
-    $tempresult = mysqli_query($conn, "SELECT * FROM kacamata JOIN color ON kc_id = co_kc_id JOIN brand ON kc_br_id = br_id GROUP BY co_kc_id");
+    $tempresult = mysqli_query($conn, "SELECT * FROM kacamata JOIN color ON kc_id = co_kc_id JOIN brand ON kc_br_id = br_id AND br_id = 'BR008' AND kc_price > 1600000 GROUP BY co_kc_id ORDER BY kc_price DESC ");
     while ($row = mysqli_fetch_array($tempresult)) {
         $result[] = $row;
-    }
-
-    $page = 1;
-    $maxpage = intval(count($result) / 30) + 1;
-    if (isset($_GET["page"])) {
-        $page = $_GET["page"];
-    }
-
-    if ($page < 1) {
-        header("Location: index.php?page=1");
-    } else if ($page > $maxpage) {
-        header("Location: index.php?page=$maxpage");
     }
 ?>
 <!DOCTYPE html>
@@ -32,145 +27,140 @@
     <script src="jshome.js"></script>
 </head>
 <body>
-    <form>
-        <nav class="navbar navbar-expand-lg bg-white p-3 position-fixed position-absolute top-0 w-100 border-bottom" style="z-index: 5;">
+    <form method="POST">
+        <nav class="navbar navbar-expand-lg bg-white p-3 position-sticky top-0 w-100 border-bottom shadow" style="z-index: 5;">
             <div class="container-fluid">
                 <a class="navbar-brand" href="index.php"><h4 class="m-0">Optik Primadona</h4></a>
                 <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
                 <span class="navbar-toggler-icon"></span>
                 </button>
                 <div class="collapse navbar-collapse" id="navbarSupportedContent">
-                <ul class="navbar-nav me-auto mb-2 mb-lg-0">
-                    <li class="nav-item">
-                        <a class="nav-link" role="button" href="product.php">Semua Produk</a>
-                    </li>
-                    <li class="nav-item dropdown">
-                        <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-                        Dropdown
-                        </a>
-                        <ul class="dropdown-menu">
-                            <li><a class="dropdown-item" href="#">Action</a></li>
-                            <li><a class="dropdown-item" href="#">Another action</a></li>
-                            <li><hr class="dropdown-divider"></li>
-                            <li><a class="dropdown-item" href="#">Something else here</a></li>
-                        </ul>
-                    </li>
-                </ul>
-                <!-- <form class="d-flex" role="search">
-                    <input class="form-control me-2" type="search" placeholder="Search" aria-label="Search">
-                    <button class="btn btn-outline-success" type="submit">Search</button>
-                </form> -->
-                </div>
-            </div>
-        </nav>
-
-        <div id="carouselExampleFade" class="carousel slide carousel-fade" data-bs-ride="carousel" style="margin-top: 73px;">
-            <div class="carousel-inner">
-                <div class="carousel-item active" data-bs-interval="5000">
-                <img src="img/fot1.png" class="d-block w-100" alt="..." style="height: 100%;">
-                </div>
-                <div class="carousel-item" data-bs-interval="5000">
-                <img src="img/fot2.png" class="d-block w-100" alt="..." style="height: 100%;">
-                </div>
-                <div class="carousel-item" data-bs-interval="5000">
-                <img src="img/fot3.png" class="d-block w-100" alt="..." style="height: 100%;">
-                </div>
-            </div>
-        </div>
-
-        <div class="container-xxl">
-            <div class="row">
-                <div class="col">
-                    <h1>Popular Brand</h1>
-                </div>
-            </div>
-            
-            <div class="row">
-                <?php
-                    for ($i = ($page - 1) * 30; $i < $page * 30; $i++) {
-                        if (isset($result[$i])) {
-                            $kc_id = $result[$i]["kc_id"];
-                            $kc_price = $result[$i]["kc_price"];
-                            $co_id = $result[$i]["co_id"];
-                            $co_link = $result[$i]["co_link"];
-                            $br_name = $result[$i]["br_name"];
-                ?>
-                            <div class="col text-center me-4 mb-5">
-                                <a href='<?= "detail.php?id=" . $kc_id ?>' class="text-black text-decoration-none">
-                                    <div class="card" style="width: 18rem; border: none;">
-                                        <img src='<?= $co_link ?>' class="card-img-top">
-                                        <div class="card-body">
-                                            <h4 class="card-title"><?= $br_name ?></h4>
-                                            <p class="card-text fs-5"><?= "SKU-" . $co_id ?>
-                                            <br><?= "Rp " . number_format($kc_price) ?></p>
-                                        </div>
-                                    </div>
-                                </a>
-                            </div>
-                <?php
-                        }
-                    }
-                ?>
-            </div>
-            <div class="row justify-content-center">
-                <div class="col-4">
-                    <ul class="pagination">
-                        <li class="page-item">
-                        <a class="page-link" href='index.php?page=<?php if ($page - 1 > 0) echo $page - 1; else echo "1";?>' aria-label="Previous">
-                            <span aria-hidden="true">&laquo;</span>
-                        </a>
-                        </li>
-                        <?php
-                            if ($page < 5 && $maxpage > 5) {
-                        ?>
-                            <li class="page-item"><a class="page-link" href="index.php?page=1">1</a></li>
-                            <li class="page-item"><a class="page-link" href="index.php?page=2">2</a></li>
-                            <li class="page-item"><a class="page-link" href="index.php?page=3">3</a></li>
-                            <li class="page-item"><a class="page-link" href="index.php?page=4">4</a></li>
-                            <li class="page-item"><a class="page-link" href="index.php?page=5">5</a></li>
-                            <li class="page-item"><a class="page-link">...</a></li>
-                            <li class="page-item"><a class="page-link" href="index.php?page=<?=$maxpage?>"><?=$maxpage?></a></li>
-                        <?php
-                            } else if ($maxpage <= 5) {
-                                for ($i = 0; $i < $maxpage; $i++) {
-                        ?>
-                            <li class="page-item"><a class="page-link" href="index.php?page=<?=$i + 1?>"><?=$i + 1?></a></li>
-                        <?php
-                                }
-                            } else if ($page > 4 && $page < $maxpage - 3) {
-                        ?>
-                            <li class="page-item"><a class="page-link" href="index.php?page=1">1</a></li>
-                            <li class="page-item"><a class="page-link">...</a></li>
-                            <li class="page-item"><a class="page-link" href='index.php?page=<?=$page - 1?>'><?= $page - 1 ?></a></li>
-                            <li class="page-item"><a class="page-link" href='index.php?page=<?=$page?>'><?= $page ?></a></li>
-                            <li class="page-item"><a class="page-link" href='index.php?page=<?=$page + 1?>'><?= $page + 1 ?></a></li>
-                            <li class="page-item"><a class="page-link">...</a></li>
-                            <li class="page-item"><a class="page-link" href="index.php?page=<?=$maxpage?>"><?=$maxpage?></a></li>
-                        <?php
-                            } else {
-                        ?>
-                            <li class="page-item"><a class="page-link" href="index.php?page=1">1</a></li>
-                            <li class="page-item"><a class="page-link">...</a></li>
-                            <li class="page-item"><a class="page-link" href="index.php?page=<?=$maxpage-4?>"><?=$maxpage-4?></a></li>
-                            <li class="page-item"><a class="page-link" href="index.php?page=<?=$maxpage-3?>"><?=$maxpage-3?></a></li>
-                            <li class="page-item"><a class="page-link" href="index.php?page=<?=$maxpage-2?>"><?=$maxpage-2?></a></li>
-                            <li class="page-item"><a class="page-link" href="index.php?page=<?=$maxpage-1?>"><?=$maxpage-1?></a></li>
-                            <li class="page-item"><a class="page-link" href="index.php?page=<?=$maxpage?>"><?=$maxpage?></a></li>
-                        <?php
-                            }
-                        ?>
-                        <a class="page-link" href='index.php?page=<?php if ($page + 1 < $maxpage) echo $page + 1; else echo $maxpage;?>' aria-label="Next">
-                            <span aria-hidden="true">&raquo;</span>
-                        </a>
+                    <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+                        <li class="nav-item">
+                            <a class="nav-link" role="button" href="product.php">Semua Produk</a>
                         </li>
                     </ul>
                 </div>
             </div>
+            <div class="input-group mb-1 container-fluid mt-4 mt-lg-0">
+                <input type="text" class="form-control" placeholder="Cari brand disini" name="search-val">
+                <span class="rounded-end" style="background-color: lightgray;">
+                    <button class="btn" type="submit" name="search-btn"><img src="img/search.png" width="18px" class="opacity-50"></button>
+                </span>
+            </div>
+            <img src="img/cart.png" class="mx-3 opacity-50" width="30px">
+            <div class="fs-3 pb-2 opacity-75">|</div>
+            <button class="btn btn-outline-success mx-3" type="submit">Masuk</button>
+            <button class="btn btn-success me-2" type="submit">Daftar</button>
+        </nav>
+        <div id="carouselExampleFade" class="carousel slide carousel-fade shadow" data-bs-ride="carousel">
+            <div class="carousel-inner">
+                <div class="carousel-item active" data-bs-interval="5000">
+                <img src="img/fot1.png" class="d-block w-100" style="height: 100%;">
+                </div>
+                <div class="carousel-item" data-bs-interval="5000">
+                <img src="img/fot2.png" class="d-block w-100" style="height: 100%;">
+                </div>
+                <div class="carousel-item" data-bs-interval="5000">
+                <img src="img/fot3.png" class="d-block w-100" style="height: 100%;">
+                </div>
+            </div>
         </div>
+
+        <div class="container-xxl my-4">
+            <div class="row ms-2">
+                <div class="col">
+                    <h1>Popular Brand</h1>
+                </div>
+            </div>
+            <div class="container-fluid py-2">
+                <div class="d-flex flex-row flex-nowrap overflow-auto">
+                    <?php
+                        for ($i = 0; $i < count($result); $i++) {
+                            if (isset($result[$i])) {
+                                $kc_id = $result[$i]["kc_id"];
+                                $kc_price = $result[$i]["kc_price"];
+                                $co_id = $result[$i]["co_id"];
+                                $co_link = $result[$i]["co_link"];
+                                $br_name = $result[$i]["br_name"];
+                    ?>
+                                <div class="card card-block mx-2 shadow" style="min-width: auto;">
+                                    <div class="col text-center me-4 mb-5">
+                                        <a href='<?= "detail.php?id=" . $kc_id ?>' class="text-black text-decoration-none">
+                                            <div class="card" style="width: 18rem; border: none;">
+                                                <img src='<?= $co_link ?>' class="card-img-top">
+                                                <div class="card-body">
+                                                    <h4 class="card-title"><?= $br_name ?></h4>
+                                                    <p class="card-text fs-5"><?= "SKU-" . $co_id ?>
+                                                    <br><?= "Rp " . number_format($kc_price) ?></p>
+                                                </div>
+                                            </div>
+                                        </a>
+                                    </div>
+                                </div>
+                    <?php
+                            }
+                        }
+                    ?>
+                </div>
+            </div>
+        </div>
+        <footer>
+          <div class="bg-dark" id="scrollspyHeading5">
+            <div class="container-fluid bg-dark pt-3 pb-2 text-white">
+              <div class="container">
+                <div class="row">
+                  <div class="col-12 col-lg-6 mb-4">
+                    <h2 class="fw-bold text-center">Send us Mail!</h2>
+                    <form action="halaman2.html">
+                      <div class="mb-3">
+                        <label for="exampleInputEmail1" class="form-label">Email address</label>
+                        <input type="email" class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp">
+                        <div id="emailHelp" class="form-text">We'll never share your email with anyone else.</div>
+                      </div>
+                      <div class="mb-3">
+                        <label for="exampleInputPassword1" class="form-label">Mail</label>
+                        <input type="text" class="form-control" id="exampleInputPassword1">
+                      </div>
+                      <div class="mb-3 form-check">
+                        <input type="checkbox" class="form-check-input" id="exampleCheck1">
+                        <label class="form-check-label" for="exampleCheck1">Let us send you an email</label>
+                      </div>
+                      <button type="submit" class="btn btn-primary fw-bold">Submit</button>
+                    </form>
+                  </div>
+                  <div class="col-12 col-lg-6 text-center mt-auto mb-auto">
+                    <p>
+                      <a class="btn btn-success fw-bold" data-bs-toggle="collapse" href="#collapseExample" role="button" aria-expanded="false" aria-controls="collapseExample">
+                        Customer Care
+                      </a>
+                    </p>
+                    <div class="collapse" id="collapseExample">
+                      <div class="card card-body text-success fw-bold mb-3">
+                        Email : careprimadona@care.co.id
+                      </div>
+                    </div>
+                    <p>
+                      <a class="btn btn-danger fw-bold" data-bs-toggle="collapse" href="#collapseExample" role="button" aria-expanded="false" aria-controls="collapseExample">
+                        Contact Person
+                      </a>
+                    </p>
+                    <div class="collapse" id="collapseExample">
+                      <div class="card card-body text-danger fw-bold">
+                        Email : optikprimadona@official.co.id <br>
+                        Phone : (031) 5231452
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div class="row mt-3">
+                <p class="text-center fw-bold">Copyright &copy; 2021 Optik Primadona, Inc.</p>
+              </div>
+            </div>
+          </div>
+        </footer>
     </form>
-    <footer class="p-3" style="background-color: gray;">
-        <h2>ini footer</h2>
-    </footer>
 
 
 
