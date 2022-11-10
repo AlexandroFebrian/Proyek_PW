@@ -2,7 +2,18 @@
     require_once("Connection.php");
 
     $result = [];
-    $tempresult = mysqli_query($conn, "SELECT * FROM kacamata JOIN color ON kc_id = co_kc_id JOIN brand ON kc_br_id = br_id GROUP BY co_kc_id");
+
+    $query = "SELECT * FROM kacamata JOIN color ON kc_id = co_kc_id JOIN brand ON kc_br_id = br_id ";
+    
+    if(isset($_GET["apply-filter"])){
+        $filter_brand = mysqli_query($conn, "SELECT * FROM brand");
+
+        
+    }
+
+    $query .= "GROUP BY co_kc_id";
+    
+    $tempresult = mysqli_query($conn, $query);
     while ($row = mysqli_fetch_array($tempresult)) {
         $result[] = $row;
     }
@@ -18,6 +29,7 @@
     } else if ($page > $maxpage) {
         header("Location: product.php?page=$maxpage");
     }
+
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -28,12 +40,12 @@
     <title>Document</title>
     <link rel="stylesheet" href="css/bootstrap.min.css">
     <!-- <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-Zenh87qX5JnK2Jl0vWa8Ck2rdkQ2Bzep5IDxbcnCeuOxjzrPF/et3URy9Bv1WTRi" crossorigin="anonymous"> -->
-    <link rel="stylesheet" href="css/stylehome.css">
+    <link rel="stylesheet" href="css/product.css">
     <script src="jshome.js"></script>
 </head>
 <body>
-    <form>
-        <nav class="navbar navbar-expand-lg bg-white p-3 position-fixed position-absolute top-0 w-100 border-bottom" style="z-index: 5;">
+    <form method="GET">
+        <nav class="navbar navbar-expand-lg bg-white p-3 position-fixed position-sticky top-0 w-100 border-bottom" style="z-index: 10;">
             <div class="container-fluid">
                 <a class="navbar-brand" href="index.php"><h4 class="m-0">Optik Primadona</h4></a>
                 <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
@@ -64,9 +76,62 @@
             </div>
         </nav>
 
-        
+        <div class="row justify-content-center mt-3">
+            <div class="col-4">
+                <ul class="pagination d-flex justify-content-center">
+                    <li class="page-item">
+                    <a class="page-link" href='product.php?page=<?php if ($page - 1 > 0) echo $page - 1; else echo "1";?>' aria-label="Previous">
+                        <span aria-hidden="true">&laquo;</span>
+                    </a>
+                    </li>
+                    <?php
+                        if ($page < 5 && $maxpage > 5) {
+                    ?>
+                        <li class="page-item"><a class="page-link" href="product.php?page=1">1</a></li>
+                        <li class="page-item"><a class="page-link" href="product.php?page=2">2</a></li>
+                        <li class="page-item"><a class="page-link" href="product.php?page=3">3</a></li>
+                        <li class="page-item"><a class="page-link" href="product.php?page=4">4</a></li>
+                        <li class="page-item"><a class="page-link" href="product.php?page=5">5</a></li>
+                        <li class="page-item"><a class="page-link">...</a></li>
+                        <li class="page-item"><a class="page-link" href="product.php?page=<?=$maxpage?>"><?=$maxpage?></a></li>
+                    <?php
+                        } else if ($maxpage <= 5) {
+                            for ($i = 0; $i < $maxpage; $i++) {
+                    ?>
+                        <li class="page-item"><a class="page-link" href="product.php?page=<?=$i + 1?>"><?=$i + 1?></a></li>
+                    <?php
+                            }
+                        } else if ($page > 4 && $page < $maxpage - 3) {
+                    ?>
+                        <li class="page-item"><a class="page-link" href="product.php?page=1">1</a></li>
+                        <li class="page-item"><a class="page-link">...</a></li>
+                        <li class="page-item"><a class="page-link" href='product.php?page=<?=$page - 1?>'><?= $page - 1 ?></a></li>
+                        <li class="page-item"><a class="page-link" href='product.php?page=<?=$page?>'><?= $page ?></a></li>
+                        <li class="page-item"><a class="page-link" href='product.php?page=<?=$page + 1?>'><?= $page + 1 ?></a></li>
+                        <li class="page-item"><a class="page-link">...</a></li>
+                        <li class="page-item"><a class="page-link" href="product.php?page=<?=$maxpage?>"><?=$maxpage?></a></li>
+                    <?php
+                        } else {
+                    ?>
+                        <li class="page-item"><a class="page-link" href="product.php?page=1">1</a></li>
+                        <li class="page-item"><a class="page-link">...</a></li>
+                        <li class="page-item"><a class="page-link" href="product.php?page=<?=$maxpage-4?>"><?=$maxpage-4?></a></li>
+                        <li class="page-item"><a class="page-link" href="product.php?page=<?=$maxpage-3?>"><?=$maxpage-3?></a></li>
+                        <li class="page-item"><a class="page-link" href="product.php?page=<?=$maxpage-2?>"><?=$maxpage-2?></a></li>
+                        <li class="page-item"><a class="page-link" href="product.php?page=<?=$maxpage-1?>"><?=$maxpage-1?></a></li>
+                        <li class="page-item"><a class="page-link" href="product.php?page=<?=$maxpage?>"><?=$maxpage?></a></li>
+                    <?php
+                        }
+                    ?>
+                    <a class="page-link" href='product.php?page=<?php if ($page + 1 < $maxpage) echo $page + 1; else echo $maxpage;?>' aria-label="Next">
+                        <span aria-hidden="true">&raquo;</span>
+                    </a>
+                    </li>
+                </ul>
+            </div>
+        </div>
 
-        <div class="container-fluid pt-3" style="margin-top: 73px;">
+        <div class="container-fluid pt-3">
             <div class="d-lg-none d-block">
                 <h1>test</h1>
             </div>    
@@ -74,7 +139,64 @@
             <div class="row">
                 <div class="col-1 col-lg-1"></div>
                 <div class="col-lg-2 d-lg-block d-none">
-                    <h1>aspdkjasp</h1>
+                    <h2 class="mt-2 ms-3">Filter</h2>
+                    <div class="border">
+                        <div class="accordion accordion-flush" id="accordionFlushExample">
+                            <div class="accordion-item">
+                                <h2 class="accordion-header" id="panelsStayOpen-headingOne">
+                                <button class="accordion-button collapsed border-bottom rounded-0" type="button" data-bs-toggle="collapse" data-bs-target="#panelsStayOpen-collapseOne" aria-expanded="false" aria-controls="panelsStayOpen-collapseOne">
+                                    Brand
+                                </button>
+                                </h2>
+                                <div id="panelsStayOpen-collapseOne" class="accordion-collapse collapse border-bottom rounded-0" aria-labelledby="panelsStayOpen-headingOne" data-bs-parent="#accordionpanelsStayOpenExample">
+                                    <div class="accordion-body">
+                                        <ul>
+                                            <?php
+                                                $filter_brand = mysqli_query($conn, "SELECT * FROM brand");
+
+                                                while($row = mysqli_fetch_array($filter_brand)){
+                                            ?>        
+                                                <li><input type="checkbox" name='<?= $row["br_id"] ?>' value='<?= $row["br_id"] ?>' class="me-2" id='<?= $row["br_id"] ?>' style="width: 20px; height: 20px"><label for='<?= $row["br_id"] ?>'><?= $row["br_name"] ?></label></li>
+                                                
+                                            <?php
+                                                }
+                                            ?>
+                                        </ul>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="accordion-item" style="margin-top: -1px;">
+                                <h2 class="accordion-header" id="panelsStayOpen-headingTwo">
+                                <button class="accordion-button collapsed border-bottom rounded-0border-bottom rounded-0" type="button" data-bs-toggle="collapse" data-bs-target="#panelsStayOpen-collapseTwo" aria-expanded="false" aria-controls="panelsStayOpen-collapseTwo">
+                                    Harga
+                                </button>
+                                </h2>
+                                <div id="panelsStayOpen-collapseTwo" class="accordion-collapse collapse rounded-0" aria-labelledby="flush-headingTwo" data-bs-parent="#accordionpanelsStayOpenExample">
+                                    <div class="accordion-body">
+                                        <div>
+                                            <button class="p-2 px-3 border border-1" style="margin-right: -5px" type="input" >Rp</button>
+                                            <input type="text" name="harga-minimum" placeholder="Harga Minimum" class="p-2 w-70 border border-1">
+
+                                        </div>
+                                        <br>
+                                        <div>
+                                            <button class="p-2 px-3 border border-1" style="margin-right: -5px" type="input" >Rp</button>
+                                            <input type="text" name="harga-maximum" placeholder="Harga Maximum" class="p-2 w-70">
+
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <button type="submit" class="btn w-100 h-100 border-top rounded-0" name="apply-filter">Apply</button>
+                        
+                        
+                        <!-- <select name="filter-brand" id="">
+                            <option value="-">-</option>
+                        </select> -->
+                    </div>
                 </div>
                 <div class="col-lg-8 col-10">
                     <div class="row">
@@ -112,7 +234,7 @@
             </div>
             <div class="row justify-content-center">
                 <div class="col-4">
-                    <ul class="pagination">
+                    <ul class="pagination d-flex justify-content-center">
                         <li class="page-item">
                         <a class="page-link" href='product.php?page=<?php if ($page - 1 > 0) echo $page - 1; else echo "1";?>' aria-label="Previous">
                             <span aria-hidden="true">&laquo;</span>
@@ -175,5 +297,7 @@
     <script src="script/bootstrap.bundle.min.js"></script>
     <script src="script/jquery-3.6.1.min.js"></script>
 </body>
+<script>
 
+</script>
 </html>
