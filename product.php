@@ -14,9 +14,9 @@
     }
 
     if ($page < 1) {
-        header("Location: index.php?page=1");
+        header("Location: product.php?page=1");
     } else if ($page > $maxpage) {
-        header("Location: index.php?page=$maxpage");
+        header("Location: product.php?page=$maxpage");
     }
 ?>
 ?>
@@ -115,50 +115,50 @@
                 <div class="col-4">
                     <ul class="pagination">
                         <li class="page-item">
-                        <a class="page-link" href='index.php?page=<?php if ($page - 1 > 0) echo $page - 1; else echo "1";?>' aria-label="Previous">
+                        <a class="page-link" href='product.php?page=<?php if ($page - 1 > 0) echo $page - 1; else echo "1";?>' aria-label="Previous">
                             <span aria-hidden="true">&laquo;</span>
                         </a>
                         </li>
                         <?php
                             if ($page < 5 && $maxpage > 5) {
                         ?>
-                            <li class="page-item"><a class="page-link" href="index.php?page=1">1</a></li>
-                            <li class="page-item"><a class="page-link" href="index.php?page=2">2</a></li>
-                            <li class="page-item"><a class="page-link" href="index.php?page=3">3</a></li>
-                            <li class="page-item"><a class="page-link" href="index.php?page=4">4</a></li>
-                            <li class="page-item"><a class="page-link" href="index.php?page=5">5</a></li>
+                            <li class="page-item"><a class="page-link" href="product.php?page=1">1</a></li>
+                            <li class="page-item"><a class="page-link" href="product.php?page=2">2</a></li>
+                            <li class="page-item"><a class="page-link" href="product.php?page=3">3</a></li>
+                            <li class="page-item"><a class="page-link" href="product.php?page=4">4</a></li>
+                            <li class="page-item"><a class="page-link" href="product.php?page=5">5</a></li>
                             <li class="page-item"><a class="page-link">...</a></li>
-                            <li class="page-item"><a class="page-link" href="index.php?page=<?=$maxpage?>"><?=$maxpage?></a></li>
+                            <li class="page-item"><a class="page-link" href="product.php?page=<?=$maxpage?>"><?=$maxpage?></a></li>
                         <?php
                             } else if ($maxpage <= 5) {
                                 for ($i = 0; $i < $maxpage; $i++) {
                         ?>
-                            <li class="page-item"><a class="page-link" href="index.php?page=<?=$i + 1?>"><?=$i + 1?></a></li>
+                            <li class="page-item"><a class="page-link" href="product.php?page=<?=$i + 1?>"><?=$i + 1?></a></li>
                         <?php
                                 }
                             } else if ($page > 4 && $page < $maxpage - 3) {
                         ?>
-                            <li class="page-item"><a class="page-link" href="index.php?page=1">1</a></li>
+                            <li class="page-item"><a class="page-link" href="product.php?page=1">1</a></li>
                             <li class="page-item"><a class="page-link">...</a></li>
-                            <li class="page-item"><a class="page-link" href='index.php?page=<?=$page - 1?>'><?= $page - 1 ?></a></li>
-                            <li class="page-item"><a class="page-link" href='index.php?page=<?=$page?>'><?= $page ?></a></li>
-                            <li class="page-item"><a class="page-link" href='index.php?page=<?=$page + 1?>'><?= $page + 1 ?></a></li>
+                            <li class="page-item"><a class="page-link" href='product.php?page=<?=$page - 1?>'><?= $page - 1 ?></a></li>
+                            <li class="page-item"><a class="page-link" href='product.php?page=<?=$page?>'><?= $page ?></a></li>
+                            <li class="page-item"><a class="page-link" href='product.php?page=<?=$page + 1?>'><?= $page + 1 ?></a></li>
                             <li class="page-item"><a class="page-link">...</a></li>
-                            <li class="page-item"><a class="page-link" href="index.php?page=<?=$maxpage?>"><?=$maxpage?></a></li>
+                            <li class="page-item"><a class="page-link" href="product.php?page=<?=$maxpage?>"><?=$maxpage?></a></li>
                         <?php
                             } else {
                         ?>
-                            <li class="page-item"><a class="page-link" href="index.php?page=1">1</a></li>
+                            <li class="page-item"><a class="page-link" href="product.php?page=1">1</a></li>
                             <li class="page-item"><a class="page-link">...</a></li>
-                            <li class="page-item"><a class="page-link" href="index.php?page=<?=$maxpage-4?>"><?=$maxpage-4?></a></li>
-                            <li class="page-item"><a class="page-link" href="index.php?page=<?=$maxpage-3?>"><?=$maxpage-3?></a></li>
-                            <li class="page-item"><a class="page-link" href="index.php?page=<?=$maxpage-2?>"><?=$maxpage-2?></a></li>
-                            <li class="page-item"><a class="page-link" href="index.php?page=<?=$maxpage-1?>"><?=$maxpage-1?></a></li>
-                            <li class="page-item"><a class="page-link" href="index.php?page=<?=$maxpage?>"><?=$maxpage?></a></li>
+                            <li class="page-item"><a class="page-link" href="product.php?page=<?=$maxpage-4?>"><?=$maxpage-4?></a></li>
+                            <li class="page-item"><a class="page-link" href="product.php?page=<?=$maxpage-3?>"><?=$maxpage-3?></a></li>
+                            <li class="page-item"><a class="page-link" href="product.php?page=<?=$maxpage-2?>"><?=$maxpage-2?></a></li>
+                            <li class="page-item"><a class="page-link" href="product.php?page=<?=$maxpage-1?>"><?=$maxpage-1?></a></li>
+                            <li class="page-item"><a class="page-link" href="product.php?page=<?=$maxpage?>"><?=$maxpage?></a></li>
                         <?php
                             }
                         ?>
-                        <a class="page-link" href='index.php?page=<?php if ($page + 1 < $maxpage) echo $page + 1; else echo $maxpage;?>' aria-label="Next">
+                        <a class="page-link" href='product.php?page=<?php if ($page + 1 < $maxpage) echo $page + 1; else echo $maxpage;?>' aria-label="Next">
                             <span aria-hidden="true">&raquo;</span>
                         </a>
                         </li>
