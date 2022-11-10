@@ -8,7 +8,7 @@
     if(isset($_GET["apply-filter"])){
         $filter_brand = mysqli_query($conn, "SELECT * FROM brand");
 
-        
+        while($row = mysqli_fetch_array())
     }
 
     $query .= "GROUP BY co_kc_id";
