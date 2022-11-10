@@ -25,8 +25,8 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Document</title>
-    <!-- <link rel="stylesheet" href="css/bootstrap.min.css"> -->
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-Zenh87qX5JnK2Jl0vWa8Ck2rdkQ2Bzep5IDxbcnCeuOxjzrPF/et3URy9Bv1WTRi" crossorigin="anonymous">
+    <link rel="stylesheet" href="css/bootstrap.min.css">
+    <!-- <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-Zenh87qX5JnK2Jl0vWa8Ck2rdkQ2Bzep5IDxbcnCeuOxjzrPF/et3URy9Bv1WTRi" crossorigin="anonymous"> -->
     <link rel="stylesheet" href="css/stylehome.css">
     <script src="jshome.js"></script>
 </head>
@@ -40,21 +40,8 @@
                 </button>
                 <div class="collapse navbar-collapse" id="navbarSupportedContent">
                 <ul class="navbar-nav me-auto mb-2 mb-lg-0">
-                    <li class="nav-item dropdown">
-                        <a class="nav-link dropdown-toggle" role="button" data-bs-toggle="dropdown" aria-expanded="false">Cari Produk</a>
-                        <div class="dropdown-menu">
-                            <ul class="p-0">
-                            <?php
-                                $brand = mysqli_query($conn, "SELECT * FROM brand");
-                                while($row = mysqli_fetch_array($brand)){
-                                    echo "<li>";
-                                    echo "<a href='#' class='text-dark dropdown-item'>".$row["br_name"]."</a>";
-                                    echo "</li><hr class='m-0'>";
-                                }
-                            ?>
-                            </ul>
-
-                        </div>
+                    <li class="nav-item">
+                        <a class="nav-link" role="button" href="product.php">Semua Produk</a>
                     </li>
                     <li class="nav-item dropdown">
                         <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
@@ -79,12 +66,16 @@
         
 
         <div class="container-fluid" style="margin-top: 73px;">
-                       
-            <div class="row mx-auto">
-                <div class="col-2">
-                                <h1>aspdkjasp</h1>
+            <div class="d-lg-none d-block">
+                <h1>test</h1>
+            </div>    
+
+            <div class="row">
+                <div class="col-1 col-lg-1"></div>
+                <div class="col-lg-2 d-lg-block d-none">
+                    <h1>aspdkjasp</h1>
                 </div>
-                <div class="col-8">
+                <div class="col-lg-8 col-10">
                     <div class="row">
                         <?php
                             for ($i = ($page - 1) * 30; $i < $page * 30; $i++) {
@@ -95,9 +86,9 @@
                                     $co_link = $result[$i]["co_link"];
                                     $br_name = $result[$i]["br_name"];
                         ?>
-                                    <div class="col text-center me-4 mb-5">
+                                    <div class="col-xxl-4 col-md-6 col-12 d-flex justify-content-center">
                                         <a href='<?= "detail.php?id=" . $kc_id ?>' class="text-black text-decoration-none">
-                                            <div class="card" style="width: 18rem; border: none;">
+                                            <div class="card text-center" style="width: 18rem; border: none;">
                                                 <img src='<?= $co_link ?>' class="card-img-top">
                                                 <div class="card-body">
                                                     <h4 class="card-title"><?= $br_name ?></h4>
@@ -105,6 +96,7 @@
                                                     <br><?= "Rp " . number_format($kc_price) ?></p>
                                                 </div>
                                             </div>
+
                                         </a>
                                     </div>
                         <?php
@@ -115,6 +107,7 @@
                     </div>
 
                 </div>
+                <div class="col-1 col-lg-1"></div>
             </div>
             <div class="row justify-content-center">
                 <div class="col-4">
