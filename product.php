@@ -40,9 +40,21 @@
                 </button>
                 <div class="collapse navbar-collapse" id="navbarSupportedContent">
                 <ul class="navbar-nav me-auto mb-2 mb-lg-0">
-                    <li class="nav-item">
-                        <a class="nav-link" role="button" href="product.php">Semua Produk</a>
-                        
+                    <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle" role="button" data-bs-toggle="dropdown" aria-expanded="false">Cari Produk</a>
+                        <div class="dropdown-menu">
+                            <ul class="p-0">
+                            <?php
+                                $brand = mysqli_query($conn, "SELECT * FROM brand");
+                                while($row = mysqli_fetch_array($brand)){
+                                    echo "<li>";
+                                    echo "<a href='#' class='text-dark dropdown-item'>".$row["br_name"]."</a>";
+                                    echo "</li><hr class='m-0'>";
+                                }
+                            ?>
+                            </ul>
+
+                        </div>
                     </li>
                     <li class="nav-item dropdown">
                         <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
@@ -64,53 +76,45 @@
             </div>
         </nav>
 
-        <div id="carouselExampleFade" class="carousel slide carousel-fade" data-bs-ride="carousel" style="margin-top: 73px;">
-            <div class="carousel-inner">
-                <div class="carousel-item active" data-bs-interval="5000">
-                <img src="img/fot1.png" class="d-block w-100" alt="..." style="height: 100%;">
-                </div>
-                <div class="carousel-item" data-bs-interval="5000">
-                <img src="img/fot2.png" class="d-block w-100" alt="..." style="height: 100%;">
-                </div>
-                <div class="carousel-item" data-bs-interval="5000">
-                <img src="img/fot3.png" class="d-block w-100" alt="..." style="height: 100%;">
-                </div>
-            </div>
-        </div>
+        
 
-        <div class="container-xxl">
-            <div class="row">
-                <div class="col">
-                    <h1>Popular Brand</h1>
+        <div class="container-fluid" style="margin-top: 73px;">
+                       
+            <div class="row mx-auto">
+                <div class="col-2">
+                                <h1>aspdkjasp</h1>
                 </div>
-            </div>
-            
-            <div class="row">
-                <?php
-                    for ($i = ($page - 1) * 30; $i < $page * 30; $i++) {
-                        if (isset($result[$i])) {
-                            $kc_id = $result[$i]["kc_id"];
-                            $kc_price = $result[$i]["kc_price"];
-                            $co_id = $result[$i]["co_id"];
-                            $co_link = $result[$i]["co_link"];
-                            $br_name = $result[$i]["br_name"];
-                ?>
-                            <div class="col text-center me-4 mb-5">
-                                <a href='<?= "detail.php?id=" . $kc_id ?>' class="text-black text-decoration-none">
-                                    <div class="card" style="width: 18rem; border: none;">
-                                        <img src='<?= $co_link ?>' class="card-img-top">
-                                        <div class="card-body">
-                                            <h4 class="card-title"><?= $br_name ?></h4>
-                                            <p class="card-text fs-5"><?= "SKU-" . $co_id ?>
-                                            <br><?= "Rp " . number_format($kc_price) ?></p>
-                                        </div>
+                <div class="col-8">
+                    <div class="row">
+                        <?php
+                            for ($i = ($page - 1) * 30; $i < $page * 30; $i++) {
+                                if (isset($result[$i])) {
+                                    $kc_id = $result[$i]["kc_id"];
+                                    $kc_price = $result[$i]["kc_price"];
+                                    $co_id = $result[$i]["co_id"];
+                                    $co_link = $result[$i]["co_link"];
+                                    $br_name = $result[$i]["br_name"];
+                        ?>
+                                    <div class="col text-center me-4 mb-5">
+                                        <a href='<?= "detail.php?id=" . $kc_id ?>' class="text-black text-decoration-none">
+                                            <div class="card" style="width: 18rem; border: none;">
+                                                <img src='<?= $co_link ?>' class="card-img-top">
+                                                <div class="card-body">
+                                                    <h4 class="card-title"><?= $br_name ?></h4>
+                                                    <p class="card-text fs-5"><?= "SKU-" . $co_id ?>
+                                                    <br><?= "Rp " . number_format($kc_price) ?></p>
+                                                </div>
+                                            </div>
+                                        </a>
                                     </div>
-                                </a>
-                            </div>
-                <?php
-                        }
-                    }
-                ?>
+                        <?php
+                                }
+                            }
+                        ?>
+
+                    </div>
+
+                </div>
             </div>
             <div class="row justify-content-center">
                 <div class="col-4">
