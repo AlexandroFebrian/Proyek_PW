@@ -1,25 +1,70 @@
 <?php
     require_once("Connection.php");
-
+    
     $result = [];
 
     $query = "SELECT * FROM kacamata JOIN color ON kc_id = co_kc_id JOIN brand ON kc_br_id = br_id ";
     
-    if(isset($_GET["apply-filter"])){
+    // if(isset($_GET["apply-filter"])){
+    //     $filter_brand = mysqli_query($conn, "SELECT * FROM brand");
+        
+    //     $tempfilter = [];
+        // while($row = mysqli_fetch_array($filter_brand)){
+        //     if(isset($_GET[$row["br_id"]])){
+        //         $tempfilter[] = $row;
+        //     }
+        // }
+
+        // if(sizeof($tempfilter) > 0){
+        //     $query .= "WHERE ";
+
+        //     for($i = 0; $i < sizeof($tempfilter); $i++){
+        //         $query .= "br_id = '".$tempfilter[$i]["br_id"]."'";
+        //         if($i != sizeof($tempfilter)-1){
+        //             $query .= " OR ";
+        //         }else{
+        //             $query .= " ";
+        //         }
+        //     }
+        // }
+
+    //     if(isset($_GET["harga-minimum"])){
+    //         if($_GET["harga-minimum"] != ""){
+    //             $query .= "AND kc_price >= ".$_GET["harga-minimum"]." ";
+    //         }
+    //     }
+    //     if(isset($_GET["harga-minimum"]) && isset($_GET["harga-maximum"])){
+    //         if(($_GET["harga-minimum"] != "" && $_GET["harga-maximum"] != "") || ($_GET["harga-minimum"] == "" && $_GET["harga-maximum"] != "")){
+    //             $query .= "AND ";
+    //         }
+    //     }
+    //     if(isset($_GET["harga-maximum"])){
+    //         if($_GET["harga-maximum"] != ""){
+    //             $query .= "kc_price <= ".$_GET["harga-maximum"]." ";
+    //         }
+
+    //     }
+    // }
+
+    
+    if(isset($_POST["apply-filter"])){
         $filter_brand = mysqli_query($conn, "SELECT * FROM brand");
         
         $tempfilter = [];
+        
         while($row = mysqli_fetch_array($filter_brand)){
-            if(isset($_GET[$row["br_id"]])){
-                $tempfilter[] = $row;
+            if(isset($_POST[$row["br_id"]])){
+                $tempfilter[] = $row["br_id"];
             }
         }
-
+        
+        $_SESSION["filter"] = $tempfilter;
+        
         if(sizeof($tempfilter) > 0){
             $query .= "WHERE ";
-
+            
             for($i = 0; $i < sizeof($tempfilter); $i++){
-                $query .= "br_id = '".$tempfilter[$i]["br_id"]."'";
+                $query .= "br_id = '".$tempfilter[$i]."'";
                 if($i != sizeof($tempfilter)-1){
                     $query .= " OR ";
                 }else{
@@ -27,25 +72,26 @@
                 }
             }
         }
+        
+        
+    }
+    else if(isset($_SESSION["filter"])){
+        if(sizeof($_SESSION["filter"]) > 0){
+            $query .= "WHERE ";
 
-        if(isset($_GET["harga-minimum"])){
-            if($_GET["harga-minimum"] != ""){
-                $query .= "AND kc_price >= ".$_GET["harga-minimum"]." ";
+            for($i = 0; $i < sizeof($_SESSION["filter"]); $i++){
+                $query .= "br_id = '".$_SESSION["filter"][$i]."'";
+                if($i != sizeof($_SESSION["filter"])-1){
+                    $query .= " OR ";
+                }else{
+                    $query .= " ";
+                }
             }
-        }
-        if(isset($_GET["harga-minimum"]) && isset($_GET["harga-maximum"])){
-            if(($_GET["harga-minimum"] != "" && $_GET["harga-maximum"] != "") || ($_GET["harga-minimum"] == "" && $_GET["harga-maximum"] != "")){
-                $query .= "AND ";
-            }
-        }
-        if(isset($_GET["harga-maximum"])){
-            if($_GET["harga-maximum"] != ""){
-                $query .= "kc_price <= ".$_GET["harga-maximum"]." ";
-            }
-
         }
     }
-
+    
+    
+    
     $query .= "GROUP BY co_kc_id";
     
     $tempresult = mysqli_query($conn, $query);
@@ -79,7 +125,7 @@
     <script src="jshome.js"></script>
 </head>
 <body>
-    <form method="GET">
+    <form method="POST">
         <nav class="navbar navbar-expand-lg bg-white p-3 position-fixed position-sticky top-0 w-100 border-bottom" style="z-index: 10;">
             <div class="container-fluid">
                 <a class="navbar-brand" href="index.php"><h4 class="m-0">Optik Primadona</h4></a>
@@ -89,7 +135,7 @@
                 <div class="collapse navbar-collapse" id="navbarSupportedContent">
                 <ul class="navbar-nav me-auto mb-2 mb-lg-0">
                     <li class="nav-item">
-                        <a class="nav-link" role="button" href="product.php">Semua Produk</a>
+                        <a class="nav-link" role="button" href="product.php?page=1">Semua Produk</a>
                     </li>
                     <li class="nav-item dropdown">
                         <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
