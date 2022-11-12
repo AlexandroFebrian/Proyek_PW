@@ -1,5 +1,5 @@
 <?php
-    require_once("Connection.php");
+    require_once("connection.php");
 
     $kc_id = "";
     if (isset($_GET["id"])) {

@@ -1,5 +1,5 @@
 <?php
-    require_once("Connection.php");
+    require_once("connection.php");
     
     if (isset($_POST["search-btn"])) {
         $br_name = $_POST["search-val"];
@@ -45,10 +45,10 @@
             <div class="input-group mb-1 container-fluid mt-4 mt-lg-0">
                 <input type="text" class="form-control" placeholder="Cari brand disini" name="search-val">
                 <span class="rounded-end" style="background-color: lightgray;">
-                    <button class="btn" type="submit" name="search-btn"><img src="img/search.png" width="18px" class="opacity-50"></button>
+                    <button class="btn" type="submit" name="search-btn"><img src="storage/icons/search.png" width="18px" class="opacity-50"></button>
                 </span>
             </div>
-            <img src="img/cart.png" class="mx-3 opacity-50" width="30px">
+            <img src="storage/icons/cart.png" class="mx-3 opacity-50" width="30px">
             <div class="fs-3 pb-2 opacity-75">|</div>
             <button class="btn btn-outline-success mx-3" type="submit">Masuk</button>
             <button class="btn btn-success me-2" type="submit">Daftar</button>
@@ -56,13 +56,13 @@
         <div id="carouselExampleFade" class="carousel slide carousel-fade shadow" data-bs-ride="carousel">
             <div class="carousel-inner">
                 <div class="carousel-item active" data-bs-interval="5000">
-                <img src="img/fot1.png" class="d-block w-100" style="height: 100%;">
+                <img src="storage/img/fot1.png" class="d-block w-100" style="height: 100%;">
                 </div>
                 <div class="carousel-item" data-bs-interval="5000">
-                <img src="img/fot2.png" class="d-block w-100" style="height: 100%;">
+                <img src="storage/img/fot2.png" class="d-block w-100" style="height: 100%;">
                 </div>
                 <div class="carousel-item" data-bs-interval="5000">
-                <img src="img/fot3.png" class="d-block w-100" style="height: 100%;">
+                <img src="storage/img/fot3.png" class="d-block w-100" style="height: 100%;">
                 </div>
             </div>
         </div>
