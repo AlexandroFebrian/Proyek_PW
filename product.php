@@ -201,7 +201,7 @@
         }
 
     }
-/*<?php echo "<script>alert('tex')</script>"?>*/
+/* <?php echo "<script>alert('tex')</script>"?> SELECT * FROM users WHERE TRUE */
     $query .= "GROUP BY co_kc_id";
     
     //$tempresult = mysqli_query($conn, $query);
@@ -209,7 +209,6 @@
     if(isset($_SESSION["search-val"])){
         $search = "%".$_SESSION["search-val"]."%";
         $tempresult->bind_param('ss', $search, $search);
-
     }
     $tempresult->execute();
 
@@ -237,7 +236,7 @@
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
+    <title>Optik Primadona</title>
     <link rel="stylesheet" href="css/bootstrap.min.css">
     <!-- <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-Zenh87qX5JnK2Jl0vWa8Ck2rdkQ2Bzep5IDxbcnCeuOxjzrPF/et3URy9Bv1WTRi" crossorigin="anonymous"> -->
     <link rel="stylesheet" href="css/product.css">
@@ -276,7 +275,7 @@
         <div class="container-fluid pt-4">
 
             <!-- TOMBOL GANTI PAGE ATAS -->
-            <div class="row justify-content-center">
+            <div class="row justify-content-center mt-3">
                 <div class="col-4">
                     <ul class="pagination d-flex justify-content-center">
                         <li class="page-item">
@@ -521,7 +520,7 @@
             </div>
 
             <!-- TOMBOL GANTI PAGE BAWAH -->
-            <div class="row justify-content-center">
+            <div class="row justify-content-center my-5">
                 <div class="col-4">
                     <ul class="pagination d-flex justify-content-center">
                         <li class="page-item">
@@ -577,9 +576,61 @@
             </div>
         </div>
     </form>
-    <footer class="p-3" style="background-color: gray;">
-        <h2>ini footer</h2>
-    </footer>
+    <footer>
+          <div class="bg-dark" id="scrollspyHeading5">
+            <div class="container-fluid bg-dark pt-3 pb-2 text-white">
+              <div class="container">
+                <div class="row">
+                  <div class="col-12 col-lg-6 mb-4">
+                    <h2 class="fw-bold text-center">Send us Mail!</h2>
+                    <form action="halaman2.html">
+                      <div class="mb-3">
+                        <label for="exampleInputEmail1" class="form-label">Email address</label>
+                        <input type="email" class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp">
+                        <div id="emailHelp" class="form-text">We'll never share your email with anyone else.</div>
+                      </div>
+                      <div class="mb-3">
+                        <label class="form-label">Mail</label>
+                        <textarea name="mail" cols="30" rows="8" class="form-control"></textarea>
+                      </div>
+                      <div class="mb-3 form-check">
+                        <input type="checkbox" class="form-check-input" id="exampleCheck1">
+                        <label class="form-check-label" for="exampleCheck1">Let us send you an email</label>
+                      </div>
+                      <button type="submit" class="btn btn-primary fw-bold">Submit</button>
+                    </form>
+                  </div>
+                  <div class="col-12 col-lg-6 text-center mt-auto mb-auto">
+                    <p>
+                      <a class="btn btn-success fw-bold" data-bs-toggle="collapse" href="#collapseExample" role="button" aria-expanded="false" aria-controls="collapseExample">
+                        Customer Care
+                      </a>
+                    </p>
+                    <div class="collapse" id="collapseExample">
+                      <div class="card card-body text-success fw-bold mb-3">
+                        Email : careprimadona@care.co.id
+                      </div>
+                    </div>
+                    <p>
+                      <a class="btn btn-danger fw-bold" data-bs-toggle="collapse" href="#collapseExample" role="button" aria-expanded="false" aria-controls="collapseExample">
+                        Contact Person
+                      </a>
+                    </p>
+                    <div class="collapse" id="collapseExample">
+                      <div class="card card-body text-danger fw-bold">
+                        Email : optikprimadona@official.co.id <br>
+                        Phone : (031) 5231452
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div class="row mt-3">
+                <p class="text-center fw-bold">Copyright &copy; 2021 Optik Primadona, Inc.</p>
+              </div>
+            </div>
+          </div>
+        </footer>
 
 
 
