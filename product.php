@@ -28,24 +28,39 @@
         //     }
         // }
 
-    //     if(isset($_GET["harga-minimum"])){
-    //         if($_GET["harga-minimum"] != ""){
-    //             $query .= "AND kc_price >= ".$_GET["harga-minimum"]." ";
-    //         }
-    //     }
-    //     if(isset($_GET["harga-minimum"]) && isset($_GET["harga-maximum"])){
-    //         if(($_GET["harga-minimum"] != "" && $_GET["harga-maximum"] != "") || ($_GET["harga-minimum"] == "" && $_GET["harga-maximum"] != "")){
-    //             $query .= "AND ";
-    //         }
-    //     }
-    //     if(isset($_GET["harga-maximum"])){
-    //         if($_GET["harga-maximum"] != ""){
-    //             $query .= "kc_price <= ".$_GET["harga-maximum"]." ";
-    //         }
-
-    //     }
+        // if(isset($_GET["harga-minimum"])){
+        //     if($_GET["harga-minimum"] != ""){
+        //         $query .= "AND kc_price >= ".$_GET["harga-minimum"]." ";
+        //     }
+        // }
+        // if(isset($_GET["harga-minimum"]) && isset($_GET["harga-maximum"])){
+        //     if(($_GET["harga-minimum"] != "" && $_GET["harga-maximum"] != "") || ($_GET["harga-minimum"] == "" && $_GET["harga-maximum"] != "")){
+        //         $query .= "AND ";
+        //     }
+        // }
+        // if(isset($_GET["harga-maximum"])){
+        //     if($_GET["harga-maximum"] != ""){
+        //         $query .= "kc_price <= ".$_GET["harga-maximum"]." ";
+        //     }
+        // }
     // }
 
+    // if(isset($_POST["search-btn"])){
+    //     if
+    // }
+
+    if(isset($_POST["search-btn"])){
+        if($_POST["search-val"] != ""){
+            $_SESSION["search-val"] = $_POST["search-val"];
+            $query .= "WHERE (br_name LIKE '%".$_POST["search-val"]."%' OR co_id LIKE '%".$_POST["search-val"]."%') ";
+        }else{
+            unset($_SESSION["search-val"]);
+        }
+    }else if(isset($_SESSION["search-val"])){
+        $query .= "WHERE (br_name LIKE '%".$_SESSION["search-val"]."%' OR co_id LIKE '%".$_SESSION["search-val"]."%') ";
+    }
+
+    
     
     if(isset($_POST["apply-filter"])){
         $filter_brand = mysqli_query($conn, "SELECT * FROM brand");
@@ -61,23 +76,54 @@
         $_SESSION["filter"] = $tempfilter;
         
         if(sizeof($tempfilter) > 0){
-            $query .= "WHERE ";
+            if(!isset($_SESSION["search-val"])){
+                $query .= "WHERE (";
+
+            }else{
+                $query .= "AND (";
+            }
             
             for($i = 0; $i < sizeof($tempfilter); $i++){
                 $query .= "br_id = '".$tempfilter[$i]."'";
                 if($i != sizeof($tempfilter)-1){
                     $query .= " OR ";
-                }else{
-                    $query .= " ";
                 }
             }
+
+            $query .= ") ";
         }
-        
-        
+
+        if(isset($_POST["harga-minimum"])){
+            if($_POST["harga-minimum"] != ""){
+                $_SESSION["harga-minimum"] = $_POST["harga-minimum"];
+                $query .= "AND kc_price >= ".$_POST["harga-minimum"]." ";
+            }else{
+                unset($_SESSION["harga-minimum"]);
+            }
+        }
+        if(isset($_POST["harga-minimum"]) && isset($_POST["harga-maximum"])){
+            if(($_POST["harga-minimum"] != "" && $_POST["harga-maximum"] != "") || ($_POST["harga-minimum"] == "" && $_POST["harga-maximum"] != "")){
+                $query .= "AND ";
+            }
+        }
+        if(isset($_POST["harga-maximum"])){
+            if($_POST["harga-maximum"] != ""){
+                $_SESSION["harga-maximum"] = $_POST["harga-maximum"];
+                $query .= "kc_price <= ".$_POST["harga-maximum"]." ";
+            }else{
+                unset($_SESSION["harga-maximum"]);
+            }
+        }
+
     }
     else if(isset($_SESSION["filter"])){
         if(sizeof($_SESSION["filter"]) > 0){
-            $query .= "WHERE ";
+            if(!isset($_SESSION["search-val"])){
+                $query .= "WHERE (";
+
+            }else{
+                $query .= "AND (";
+            }
 
             for($i = 0; $i < sizeof($_SESSION["filter"]); $i++){
                 $query .= "br_id = '".$_SESSION["filter"][$i]."'";
@@ -87,11 +133,33 @@
                     $query .= " ";
                 }
             }
+
+            $query .= ") ";
+        }
+
+        if(isset($_SESSION["harga-minimum"])){
+            if($_SESSION["harga-minimum"] != ""){
+                $query .= "AND kc_price >= ".$_SESSION["harga-minimum"]." ";
+            }
+
+        }
+        if(isset($_SESSION["harga-minimum"]) && isset($_SESSION["harga-maximum"])){
+            if(($_SESSION["harga-minimum"] != "" && $_SESSION["harga-maximum"] != "") || ($_SESSION["harga-minimum"] == "" && $_SESSION["harga-maximum"] != "")){
+                $query .= "AND ";
+            }
+
+        }
+        if(isset($_SESSION["harga-maximum"])){
+            if($_SESSION["harga-maximum"] != ""){
+                if(!isset($_SESSION["harga-minimum"])){
+                    $query .= "AND ";
+                }
+                $query .= "kc_price <= ".$_SESSION["harga-maximum"]." ";
+            }
+            
         }
     }
-    
-    
-    
+
     $query .= "GROUP BY co_kc_id";
     
     $tempresult = mysqli_query($conn, $query);
@@ -133,24 +201,31 @@
                 <span class="navbar-toggler-icon"></span>
                 </button>
                 <div class="collapse navbar-collapse" id="navbarSupportedContent">
-                <ul class="navbar-nav me-auto mb-2 mb-lg-0">
-                    <li class="nav-item">
-                        <a class="nav-link" role="button" href="product.php?page=1">Semua Produk</a>
-                    </li>
-                    <li class="nav-item dropdown">
-                        <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-                        Dropdown
-                        </a>
-                        <ul class="dropdown-menu">
-                            <li><a class="dropdown-item" href="#">Action</a></li>
-                            <li><a class="dropdown-item" href="#">Another action</a></li>
-                            <li><hr class="dropdown-divider"></li>
-                            <li><a class="dropdown-item" href="#">Something else here</a></li>
-                        </ul>
-                    </li>
-                </ul>
+                    <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+                        <li class="nav-item">
+                            <a class="nav-link" role="button" href="product.php?page=1">Semua Produk</a>
+                        </li>
+                        
+                    </ul>
                 </div>
             </div>
+            <div class="input-group mb-1 container-fluid mt-4 mt-lg-0">
+                <input type="text" class="form-control" placeholder="Cari brand disini" name="search-val" 
+                <?php
+                    //BIAR TULISAN DI SEARCH TIDAK HILANG
+                    if(isset($_SESSION["search-val"])){
+                        echo "value='".$_SESSION["search-val"]."'";
+                    }
+                ?>
+                >
+                <span class="rounded-end" style="background-color: lightgray;">
+                    <button class="btn" type="submit" name="search-btn"><img src="storage/icons/search.png" width="18px" class="opacity-50"></button>
+                </span>
+            </div>
+            <img src="storage/icons/cart.png" class="mx-3 opacity-50" width="30px">
+            <div class="fs-3 pb-2 opacity-75">|</div>
+            <button class="btn btn-outline-success mx-3" type="submit">Masuk</button>
+            <button class="btn btn-success me-2" type="submit">Daftar</button>
         </nav>
 
         
@@ -244,9 +319,16 @@
                                                     <input type="checkbox" name='<?= $row["br_id"] ?>' value='<?= $row["br_id"] ?>' class="me-2" id='<?= $row["br_id"] ?>' style="width: 20px; height: 20px" 
                                                     <?php
                                                         //BIAR BISA TETEP KECENTANG SETELAH REFRESH PAGE
-                                                        if(isset($_GET[$row["br_id"]])){
-                                                            echo "checked='checked'";
-                                                        } 
+
+                                                        if(isset($_SESSION["filter"])){
+                                                            for($i = 0; $i < sizeof($_SESSION["filter"]); $i++){
+                                                                if($_SESSION["filter"][$i] == $row["br_id"]){
+                                                                    echo "checked='checked'";
+                                                                    break;
+                                                                }
+                                                            }
+
+                                                        }
                                                     ?>
                                                     >
                                                     <label for='<?= $row["br_id"] ?>'><?= $row["br_name"] ?></label>
@@ -273,9 +355,9 @@
                                             <input type="number" min="0" name="harga-minimum" placeholder="Harga Minimum" class="p-2 w-70 border border-1"
                                             <?php
                                                 //BIAR HARGA TETAP ADA SETELAH REFRESH
-                                                if(isset($_GET["harga-minimum"])){
-                                                    if($_GET["harga-minimum"] != ""){
-                                                        echo "value='".$_GET["harga-minimum"]."'";
+                                                if(isset($_SESSION["harga-minimum"])){
+                                                    if($_SESSION["harga-minimum"] != ""){
+                                                        echo "value='".$_SESSION["harga-minimum"]."'";
                                                     }
 
                                                 }
@@ -289,9 +371,9 @@
                                             <input type="number" min="0" name="harga-maximum" placeholder="Harga Maximum" class="p-2 w-70" 
                                             <?php
                                                 //BIAR HARGA TETAP ADA SETELAH REFRESH
-                                                if(isset($_GET["harga-maximum"])){
-                                                    if($_GET["harga-maximum"] != ""){
-                                                        echo "value='".$_GET["harga-maximum"]."'";
+                                                if(isset($_SESSION["harga-maximum"])){
+                                                    if($_SESSION["harga-maximum"] != ""){
+                                                        echo "value='".$_SESSION["harga-maximum"]."'";
                                                     }
 
                                                 }

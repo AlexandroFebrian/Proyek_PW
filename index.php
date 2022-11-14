@@ -13,6 +13,22 @@
     while ($row = mysqli_fetch_array($tempresult)) {
         $result[] = $row;
     }
+
+    if(isset($_SESSION["filter"])){
+      unset($_SESSION["filter"]);
+    }
+
+    if(isset($_SESSION["harga-minimum"])){
+      unset($_SESSION["harga-minimum"]);
+    }
+
+    if(isset($_SESSION["harga-maximum"])){
+      unset($_SESSION["harga-maximum"]);
+    }
+
+    if(isset($_SESSION["search-val"])){
+      unset($_SESSION["search-val"]);
+    }
 ?>
 <!DOCTYPE html>
 <html lang="en">
