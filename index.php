@@ -1,11 +1,12 @@
 <?php
     require_once("connection.php");
+
+    $_SESSION["gender"] = "A";
     
     if (isset($_POST["search-btn"])) {
         $br_name = $_POST["search-val"];
         $co_id = explode('-', $_POST["search-val"]);
         $co_id = $co_id[count($co_id) - 1];
-        header("Location: product.php?br_name=$br_name&co_id=$co_id");
     }
 
     $result = [];
@@ -61,7 +62,7 @@
             <div class="input-group mb-1 container-fluid mt-4 mt-lg-0">
                 <input type="text" class="form-control" placeholder="Cari brand disini" name="search-val">
                 <span class="rounded-end" style="background-color: lightgray;">
-                    <button class="btn" type="submit" name="search-btn"><img src="storage/icons/search.png" width="18px" class="opacity-50"></button>
+                    <button class="btn" type="submit" name="search-btn" formaction="product.php"><img src="storage/icons/search.png" width="18px" class="opacity-50"></button>
                 </span>
             </div>
             <img src="storage/icons/cart.png" class="mx-3 opacity-50" width="30px">

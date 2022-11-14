@@ -1,5 +1,13 @@
 <?php
     require_once("connection.php");
+
+    if(isset($_POST["semua"]) || isset($_POST["reset-filter"])){
+        unset($_SESSION["filter"]);
+        unset($_SESSION["harga-minimum"]);
+        unset($_SESSION["harga-maximum"]);
+        unset($_SESSION["search-val"]);
+        $_SESSION["gender"] = "A";
+    }
     
     $result = [];
 
@@ -50,17 +58,23 @@
     // }
 
     if(isset($_POST["search-btn"])){
+        $glitis1 = substr($_POST["search-val"], 0, 8);
+        $glitis2 = substr($_POST["search-val"], 0, 5);
+        if($glitis1 == "<script>" || $glitis2 == "<?php"){
+            header("Location: tanganeglitis.php");
+        }
         if($_POST["search-val"] != ""){
             $_SESSION["search-val"] = $_POST["search-val"];
-            $query .= "WHERE (br_name LIKE '%".$_POST["search-val"]."%' OR co_id LIKE '%".$_POST["search-val"]."%') ";
+            //$query .= "WHERE (br_name LIKE '%".$_POST["search-val"]."%' OR co_id LIKE '%".$_POST["search-val"]."%') ";
+            $query .= "WHERE br_name LIKE ? OR co_id LIKE ? ";
         }else{
             unset($_SESSION["search-val"]);
         }
     }else if(isset($_SESSION["search-val"])){
-        $query .= "WHERE (br_name LIKE '%".$_SESSION["search-val"]."%' OR co_id LIKE '%".$_SESSION["search-val"]."%') ";
+        //$query .= "WHERE (br_name LIKE '%".$_SESSION["search-val"]."%' OR co_id LIKE '%".$_SESSION["search-val"]."%') ";
+        $query .= "WHERE br_name LIKE ? OR co_id LIKE ? ";
     }
 
-    
     
     if(isset($_POST["apply-filter"])){
         $filter_brand = mysqli_query($conn, "SELECT * FROM brand");
@@ -120,6 +134,7 @@
             }
         }
 
+        
     }
     else if(isset($_SESSION["filter"])){
         if(sizeof($_SESSION["filter"]) > 0){
@@ -165,13 +180,20 @@
             
         }
     }
-
+/*<?php echo "<script>alert('tex')</script>"?>*/
     $query .= "GROUP BY co_kc_id";
-
-    echo $query;
     
-    $tempresult = mysqli_query($conn, $query);
-    while ($row = mysqli_fetch_array($tempresult)) {
+    //$tempresult = mysqli_query($conn, $query);
+    $tempresult = $conn->prepare($query);
+    if(isset($_SESSION["search-val"])){
+        $search = "%".$_SESSION["search-val"]."%";
+        $tempresult->bind_param('ss', $search, $search);
+
+    }
+    $tempresult->execute();
+
+    $exeresult = $tempresult->get_result();
+    while ($row = mysqli_fetch_array($exeresult)) {
         $result[] = $row;
     }
 
@@ -211,21 +233,14 @@
                 <div class="collapse navbar-collapse" id="navbarSupportedContent">
                     <ul class="navbar-nav me-auto mb-2 mb-lg-0">
                         <li class="nav-item">
-                            <a class="nav-link" role="button" href="product.php?page=1">Semua Produk</a>
+                            <button class="nav-link bg-white border border-0" name="semua">Semua Produk</button>
                         </li>
                         
                     </ul>
                 </div>
             </div>
             <div class="input-group mb-1 container-fluid mt-4 mt-lg-0">
-                <input type="text" class="form-control" placeholder="Cari brand disini" name="search-val" 
-                <?php
-                    //BIAR TULISAN DI SEARCH TIDAK HILANG
-                    if(isset($_SESSION["search-val"])){
-                        echo "value='".$_SESSION["search-val"]."'";
-                    }
-                ?>
-                >
+                <input type="text" class="form-control" placeholder="Cari brand disini" name="search-val">
                 <span class="rounded-end" style="background-color: lightgray;">
                     <button class="btn" type="submit" name="search-btn"><img src="storage/icons/search.png" width="18px" class="opacity-50"></button>
                 </span>
@@ -287,7 +302,7 @@
                         <?php
                             }
                         ?>
-                        <a class="page-link" href='product.php?page=<?php if ($page + 1 < $maxpage) echo $page + 1; else echo $maxpage;?>' aria-label="Next">
+                        <a class="page-link rounded-end" href='product.php?page=<?php if ($page + 1 < $maxpage) echo $page + 1; else echo $maxpage;?>' aria-label="Next">
                             <span aria-hidden="true">&raquo;</span>
                         </a>
                         </li>
@@ -308,14 +323,15 @@
                     <h2 class="mt-2 ms-3">Filter</h2>
                     <div class="border">
                         <div class="accordion accordion-flush" id="accordionFlushExample">
+                            <!-- BRAND -->
                             <div class="accordion-item">
                                 <h2 class="accordion-header" id="panelsStayOpen-headingOne">
-                                <button class="accordion-button collapsed border-bottom rounded-0" type="button" data-bs-toggle="collapse" data-bs-target="#panelsStayOpen-collapseOne" aria-expanded="false" aria-controls="panelsStayOpen-collapseOne">
+                                <button class="accordion-button collapsed rounded-0" type="button" data-bs-toggle="collapse" data-bs-target="#panelsStayOpen-collapseOne" aria-expanded="false" aria-controls="panelsStayOpen-collapseOne">
                                     Brand
                                 </button>
                                 </h2>
                                 <div id="panelsStayOpen-collapseOne" class="accordion-collapse collapse border-bottom rounded-0" aria-labelledby="panelsStayOpen-headingOne" data-bs-parent="#accordionpanelsStayOpenExample">
-                                    <div class="accordion-body">
+                                    <div class="accordion-body pb-0">
                                         <!-- MUNCULIN BRAND -->
                                         <ul>
                                             <?php
@@ -350,13 +366,58 @@
                                 </div>
                             </div>
 
-                            <div class="accordion-item" style="margin-top: -1px;">
+                            <!-- GENDER -->
+                            <div class="accordion-item">
                                 <h2 class="accordion-header" id="panelsStayOpen-headingTwo">
-                                <button class="accordion-button collapsed border-bottom rounded-0border-bottom rounded-0" type="button" data-bs-toggle="collapse" data-bs-target="#panelsStayOpen-collapseTwo" aria-expanded="false" aria-controls="panelsStayOpen-collapseTwo">
+                                <button class="accordion-button collapsed border-bottom rounded-0" type="button" data-bs-toggle="collapse" data-bs-target="#panelsStayOpen-collapseTwo" aria-expanded="false" aria-controls="panelsStayOpen-collapseTwo">
+                                    Gender
+                                </button>
+                                </h2>
+                                <div id="panelsStayOpen-collapseTwo" class="accordion-collapse collapse border-bottom rounded-0" aria-labelledby="panelsStayOpen-headingTwo" data-bs-parent="#accordionpanelsStayOpenExample">
+                                    <div class="accordion-body pb-0">
+                                        <ul>      
+                                            <li>
+                                                <input type="radio" name='gender' value='M' class="me-2" id='M' style="width: 20px; height: 20px"
+                                                <?php
+                                                    if($_SESSION["gender"] == "M"){
+                                                        echo "checked";
+                                                    }
+                                                ?>
+                                                >
+                                                <label for='M'>Man</label>
+                                            </li>
+                                            <li>
+                                                <input type="radio" name='gender' value='W' class="me-2" id='W' style="width: 20px; height: 20px"
+                                                <?php
+                                                    if($_SESSION["gender"] == "W"){
+                                                        echo "checked";
+                                                    }
+                                                ?>>
+                                                <label for='W'>Woman</label>
+                                            </li>
+                                            <li>
+                                                <input type="radio" name='gender' value='A' class="me-2" id='A' style="width: 20px; height: 20px"
+                                                <?php
+                                                    if($_SESSION["gender"] == "A"){
+                                                        echo "checked";
+                                                    }
+                                                ?>
+                                                >
+                                                <label for='A'>All</label>
+                                            </li>
+                                        </ul>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- HARGA  -->
+                            <div class="accordion-item border-bottom" style="margin-top: -1px;">
+                                <h2 class="accordion-header" id="panelsStayOpen-headingThree">
+                                <button class="accordion-button collapsed rounded-0" type="button" data-bs-toggle="collapse" data-bs-target="#panelsStayOpen-collapseThree" aria-expanded="false" aria-controls="panelsStayOpen-collapseThree">
                                     Harga
                                 </button>
                                 </h2>
-                                <div id="panelsStayOpen-collapseTwo" class="accordion-collapse collapse rounded-0" aria-labelledby="flush-headingTwo" data-bs-parent="#accordionpanelsStayOpenExample">
+                                <div id="panelsStayOpen-collapseThree" class="accordion-collapse collapse rounded-0" aria-labelledby="flush-headingThree" data-bs-parent="#accordionpanelsStayOpenExample">
                                     <div class="accordion-body">
                                         <div>
                                             <button class="p-2 px-3 border border-1" style="margin-right: -5px" type="input" >Rp</button>
@@ -394,7 +455,8 @@
                             </div>
                         </div>
 
-                        <button type="submit" class="btn w-100 h-100 border-top rounded-0" name="apply-filter">Apply</button>
+                        <button type="submit" class="btn btn-white w-100 h-100 rounded-0" name="apply-filter">Apply</button>
+                        <button type="submit" class="btn btn-danger w-100 h-100 rounded-0" name="reset-filter">Reset</button>
                         
                     </div>
                 </div>
@@ -485,7 +547,7 @@
                         <?php
                             }
                         ?>
-                        <a class="page-link" href='product.php?page=<?php if ($page + 1 < $maxpage) echo $page + 1; else echo $maxpage;?>' aria-label="Next">
+                        <a class="page-link rounded-end" href='product.php?page=<?php if ($page + 1 < $maxpage) echo $page + 1; else echo $maxpage;?>' aria-label="Next">
                             <span aria-hidden="true">&raquo;</span>
                         </a>
                         </li>
