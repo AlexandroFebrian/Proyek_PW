@@ -134,7 +134,17 @@
             }
         }
 
-        
+        if($_POST["gender"] != "A"){
+            $_SESSION["gender"] = $_POST["gender"];
+            if(sizeof($_SESSION["filter"]) == 0 && !isset($_SESSION["search-val"]) && !isset($_SESSION["harga-minimum"]) && !isset($_SESSION["harga-maximum"])){
+                $query .= "WHERE ";
+            }else{
+                $query .= "AND ";
+            }
+            $query .= "kc_gender = '".$_SESSION["gender"]."' ";
+        }else{
+            $_SESSION["gender"] = "A";
+        }
     }
     else if(isset($_SESSION["filter"])){
         if(sizeof($_SESSION["filter"]) > 0){
@@ -179,6 +189,17 @@
             }
             
         }
+
+        if($_SESSION["gender"] != "A"){
+            if(sizeof($_SESSION["filter"]) == 0 && !isset($_SESSION["search-val"]) && !isset($_SESSION["harga-minimum"]) && !isset($_SESSION["harga-maximum"])){
+                $query .= "WHERE ";
+            }else{
+                $query .= "AND ";
+            }
+            $query .= "kc_gender = '".$_SESSION["gender"]."' ";
+
+        }
+
     }
 /*<?php echo "<script>alert('tex')</script>"?>*/
     $query .= "GROUP BY co_kc_id";
