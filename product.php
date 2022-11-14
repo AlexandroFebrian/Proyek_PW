@@ -96,19 +96,24 @@
         if(isset($_POST["harga-minimum"])){
             if($_POST["harga-minimum"] != ""){
                 $_SESSION["harga-minimum"] = $_POST["harga-minimum"];
-                $query .= "AND kc_price >= ".$_POST["harga-minimum"]." ";
+                if(sizeof($_SESSION["filter"]) == 0 && !isset($_SESSION["search-val"])){
+                    $query .= "WHERE ";
+                }else{
+                    $query .= "AND ";
+                }
+                $query .= "kc_price >= ".$_POST["harga-minimum"]." ";
             }else{
                 unset($_SESSION["harga-minimum"]);
-            }
-        }
-        if(isset($_POST["harga-minimum"]) && isset($_POST["harga-maximum"])){
-            if(($_POST["harga-minimum"] != "" && $_POST["harga-maximum"] != "") || ($_POST["harga-minimum"] == "" && $_POST["harga-maximum"] != "")){
-                $query .= "AND ";
             }
         }
         if(isset($_POST["harga-maximum"])){
             if($_POST["harga-maximum"] != ""){
                 $_SESSION["harga-maximum"] = $_POST["harga-maximum"];
+                if(sizeof($_SESSION["filter"]) == 0 && !isset($_SESSION["search-val"]) && !isset($_SESSION["harga-minimum"])){
+                    $query .= "WHERE ";
+                }else{
+                    $query .= "AND ";
+                }
                 $query .= "kc_price <= ".$_POST["harga-maximum"]." ";
             }else{
                 unset($_SESSION["harga-maximum"]);
@@ -139,19 +144,20 @@
 
         if(isset($_SESSION["harga-minimum"])){
             if($_SESSION["harga-minimum"] != ""){
-                $query .= "AND kc_price >= ".$_SESSION["harga-minimum"]." ";
-            }
-
-        }
-        if(isset($_SESSION["harga-minimum"]) && isset($_SESSION["harga-maximum"])){
-            if(($_SESSION["harga-minimum"] != "" && $_SESSION["harga-maximum"] != "") || ($_SESSION["harga-minimum"] == "" && $_SESSION["harga-maximum"] != "")){
-                $query .= "AND ";
+                if(sizeof($_SESSION["filter"]) == 0 && !isset($_SESSION["search-val"])){
+                    $query .= "WHERE ";
+                }else{
+                    $query .= "AND ";
+                }
+                $query .= "kc_price >= ".$_SESSION["harga-minimum"]." ";
             }
 
         }
         if(isset($_SESSION["harga-maximum"])){
             if($_SESSION["harga-maximum"] != ""){
-                if(!isset($_SESSION["harga-minimum"])){
+                if(sizeof($_SESSION["filter"]) == 0 && !isset($_SESSION["search-val"]) && !isset($_SESSION["harga-minimum"])){
+                    $query .= "WHERE ";
+                }else{
                     $query .= "AND ";
                 }
                 $query .= "kc_price <= ".$_SESSION["harga-maximum"]." ";
@@ -161,6 +167,8 @@
     }
 
     $query .= "GROUP BY co_kc_id";
+
+    echo $query;
     
     $tempresult = mysqli_query($conn, $query);
     while ($row = mysqli_fetch_array($tempresult)) {
