@@ -1661,6 +1661,60 @@ insert  into `color`(`co_id`,`co_kc_id`,`co_link`) values
 ('CO1593','KC415','storage/products/0D17b0TLJpKcaNFkKfEMewLT2cRBRUcF.jpg'),
 ('CO1594','KC415','storage/products/7zsQR2gstq7nBXY0DJvzhGu2jEZTWksd.jpg');
 
+/*Table structure for table `discount` */
+
+DROP TABLE IF EXISTS `discount`;
+
+CREATE TABLE `discount` (
+  `di_id` varchar(5) NOT NULL,
+  `di_name` varchar(50) DEFAULT NULL,
+  `di_value` int(10) DEFAULT NULL,
+  `di_status` varchar(1) DEFAULT NULL,
+  PRIMARY KEY (`di_id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+/*Data for the table `discount` */
+
+/*Table structure for table `dtrans` */
+
+DROP TABLE IF EXISTS `dtrans`;
+
+CREATE TABLE `dtrans` (
+  `dt_id` varchar(6) NOT NULL,
+  `dt_co_id` varchar(6) DEFAULT NULL,
+  `dt_qty` int(3) DEFAULT NULL,
+  `dt_subtotal` int(12) DEFAULT NULL,
+  `dt_ht_id` varchar(6) DEFAULT NULL,
+  PRIMARY KEY (`dt_id`),
+  KEY `dt_co_id` (`dt_co_id`),
+  KEY `dt_ht_id` (`dt_ht_id`),
+  CONSTRAINT `dtrans_ibfk_1` FOREIGN KEY (`dt_co_id`) REFERENCES `color` (`co_id`),
+  CONSTRAINT `dtrans_ibfk_2` FOREIGN KEY (`dt_ht_id`) REFERENCES `htrans` (`ht_id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+/*Data for the table `dtrans` */
+
+/*Table structure for table `htrans` */
+
+DROP TABLE IF EXISTS `htrans`;
+
+CREATE TABLE `htrans` (
+  `ht_id` varchar(6) NOT NULL,
+  `ht_date` datetime DEFAULT NULL,
+  `ht_invoice` varchar(10) DEFAULT NULL,
+  `ht_total` int(12) DEFAULT NULL,
+  `ht_status` varchar(1) DEFAULT NULL,
+  `ht_us_id` varchar(6) DEFAULT NULL,
+  `ht_dc_id` varchar(5) DEFAULT NULL,
+  PRIMARY KEY (`ht_id`),
+  KEY `ht_us_id` (`ht_us_id`),
+  KEY `ht_dc_id` (`ht_dc_id`),
+  CONSTRAINT `htrans_ibfk_1` FOREIGN KEY (`ht_us_id`) REFERENCES `users` (`us_id`),
+  CONSTRAINT `htrans_ibfk_2` FOREIGN KEY (`ht_dc_id`) REFERENCES `discount` (`di_id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+/*Data for the table `htrans` */
+
 /*Table structure for table `kacamata` */
 
 DROP TABLE IF EXISTS `kacamata`;
@@ -2095,6 +2149,25 @@ insert  into `kacamata`(`kc_id`,`kc_price`,`kc_stock`,`kc_status`,`kc_gender`,`k
 ('KC413',1599000,60,'1','M','BR020'),
 ('KC414',1599000,56,'1','M','BR020'),
 ('KC415',1599000,61,'1','M','BR020');
+
+/*Table structure for table `users` */
+
+DROP TABLE IF EXISTS `users`;
+
+CREATE TABLE `users` (
+  `us_id` varchar(6) NOT NULL,
+  `us_username` varchar(100) DEFAULT NULL,
+  `us_email` varchar(100) DEFAULT NULL,
+  `us_password` varchar(100) DEFAULT NULL,
+  `us_name` varchar(100) DEFAULT NULL,
+  `us_birth` date DEFAULT NULL,
+  `us_gender` varchar(1) DEFAULT NULL,
+  `us_phone` varchar(15) DEFAULT NULL,
+  `us_address` varchar(255) DEFAULT NULL,
+  PRIMARY KEY (`us_id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+/*Data for the table `users` */
 
 /*!40101 SET SQL_MODE=@OLD_SQL_MODE */;
 /*!40014 SET FOREIGN_KEY_CHECKS=@OLD_FOREIGN_KEY_CHECKS */;
