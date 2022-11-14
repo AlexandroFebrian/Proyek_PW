@@ -1,12 +1,13 @@
 <?php
     require_once("connection.php");
 
-    $_SESSION["gender"] = "A";
-
-    if (isset($_SESSION["auth_user_id"])) {
-      
-    }
+    $_SESSION["gender"] = "A";    
     
+    if (isset($_POST["logout"])) {
+        unset($_SESSION["auth_user_id"]);
+        header("Location: index.php");
+    }
+
     if (isset($_POST["search-btn"])) {
         $br_name = $_POST["search-val"];
         $co_id = explode('-', $_POST["search-val"]);
@@ -60,8 +61,18 @@
                     <ul class="navbar-nav me-auto mb-2 mb-lg-0">
                         <li class="nav-item">
                             <a class="nav-link" role="button" href="product.php?page=1">Semua Produk</a>
-                            <a class="nav-link d-block d-lg-none" role="button" href="login.php?page=1">Masuk</a>
-                            <a class="nav-link d-block d-lg-none" role="button" href="register.php?page=1">Daftar</a>
+                            <?php
+                                if (!isset($_SESSION["auth_user_id"])) {
+                            ?>
+                                <a class="nav-link d-block d-lg-none" role="button" href="login.php">Masuk</a>
+                                <a class="nav-link d-block d-lg-none" role="button" href="register.php">Daftar</a>
+                            <?php
+                                } else {
+                            ?>
+                                <button class="btn btn-danger d-block d-lg-none rounded-3" type="submit" name="logout">Logout <img class="text-white" src="storage/icons/logout.ico" width="20px"></button>
+                            <?php
+                                }
+                            ?>
                         </li>
                     </ul>
                 </div>
@@ -73,8 +84,18 @@
                 </span>
                 <img src="storage/icons/cart.png" class="mx-lg-3 mx-0 ms-3 opacity-50" width="30px">
                 <div class="fs-3 pb-2 opacity-75 d-none d-lg-block">|</div>
-                <button class="btn btn-outline-success mx-3 d-none d-lg-block rounded-3" type="submit" formaction="login.php">Masuk</button>
-                <button class="btn btn-success me-0 me-lg-2 d-none d-lg-block rounded-3" type="submit" formaction="register.php">Daftar</button>
+                <?php
+                    if (!isset($_SESSION["auth_user_id"])) {
+                ?>
+                    <button class="btn btn-outline-success mx-3 d-none d-lg-block rounded-3" type="submit" formaction="login.php">Masuk</button>
+                    <button class="btn btn-success me-0 me-lg-2 d-none d-lg-block rounded-3" type="submit" formaction="register.php">Daftar</button>
+                <?php
+                    } else {
+                ?>
+                    <button class="btn btn-danger mx-3 d-none d-lg-block rounded-3" type="submit" name="logout">Logout <img class="text-white" src="storage/icons/logout.ico" width="20px"></button>
+                <?php
+                    }
+                ?>
             </div>
         </nav>
 

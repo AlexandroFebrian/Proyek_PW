@@ -3,9 +3,9 @@
 
     $msg = "";
 
-    if (isset($_SESSION["auth_user_id"])) {
-        unset($_SESSION["auth_user_id"]);
-    }
+    // if (isset($_SESSION["auth_user_id"])) {
+    //     unset($_SESSION["auth_user_id"]);
+    // }
 
     if (isset($_POST["register"])) {
         $username = $_POST["username"];
