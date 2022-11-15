@@ -2,6 +2,7 @@
     require_once("connection.php");
 
     $_SESSION["gender"] = "A";
+    $result = [];
     
     if (isset($_POST["logout"])) {
         unset($_SESSION["auth_user_id"]);
@@ -14,10 +15,11 @@
         $co_id = $co_id[count($co_id) - 1];
     }
 
-    $query = mysqli_query($conn, "SELECT * FROM cart JOIN cart_item ON ci_ca_id = ca_id JOIN color ON ci_co_id = co_id WHERE ca_status = 0 AND ca_us_id = '". $_SESSION["auth_user_id"] . "'");
-    $result = [];
-    while ($row = mysqli_fetch_array($query)) {
-        $result[] = $row;
+    if (isset($_SESSION["auth_user_id"])) {
+        $query = mysqli_query($conn, "SELECT * FROM cart JOIN cart_item ON ci_ca_id = ca_id JOIN color ON ci_co_id = co_id WHERE ca_status = 0 AND ca_us_id = '". $_SESSION["auth_user_id"] . "'");
+        while ($row = mysqli_fetch_array($query)) {
+            $result[] = $row;
+        }
     }
 ?>
 <!DOCTYPE html>
