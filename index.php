@@ -82,7 +82,7 @@
                 <span class="rounded-end" style="background-color: lightgray;">
                     <button class="btn" type="submit" name="search-btn" formaction="product.php"><img src="storage/icons/search.png" width="18px" class="opacity-50"></button>
                 </span>
-                <img src="storage/icons/cart.png" class="mx-lg-3 mx-0 ms-3 opacity-50" width="30px">
+                <a href="cart.php"><img src="storage/icons/cart.png" class="mx-lg-3 mx-0 ms-3 opacity-50" width="30px"></a>
                 <div class="fs-3 pb-2 opacity-75 d-none d-lg-block">|</div>
                 <?php
                     if (!isset($_SESSION["auth_user_id"])) {

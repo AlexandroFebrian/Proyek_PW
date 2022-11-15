@@ -50,6 +50,39 @@ insert  into `brand`(`br_id`,`br_name`) values
 ('BR019','Junni'),
 ('BR020','Based');
 
+/*Table structure for table `cart` */
+
+DROP TABLE IF EXISTS `cart`;
+
+CREATE TABLE `cart` (
+  `ca_id` varchar(6) NOT NULL,
+  `ca_us_id` varchar(6) DEFAULT NULL,
+  `ca_total` int(12) DEFAULT NULL,
+  `ca_status` varchar(1) DEFAULT NULL COMMENT '0 = current cart, 1 = paid',
+  PRIMARY KEY (`ca_id`),
+  KEY `ca_us_id` (`ca_us_id`),
+  CONSTRAINT `cart_ibfk_1` FOREIGN KEY (`ca_us_id`) REFERENCES `users` (`us_id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+/*Data for the table `cart` */
+
+/*Table structure for table `cart_item` */
+
+DROP TABLE IF EXISTS `cart_item`;
+
+CREATE TABLE `cart_item` (
+  `ci_co_id` varchar(6) NOT NULL,
+  `ci_qty` int(5) DEFAULT NULL,
+  `ci_subtotal` int(12) DEFAULT NULL,
+  `ci_ca_id` varchar(6) NOT NULL,
+  PRIMARY KEY (`ci_co_id`,`ci_ca_id`),
+  KEY `ci_ca_id` (`ci_ca_id`),
+  CONSTRAINT `cart_item_ibfk_1` FOREIGN KEY (`ci_co_id`) REFERENCES `color` (`co_id`),
+  CONSTRAINT `cart_item_ibfk_2` FOREIGN KEY (`ci_ca_id`) REFERENCES `cart` (`ca_id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+/*Data for the table `cart_item` */
+
 /*Table structure for table `color` */
 
 DROP TABLE IF EXISTS `color`;
@@ -1680,12 +1713,11 @@ CREATE TABLE `discount` (
 DROP TABLE IF EXISTS `dtrans`;
 
 CREATE TABLE `dtrans` (
-  `dt_id` varchar(6) NOT NULL,
-  `dt_co_id` varchar(6) DEFAULT NULL,
+  `dt_co_id` varchar(6) NOT NULL,
   `dt_qty` int(3) DEFAULT NULL,
   `dt_subtotal` int(12) DEFAULT NULL,
-  `dt_ht_id` varchar(6) DEFAULT NULL,
-  PRIMARY KEY (`dt_id`),
+  `dt_ht_id` varchar(6) NOT NULL,
+  PRIMARY KEY (`dt_co_id`,`dt_ht_id`),
   KEY `dt_co_id` (`dt_co_id`),
   KEY `dt_ht_id` (`dt_ht_id`),
   CONSTRAINT `dtrans_ibfk_1` FOREIGN KEY (`dt_co_id`) REFERENCES `color` (`co_id`),
