@@ -55,33 +55,21 @@ insert  into `brand`(`br_id`,`br_name`) values
 DROP TABLE IF EXISTS `cart`;
 
 CREATE TABLE `cart` (
-  `ca_id` varchar(6) NOT NULL,
-  `ca_us_id` varchar(6) DEFAULT NULL,
-  `ca_total` int(12) DEFAULT NULL,
-  `ca_status` varchar(1) DEFAULT NULL COMMENT '0 = current cart, 1 = paid',
-  PRIMARY KEY (`ca_id`),
-  KEY `ca_us_id` (`ca_us_id`),
-  CONSTRAINT `cart_ibfk_1` FOREIGN KEY (`ca_us_id`) REFERENCES `users` (`us_id`)
+  `ca_co_id` varchar(6) NOT NULL,
+  `ca_qty` int(5) DEFAULT NULL,
+  `ca_subtotal` int(12) DEFAULT NULL,
+  `ca_us_id` varchar(6) NOT NULL,
+  PRIMARY KEY (`ca_co_id`,`ca_us_id`),
+  KEY `ci_ca_id` (`ca_us_id`),
+  CONSTRAINT `cart_ibfk_1` FOREIGN KEY (`ca_co_id`) REFERENCES `color` (`co_id`),
+  CONSTRAINT `cart_ibfk_2` FOREIGN KEY (`ca_us_id`) REFERENCES `users` (`us_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 /*Data for the table `cart` */
 
-/*Table structure for table `cart_item` */
-
-DROP TABLE IF EXISTS `cart_item`;
-
-CREATE TABLE `cart_item` (
-  `ci_co_id` varchar(6) NOT NULL,
-  `ci_qty` int(5) DEFAULT NULL,
-  `ci_subtotal` int(12) DEFAULT NULL,
-  `ci_ca_id` varchar(6) NOT NULL,
-  PRIMARY KEY (`ci_co_id`,`ci_ca_id`),
-  KEY `ci_ca_id` (`ci_ca_id`),
-  CONSTRAINT `cart_item_ibfk_1` FOREIGN KEY (`ci_co_id`) REFERENCES `color` (`co_id`),
-  CONSTRAINT `cart_item_ibfk_2` FOREIGN KEY (`ci_ca_id`) REFERENCES `cart` (`ca_id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
-
-/*Data for the table `cart_item` */
+insert  into `cart`(`ca_co_id`,`ca_qty`,`ca_subtotal`,`ca_us_id`) values 
+('CO0001',3,799000,'US0003'),
+('CO0004',3,2397000,'US0003');
 
 /*Table structure for table `color` */
 

@@ -2,7 +2,7 @@
     require_once("connection.php");
 
     $_SESSION["gender"] = "A";
-    $result = [];
+    $cart_item = [];
     
     if (isset($_POST["logout"])) {
         unset($_SESSION["auth_user_id"]);
@@ -16,9 +16,9 @@
     }
 
     if (isset($_SESSION["auth_user_id"])) {
-        $query = mysqli_query($conn, "SELECT * FROM cart JOIN cart_item ON ci_ca_id = ca_id JOIN color ON ci_co_id = co_id WHERE ca_status = 0 AND ca_us_id = '". $_SESSION["auth_user_id"] . "'");
+        $query = mysqli_query($conn, "SELECT * FROM cart JOIN color ON ca_co_id = co_id WHERE ca_us_id = '". $_SESSION["auth_user_id"] . "'");
         while ($row = mysqli_fetch_array($query)) {
-            $result[] = $row;
+            $cart_item[] = $row;
         }
     }
 ?>
@@ -69,14 +69,16 @@
                     <button class="btn" type="submit" name="search-btn" formaction="product.php"><img src="storage/icons/search.png" width="18px" class="opacity-50"></button>
                 </span>
                 <div class="position-relative">
-                    <?php
-                        if (count($result) != 0) {
-                    ?>
-                        <p class="position-absolute bg-danger text-white fw-bold rounded-5 start-50 px-2" style="z-index: 2; font-size: 12px;"><?= count($result) ?></p>
-                    <?php
-                        }
-                    ?>
-                    <a href="cart.php"><img src="storage/icons/cart.png" class="mx-lg-3 mx-0 ms-3 opacity-50" width="30px"></a>
+                    <a href="cart.php">
+                        <?php
+                            if (count($cart_item) != 0) {
+                        ?>
+                            <p class="position-absolute bg-danger text-white fw-bold rounded-5 start-50 px-2" style="z-index: 2; font-size: 12px;"><?= count($cart_item) ?></p>
+                        <?php
+                            }
+                        ?>
+                        <img src="storage/icons/cart.png" class="mx-lg-3 mx-0 ms-3 opacity-50" width="30px">
+                    </a>
                 </div>
                 <div class="fs-3 pb-2 opacity-75 d-none d-lg-block">|</div>
                 <?php
@@ -97,7 +99,7 @@
         <!-- Keranjang kosong -->
         <div class="container-fluid text-center">
             <?php
-                if (count($result) == 0) {
+                if (count($cart_item) == 0) {
             ?>
                 <div class="container-fuild">
                     <img src="storage/icons/empty.png" class="mt-5" width="150px">
