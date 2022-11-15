@@ -57,6 +57,10 @@
     //     if
     // }
 
+    if(isset($_POST["apply-filter"])){
+        unset($_SESSION["search-val"]);
+    }
+
     if(isset($_POST["search-btn"])){
         $glitis1 = substr($_POST["search-val"], 0, 8);
         $glitis2 = substr($_POST["search-val"], 0, 5);
