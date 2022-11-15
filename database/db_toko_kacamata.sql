@@ -2169,6 +2169,11 @@ CREATE TABLE `users` (
 
 /*Data for the table `users` */
 
+insert  into `users`(`us_id`,`us_username`,`us_email`,`us_password`,`us_name`,`us_birth`,`us_gender`,`us_phone`,`us_address`) values 
+('US0001','razzking','akuncitcs@gmail.com','$2y$10$voDod5ewBV6hb.uZznnzHe9QJXRClw0uOVPUfbQ1JLOsRW7WbKmWS','Ivan Susanto','2022-11-10','M','82140001230','Surabaya'),
+('US0002','jes','jes@gmail.com','$2y$10$H6v0TaODJsZNu4b45eVTUeB0fdAQ9xvjSxqur9yqR9I506hk.WU82','Jessy Marsel','2022-11-09','W','81357661890','Surabaya'),
+('US0003','ryks','ryks@gmail.com','$2y$10$4kJlcXRUDrBLu4BHE1JtOelNeMG2MZYcTJGshlVxOBKobOC6I3bKi','Ryan Kohans','2022-11-11','M','082367178234','Surabaya');
+
 /*!40101 SET SQL_MODE=@OLD_SQL_MODE */;
 /*!40014 SET FOREIGN_KEY_CHECKS=@OLD_FOREIGN_KEY_CHECKS */;
 /*!40014 SET UNIQUE_CHECKS=@OLD_UNIQUE_CHECKS */;
