@@ -121,6 +121,7 @@
                     for ($i = 0; $i < count($cart_item); $i++) {
                         $qtytotal += $cart_item[$i]["ca_qty"];
                         $hargatotal += $cart_item[$i]["ca_subtotal"];
+                        $co_id = $cart_item[$i]["ca_co_id"];
             ?>
                         <div class="row justify-content-center border rounded-4 p-5">
                             <div class="col-6 col-lg-4">
@@ -136,7 +137,13 @@
                             <div class="col-12 col-lg-4 mt-5">
                                 <p>Stok : <?= $cart_item[$i]["kc_stock"] ?></p>
                                 <div class="d-flex justify-content-center">
-                                    <input class="form-control text-center w-25" type="number" value='<?= $cart_item[$i]["ca_qty"] ?>' min="1" max="<?= $cart_item[$i]["kc_stock"] ?>" step="1" name="qty">
+                                     <div class="d-inline-block p-0 m-0" style="border: 2px gray solid; border-radius:5px; border-spacing: 0px;">
+                                        <button type="button" class="btn" onclick="xixixiKurang(this)" value='<?= $co_id ?>' style="border-right:2px gray solid; border-radius:0px;">-</button>
+                                        <span id='<?= $co_id ?>' class="px-3" style="font-size:16px;"><?= $cart_item[$i]["ca_qty"] ?></span>
+                                        <!-- <input type="hidden" name="kuantiti" value="0" id="kuantitiHidden<?=$ctr?>"> -->
+                                        <button type="button" class="btn" onclick="xixixiTambah(this)" value='<?= $co_id ?>' style="border-left: 2px gray solid;border-radius:0px;">+</button>
+                                    </div>
+                                    <!-- <input class="form-control text-center w-25" type="number" value='<?= $cart_item[$i]["ca_qty"] ?>' min="1" max="<?= $cart_item[$i]["kc_stock"] ?>" step="1" name="qty"> -->
                                     <button class="btn btn-danger fw-bold w-50 ms-3" type="submit" name="remove" value='<?= $cart_item[$i]["ca_us_id"] . "~" . $cart_item[$i]["ca_co_id"] ?>'>Remove</button>
                                 </div>
                                 <h5 class="mt-4">Total : <?= "Rp " . number_format($cart_item[$i]["ca_subtotal"], 0, "", ",") ?></h5>
@@ -161,4 +168,28 @@
     <script src="script/bootstrap.bundle.min.js"></script>
     <script src="script/jquery-3.6.1.min.js"></script>
 </body>
+<script>
+    function xixixiTambah(obj){
+        let t = document.getElementById(obj.value);
+        //let x = document.getElementById("kuantitiHidden"+id);
+        jmlh = t.innerHTML;
+        jmlh = parseInt(jmlh);
+        jmlh++;
+        //x.value = jmlh;
+        t.innerHTML = jmlh;
+    }
+
+    function xixixiKurang(obj){
+        let t = document.getElementById(obj.value);
+        //let x = document.getElementById("kuantitiHidden"+id);
+        jmlh = t.innerHTML;
+        jmlh = parseInt(jmlh);
+        jmlh--;
+        if(jmlh < 1){
+            jmlh = 1;
+        }
+        //x.value = jmlh;
+        t.innerHTML = jmlh;
+    }
+</script>
 </html>

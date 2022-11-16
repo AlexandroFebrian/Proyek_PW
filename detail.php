@@ -57,6 +57,9 @@
         if (isset($_SESSION["auth_user_id"])) {
             $items = mysqli_fetch_array(mysqli_query($conn, "SELECT * FROM cart WHERE ca_co_id = '$co_id' AND ca_us_id = '" . $_SESSION["auth_user_id"] . "'"));
             $qty = $_POST["qty"];
+            if ($qty == "") {
+                $qty = 1;
+            }
             if (isset($items[0])) {
                 $query = mysqli_query($conn, "UPDATE cart SET ca_qty = '" . $qty + $items["ca_qty"] . "' WHERE ca_co_id = '$co_id' AND ca_us_id = '" . $_SESSION["auth_user_id"] . "'");
                 $query = mysqli_query($conn, "UPDATE cart SET ca_subtotal = '" . ($qty + $items["ca_qty"]) * $kc_price . "' WHERE ca_co_id = '$co_id' AND ca_us_id = '" . $_SESSION["auth_user_id"] . "'");
@@ -182,7 +185,10 @@
 </body>
 <script>
     $("[type='number']").keypress(function (evt) {
-        evt.preventDefault();
+         evt.preventDefault();
+        // if($("[type='number']").val == ""){
+        //     $("[type='number']").val = 1;
+        // }
     });
 </script>
 </html>
