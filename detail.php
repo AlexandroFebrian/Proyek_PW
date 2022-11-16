@@ -59,8 +59,9 @@
             $qty = $_POST["qty"];
             if (isset($items[0])) {
                 $query = mysqli_query($conn, "UPDATE cart SET ca_qty = '" . $qty + $items["ca_qty"] . "' WHERE ca_co_id = '$co_id' AND ca_us_id = '" . $_SESSION["auth_user_id"] . "'");
+                $query = mysqli_query($conn, "UPDATE cart SET ca_subtotal = '" . ($qty + $items["ca_qty"]) * $kc_price . "' WHERE ca_co_id = '$co_id' AND ca_us_id = '" . $_SESSION["auth_user_id"] . "'");
             } else {
-                $query = mysqli_query($conn, "INSERT INTO cart VALUES('$co_id', '$qty', '" . $qty * $kc_price . "', '" . $_SESSION["auth_user_id"] . "')");
+                $query = mysqli_query($conn, "INSERT INTO cart VALUES('" . $_SESSION["auth_user_id"] . "', '$co_id', '$qty', '" . $qty * $kc_price . "')");
             }
             header("Location: detail.php?id=$kc_id&color=$co_id");
         } else {
