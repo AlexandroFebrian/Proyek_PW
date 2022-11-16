@@ -55,10 +55,10 @@ insert  into `brand`(`br_id`,`br_name`) values
 DROP TABLE IF EXISTS `cart`;
 
 CREATE TABLE `cart` (
+  `ca_us_id` varchar(6) NOT NULL,
   `ca_co_id` varchar(6) NOT NULL,
   `ca_qty` int(5) DEFAULT NULL,
   `ca_subtotal` int(12) DEFAULT NULL,
-  `ca_us_id` varchar(6) NOT NULL,
   PRIMARY KEY (`ca_co_id`,`ca_us_id`),
   KEY `ci_ca_id` (`ca_us_id`),
   CONSTRAINT `cart_ibfk_1` FOREIGN KEY (`ca_co_id`) REFERENCES `color` (`co_id`),
@@ -67,9 +67,9 @@ CREATE TABLE `cart` (
 
 /*Data for the table `cart` */
 
-insert  into `cart`(`ca_co_id`,`ca_qty`,`ca_subtotal`,`ca_us_id`) values 
-('CO0001',3,799000,'US0003'),
-('CO0004',3,2397000,'US0003');
+insert  into `cart`(`ca_us_id`,`ca_co_id`,`ca_qty`,`ca_subtotal`) values 
+('US0003','CO0001',1,799000),
+('US0003','CO0007',3,2397000);
 
 /*Table structure for table `color` */
 
