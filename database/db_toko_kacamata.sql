@@ -67,10 +67,6 @@ CREATE TABLE `cart` (
 
 /*Data for the table `cart` */
 
-insert  into `cart`(`ca_us_id`,`ca_co_id`,`ca_qty`,`ca_subtotal`) values 
-('US0003','CO0001',1,799000),
-('US0003','CO0007',3,2397000);
-
 /*Table structure for table `color` */
 
 DROP TABLE IF EXISTS `color`;
@@ -1696,6 +1692,9 @@ CREATE TABLE `discount` (
 
 /*Data for the table `discount` */
 
+insert  into `discount`(`di_id`,`di_name`,`di_value`,`di_status`) values 
+('DI001','gratisongkir',50000,'1');
+
 /*Table structure for table `dtrans` */
 
 DROP TABLE IF EXISTS `dtrans`;
@@ -1714,6 +1713,14 @@ CREATE TABLE `dtrans` (
 
 /*Data for the table `dtrans` */
 
+insert  into `dtrans`(`dt_co_id`,`dt_qty`,`dt_subtotal`,`dt_ht_id`) values 
+('CO0001',1,799000,'HT0003'),
+('CO0005',3,2397000,'HT0001'),
+('CO0044',2,2798000,'HT0003'),
+('CO0758',1,1399000,'HT0002'),
+('CO0761',1,1399000,'HT0002'),
+('CO0774',1,1399000,'HT0002');
+
 /*Table structure for table `htrans` */
 
 DROP TABLE IF EXISTS `htrans`;
@@ -1721,7 +1728,7 @@ DROP TABLE IF EXISTS `htrans`;
 CREATE TABLE `htrans` (
   `ht_id` varchar(6) NOT NULL,
   `ht_date` datetime DEFAULT NULL,
-  `ht_invoice` varchar(10) DEFAULT NULL,
+  `ht_invoice` varchar(12) DEFAULT NULL,
   `ht_total` int(12) DEFAULT NULL,
   `ht_status` varchar(1) DEFAULT NULL,
   `ht_us_id` varchar(6) DEFAULT NULL,
@@ -1734,6 +1741,11 @@ CREATE TABLE `htrans` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 /*Data for the table `htrans` */
+
+insert  into `htrans`(`ht_id`,`ht_date`,`ht_invoice`,`ht_total`,`ht_status`,`ht_us_id`,`ht_dc_id`) values 
+('HT0001','2022-11-17 02:50:02','OP221117001',2397000,'1','US0003',NULL),
+('HT0002','2022-11-17 02:51:37','OP221117002',4197000,'1','US0002',NULL),
+('HT0003','2022-11-17 02:52:05','OP221117003',3597000,'1','US0003',NULL);
 
 /*Table structure for table `kacamata` */
 
@@ -2192,7 +2204,8 @@ CREATE TABLE `users` (
 insert  into `users`(`us_id`,`us_username`,`us_email`,`us_password`,`us_name`,`us_birth`,`us_gender`,`us_phone`,`us_address`) values 
 ('US0001','razzking','akuncitcs@gmail.com','$2y$10$voDod5ewBV6hb.uZznnzHe9QJXRClw0uOVPUfbQ1JLOsRW7WbKmWS','Ivan Susanto','2022-11-10','M','82140001230','Surabaya'),
 ('US0002','jes','jes@gmail.com','$2y$10$H6v0TaODJsZNu4b45eVTUeB0fdAQ9xvjSxqur9yqR9I506hk.WU82','Jessy Marsel','2022-11-09','W','81357661890','Surabaya'),
-('US0003','ryks','ryks@gmail.com','$2y$10$4kJlcXRUDrBLu4BHE1JtOelNeMG2MZYcTJGshlVxOBKobOC6I3bKi','Ryan Kohans','2022-11-11','M','082367178234','Surabaya');
+('US0003','ryks','ryks@gmail.com','$2y$10$4kJlcXRUDrBLu4BHE1JtOelNeMG2MZYcTJGshlVxOBKobOC6I3bKi','Ryan Kohans','2022-11-11','M','082367178234','Surabaya'),
+('US0004','feb','febrian@gmail.com','$2y$10$VV6C33d2Cob5Y8dizdcTIOVitqrWG9wyV2y2IRVlCO4.qIqxOikbG','Febrian Alexandro','2022-11-11','M','82140001230','Surabaya');
 
 /*!40101 SET SQL_MODE=@OLD_SQL_MODE */;
 /*!40014 SET FOREIGN_KEY_CHECKS=@OLD_FOREIGN_KEY_CHECKS */;

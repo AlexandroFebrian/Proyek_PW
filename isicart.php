@@ -64,8 +64,8 @@
                 <h5 class="mt-3">Qty Total : <?= number_format($qtytotal, 0, "", ",") ?></h5>
                 <h5 class="mt-3">Harga Barang Total : <?= "Rp " . number_format($hargatotal, 0, "", ",") ?></h5>
                 <h5 class="mt-3">Ongkir : Rp 50,000</h5>
-                <h5 class="mt-3">Harga Total : <?= "Rp " . number_format($hargatotal+50000, 0, "", ",") ?></h5>
-                <button class="btn btn-success px-5 mt-3">Beli</button>
+                <h5 class="mt-3">Harga Total : <?= "Rp " . number_format($hargatotal + 50000, 0, "", ",") ?></h5>
+                <button class="btn btn-success px-5 mt-3" type="submit" name="beli">Beli</button>
             </div>
         </div>
 <?php
