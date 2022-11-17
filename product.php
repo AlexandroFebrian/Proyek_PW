@@ -468,7 +468,7 @@
                             </div>
                         </div>
 
-                        <button type="submit" class="btn btn-white w-100 h-100 rounded-0" name="apply-filter">Apply</button>
+                        <button type="submit" class="btn btn-success w-100 h-100 rounded-0" name="apply-filter">Apply</button>
                         <button type="submit" class="btn btn-danger w-100 h-100 rounded-0" name="reset-filter">Reset</button>
                         
                     </div>

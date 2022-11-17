@@ -3,9 +3,11 @@
 
     $cart_item = [];
 
-    $query = mysqli_query($conn, "SELECT * FROM cart JOIN color ON ca_co_id = co_id JOIN kacamata ON co_kc_id = kc_id JOIN brand ON kc_br_id = br_id WHERE ca_us_id = '". $_SESSION["auth_user_id"] . "'");
-    while ($row = mysqli_fetch_array($query)) {
-        $cart_item[] = $row;
+    if (isset($_SESSION["auth_user_id"])) {
+        $query = mysqli_query($conn, "SELECT * FROM cart JOIN color ON ca_co_id = co_id JOIN kacamata ON co_kc_id = kc_id JOIN brand ON kc_br_id = br_id WHERE ca_us_id = '". $_SESSION["auth_user_id"] . "'");
+        while ($row = mysqli_fetch_array($query)) {
+            $cart_item[] = $row;
+        }
     }
 ?>
 
@@ -63,7 +65,7 @@
                 <h5 class="mt-3">Harga Barang Total : <?= "Rp " . number_format($hargatotal, 0, "", ",") ?></h5>
                 <h5 class="mt-3">Ongkir : Rp 50,000</h5>
                 <h5 class="mt-3">Harga Total : <?= "Rp " . number_format($hargatotal+50000, 0, "", ",") ?></h5>
-                <button class="btn btn-success px-5">Beli</button>
+                <button class="btn btn-success px-5 mt-3">Beli</button>
             </div>
         </div>
 <?php

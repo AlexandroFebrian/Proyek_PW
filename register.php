@@ -105,6 +105,7 @@
                 <input type="text" class="form-control bg-light" placeholder="Name" name="name">
             </div>
             <div class="mb-3">
+                <label class="form-label">Date of birth</label><br>
                 <input type="date" class="form-control bg-light" name="birth">
             </div>
             <div class="mb-3">
