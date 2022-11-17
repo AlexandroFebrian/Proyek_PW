@@ -56,7 +56,7 @@
     if (isset($_POST["keranjang"])) {
         if (isset($_SESSION["auth_user_id"])) {
             $items = mysqli_fetch_array(mysqli_query($conn, "SELECT * FROM cart WHERE ca_co_id = '$co_id' AND ca_us_id = '" . $_SESSION["auth_user_id"] . "'"));
-            $qty = $_POST["qty"];
+            $qty = $_POST["qtyhidden"];
             if ($qty == "") {
                 $qty = 1;
             }
@@ -177,7 +177,7 @@
                             <div class="d-inline-block p-0 m-0" style="border: 2px gray solid; border-radius:5px; border-spacing: 0px;">
                                 <button type="button" class="btn" onclick="Kurang()" style="border-right:2px gray solid; border-radius:0px;">-</button>
                                 <span id='qty' class="px-3" style="font-size:16px; width: 50px;" name="qty">1</span>
-                                <!-- <input type="hidden" name="kuantiti" value="0" id="kuantitiHidden<?=$ctr?>"> -->
+                                <input type="hidden" name="qtyhidden" value="1" id="qtyhidden">
                                 <button type="button" class="btn" onclick="Tambah()" style="border-left: 2px gray solid;border-radius:0px;">+</button>
                             </div>
                             <!-- <input class="form-control text-center w-25" type="number" value="1" min="1" max="<?= $kc_stock ?>" step="1" name="qty"> -->
@@ -261,6 +261,8 @@
         let s = document.getElementById("stock");
         stock = s.value;
         stock = parseInt(stock)
+        let q = document.getElementById("qtyhidden");
+        
         //let x = document.getElementById("kuantitiHidden"+id);
         jmlh = t.innerHTML;
         jmlh = parseInt(jmlh);
@@ -270,7 +272,7 @@
         }
         //x.value = jmlh;
         t.innerHTML = jmlh;
-        t.value = jmlh;
+        q.value = jmlh;
     }
 
     function Kurang(obj){
@@ -285,7 +287,7 @@
         }
         //x.value = jmlh;
         t.innerHTML = jmlh;
-        t.value = jmlh;
+        q.value = jmlh;
     }
 </script>
 </html>

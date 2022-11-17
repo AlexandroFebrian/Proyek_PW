@@ -59,8 +59,10 @@
         <div class="row justify-content-center border rounded-4 pb-5">
             <div class="d-none d-lg-block col-lg-8"></div>
             <div class="col-12 col-lg-4">
-                <h5 class="mt-4">Qty Total : <?= "Rp " . number_format($qtytotal, 0, "", ",") ?></h5>
-                <h5 class="mt-4">Harga Total : <?= "Rp " . number_format($hargatotal, 0, "", ",") ?></h5>
+                <h5 class="mt-3">Qty Total : <?= number_format($qtytotal, 0, "", ",") ?></h5>
+                <h5 class="mt-3">Harga Barang Total : <?= "Rp " . number_format($hargatotal, 0, "", ",") ?></h5>
+                <h5 class="mt-3">Ongkir : Rp 50,000</h5>
+                <h5 class="mt-3">Harga Total : <?= "Rp " . number_format($hargatotal+50000, 0, "", ",") ?></h5>
                 <button class="btn btn-success px-5">Beli</button>
             </div>
         </div>
