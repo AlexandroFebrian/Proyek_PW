@@ -146,13 +146,15 @@
             </div>
         </nav>
 
-        <!-- Detail -->
-        <?php
-            if ($kc_id != "") {
-        ?>
-                <div class="col-4 text-center me-4 mb-5 mt-3">
-                    <div class="card" style="width: 18rem; border: none;">
-                        <img src='<?= $co_link ?>' class="card-img-top">
+        <div class="container-fluid">
+            <!-- Detail -->
+            <?php
+                if ($kc_id != "") {
+            ?>
+                    <!-- <div class="col-4 text-center me-4 mb-5 mt-3">
+                        </div> -->
+                    <div class="card text-center" style="border: none;">
+                        <img src='<?= $co_link ?>' class="card-img-top w-50 mx-auto">
                         <div class="card-body">
                             <h4 class="card-title"><?= $br_name ?></h4>
                             <p class="card-text fs-5"><?= "SKU-" . $co_id ?>
@@ -169,26 +171,121 @@
                                 }
                             ?>
                         </ul>
-                        <p>Stok : <?= $kc_stock ?></p>
-                        <div class="d-flex justify-content-center">
-                            <input class="form-control text-center w-25" type="number" value="1" min="1" max="<?= $kc_stock ?>" step="1" name="qty">
-                            <button class="btn btn-success fw-bold w-50 ms-3" type="submit" name="keranjang">+ Keranjang</button>
+                        <span>Stok : <?= $kc_stock ?></span>
+                        <input type="hidden" id="stock" value='<?= $kc_stock ?>'>
+                        <div class="d-flex justify-content-center mt-3">
+                            <div class="d-inline-block p-0 m-0" style="border: 2px gray solid; border-radius:5px; border-spacing: 0px;">
+                                <button type="button" class="btn" onclick="Kurang()" style="border-right:2px gray solid; border-radius:0px;">-</button>
+                                <span id='qty' class="px-3" style="font-size:16px; width: 50px;" name="qty">1</span>
+                                <!-- <input type="hidden" name="kuantiti" value="0" id="kuantitiHidden<?=$ctr?>"> -->
+                                <button type="button" class="btn" onclick="Tambah()" style="border-left: 2px gray solid;border-radius:0px;">+</button>
+                            </div>
+                            <!-- <input class="form-control text-center w-25" type="number" value="1" min="1" max="<?= $kc_stock ?>" step="1" name="qty"> -->
+                            <button class="btn btn-success fw-bold ms-4" type="submit" name="keranjang">+ Keranjang</button>
                         </div>
                     </div>
+            <?php
+                }
+            ?>
+            
+        </div>
+
+        <footer>
+          <div class="bg-dark mt-5" id="scrollspyHeading5">
+            <div class="container-fluid bg-dark pt-3 pb-2 text-white">
+              <div class="container">
+                <div class="row">
+                  <div class="col-12 col-lg-6 mb-4">
+                    <h2 class="fw-bold text-center">Send us Mail!</h2>
+                    <form action="halaman2.html">
+                      <div class="mb-3">
+                        <label for="exampleInputEmail1" class="form-label">Email address</label>
+                        <input type="email" class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp">
+                        <div id="emailHelp" class="form-text">We'll never share your email with anyone else.</div>
+                      </div>
+                      <div class="mb-3">
+                        <label class="form-label">Mail</label>
+                        <textarea name="mail" cols="30" rows="8" class="form-control"></textarea>
+                      </div>
+                      <div class="mb-3 form-check">
+                        <input type="checkbox" class="form-check-input" id="exampleCheck1">
+                        <label class="form-check-label" for="exampleCheck1">Let us send you an email</label>
+                      </div>
+                      <button type="submit" class="btn btn-primary fw-bold">Submit</button>
+                    </form>
+                  </div>
+                  <div class="col-12 col-lg-6 text-center mt-auto mb-auto">
+                    <p>
+                      <a class="btn btn-success fw-bold" data-bs-toggle="collapse" href="#collapseExample" role="button" aria-expanded="false" aria-controls="collapseExample">
+                        Customer Care
+                      </a>
+                    </p>
+                    <div class="collapse" id="collapseExample">
+                      <div class="card card-body text-success fw-bold mb-3">
+                        Email : careprimadona@care.co.id
+                      </div>
+                    </div>
+                    <p>
+                      <a class="btn btn-danger fw-bold" data-bs-toggle="collapse" href="#collapseExample" role="button" aria-expanded="false" aria-controls="collapseExample">
+                        Contact Person
+                      </a>
+                    </p>
+                    <div class="collapse" id="collapseExample">
+                      <div class="card card-body text-danger fw-bold">
+                        Email : optikprimadona@official.co.id <br>
+                        Phone : (031) 5231452
+                      </div>
+                    </div>
+                  </div>
                 </div>
-        <?php
-            }
-        ?>
+              </div>
+              <div class="row mt-3">
+                <p class="text-center fw-bold">Copyright &copy; 2021 Optik Primadona, Inc.</p>
+              </div>
+            </div>
+          </div>
+        </footer>
     </form>
     <script src="script/bootstrap.bundle.min.js"></script>
     <script src="script/jquery-3.6.1.min.js"></script>
 </body>
 <script>
-    $("[type='number']").keypress(function (evt) {
-         evt.preventDefault();
-        // if($("[type='number']").val == ""){
-        //     $("[type='number']").val = 1;
-        // }
-    });
+    // $("[type='number']").keypress(function (evt) {
+    //      evt.preventDefault();
+    //     // if($("[type='number']").val == ""){
+    //     //     $("[type='number']").val = 1;
+    //     // }
+    // });
+    function Tambah(obj){
+        let t = document.getElementById("qty");
+        let s = document.getElementById("stock");
+        stock = s.value;
+        stock = parseInt(stock)
+        //let x = document.getElementById("kuantitiHidden"+id);
+        jmlh = t.innerHTML;
+        jmlh = parseInt(jmlh);
+        jmlh++;
+        if(jmlh > stock){
+            jmlh = stock
+        }
+        //x.value = jmlh;
+        t.innerHTML = jmlh;
+        t.value = jmlh;
+    }
+
+    function Kurang(obj){
+        let t = document.getElementById("qty");
+        
+        //let x = document.getElementById("kuantitiHidden"+id);
+        jmlh = t.innerHTML;
+        jmlh = parseInt(jmlh);
+        jmlh--;
+        if(jmlh < 1){
+            jmlh = 1;
+        }
+        //x.value = jmlh;
+        t.innerHTML = jmlh;
+        t.value = jmlh;
+    }
 </script>
 </html>

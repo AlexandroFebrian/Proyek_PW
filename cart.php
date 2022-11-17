@@ -175,21 +175,6 @@
         r.send(`id=${obj.value}&ganti=-`);
     }
 
-    function insert_user() {
-        r = new XMLHttpRequest();
-        r.onreadystatechange = function() {
-            if ((this.readyState==4) && (this.status==200)) {
-                fetch_isicart(); 
-            }
-        }
-        
-        // POST ke file user_insert.php
-        r.open('POST', 'editcart.php');	
-        // Pakai ini kalau data dalam bentuk string, kalau json beda lagi
-        r.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
-        r.send(`ganti=${ganti}`);
-    }
-
     function fetch_isicart(){
         r = new XMLHttpRequest();
         r.onreadystatechange = function() {
