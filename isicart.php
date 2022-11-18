@@ -61,10 +61,38 @@
         <div class="row justify-content-center border rounded-4 pb-5">
             <div class="d-none d-lg-block col-lg-8"></div>
             <div class="col-12 col-lg-4">
-                <h5 class="mt-3">Qty Total : <?= number_format($qtytotal, 0, "", ",") ?></h5>
-                <h5 class="mt-3">Harga Barang Total : <?= "Rp " . number_format($hargatotal, 0, "", ",") ?></h5>
-                <h5 class="mt-3">Ongkir : Rp 50,000</h5>
-                <h5 class="mt-3">Harga Total : <?= "Rp " . number_format($hargatotal + 50000, 0, "", ",") ?></h5>
+                <div class="row mt-3">
+                    <div class="col-6 text-end">
+                        Qty Total : 
+                    </div>
+                    <div class="col-6 text-start">
+                        <?= number_format($qtytotal, 0, "", ",") ?>
+                    </div>
+                </div>
+                <div class="row mt-3">
+                    <div class="col-6 text-end">
+                        Harga Barang Total : 
+                    </div>
+                    <div class="col-6 text-start">
+                    <?= "Rp " . number_format($hargatotal, 0, "", ",") ?>
+                    </div>
+                </div>
+                <div class="row mt-3">
+                    <div class="col-6 text-end">
+                        Ongkir : 
+                    </div>
+                    <div class="col-6 text-start">
+                        Rp 50,000
+                    </div>
+                </div>
+                <div class="row mt-3">
+                    <div class="col-6 text-end">
+                        <h5>Harga Total : </h5>
+                    </div>
+                    <div class="col-6 text-start">
+                        <h5><?= "Rp " . number_format($hargatotal + 50000, 0, "", ",") ?></h5>
+                    </div>
+                </div>
                 <button class="btn btn-success px-5 mt-3" type="submit" name="beli">Beli</button>
             </div>
         </div>

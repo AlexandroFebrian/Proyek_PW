@@ -145,7 +145,7 @@
         </nav>
 
         <!-- Print berhasil beli -->
-        <div id="popup" class="shadow text-center bg-white rounded-4 position-fixed top-50 start-50" style="width: 500px; height: 300px; border: 1px solid black; margin-top: -150px; margin-left: -250px; display: 
+        <div id="popup" class="shadow text-center bg-white rounded-4 position-fixed top-50 start-50" style="width: 500px; height: 400px; border: 1px solid black; margin-top: -200px; margin-left: -250px; display: 
         <?php
             if ($sukses == true) {
                 echo "block";
@@ -153,9 +153,10 @@
                 echo "none";
             }
         ?>;">
-            <h3 class="fw-bold mt-3">Checkout Berhasil !</h5><br>
+            <h3 class="fw-bold mt-5">Terimakasih Sudah Berbelanja !</h5><br>
             <img src="storage/icons/success.png" width="100px">
-            <p class="mt-4">Email : optikprimadona@official.co.id</p>
+            <p class="mt-4">Invoice : <?= $new_invoice ?></p>
+            <p>Email : optikprimadona@official.co.id</p>
             <p>Phone : (031) 5231452</p>
         </div>
 
