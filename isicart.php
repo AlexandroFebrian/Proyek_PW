@@ -46,10 +46,8 @@
                         <div class="d-inline-block p-0 m-0" style="border: 2px gray solid; border-radius:5px; border-spacing: 0px;">
                             <button type="button" class="btn" onclick="Kurang(this)" value='<?= $co_id ?>' style="border-right:2px gray solid; border-radius:0px;">-</button>
                             <span id='<?= $co_id ?>' class="px-3" style="font-size:16px;"><?= $cart_item[$i]["ca_qty"] ?></span>
-                            <!-- <input type="hidden" name="kuantiti" value="0" id="kuantitiHidden<?=$ctr?>"> -->
                             <button type="button" class="btn" onclick="Tambah(this)" value='<?= $co_id ?>' style="border-left: 2px gray solid;border-radius:0px;">+</button>
                         </div>
-                        <!-- <input class="form-control text-center w-25" type="number" value='<?= $cart_item[$i]["ca_qty"] ?>' min="1" max="<?= $cart_item[$i]["kc_stock"] ?>" step="1" name="qty"> -->
                         <button class="btn btn-danger fw-bold w-50 ms-3" type="submit" name="remove" value='<?= $cart_item[$i]["ca_us_id"] . "~" . $cart_item[$i]["ca_co_id"] ?>'>Remove</button>
                     </div>
                     <h5 class="mt-4">Total : <?= "Rp " . number_format($cart_item[$i]["ca_subtotal"], 0, "", ",") ?></h5>
