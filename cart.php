@@ -145,7 +145,7 @@
         </nav>
 
         <!-- Print berhasil beli -->
-        <div id="popup" class="shadow text-center bg-white rounded-4 position-fixed top-50 start-50" style="width: 500px; height: 400px; border: 1px solid black; margin-top: -200px; margin-left: -250px; display: 
+        <div id="popup" class="shadow text-center bg-white rounded-4 position-fixed top-50 start-50" style="width: 400px; height: 400px; border: 1px solid black; margin-top: -200px; margin-left: -200px; display: 
         <?php
             if ($sukses == true) {
                 echo "block";
@@ -153,7 +153,12 @@
                 echo "none";
             }
         ?>;">
-            <h3 class="fw-bold mt-5">Terimakasih Sudah Berbelanja !</h5><br>
+            <?php
+                $query = mysqli_query($conn, "SELECT us_name FROM users WHERE us_id = '" . $_SESSION["auth_user_id"] . "'");
+                $us_name = mysqli_fetch_array($query)[0];
+                $us_name = strtok($us_name, " ");
+            ?>
+            <h3 class="fw-bold mt-5">Terimakasih <?= $us_name ?><br>Sudah Berbelanja</h5><br>
             <img src="storage/icons/success.png" width="100px">
             <p class="mt-4">Invoice : <?= $new_invoice ?></p>
             <p>Email : optikprimadona@official.co.id</p>
