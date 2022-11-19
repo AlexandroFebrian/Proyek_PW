@@ -145,7 +145,7 @@
         </nav>
 
         <!-- Print berhasil beli -->
-        <div id="popup" class="shadow text-center bg-white rounded-4 position-fixed top-50 start-50" style="width: 400px; height: 400px; border: 1px solid black; margin-top: -200px; margin-left: -200px; display: 
+        <div id="popup" class="shadow text-center bg-white rounded-4 position-fixed top-50 start-50" style="width: 350px; height: 400px; border: 1px solid black; margin-top: -200px; margin-left: -175px; display: 
         <?php
             if ($sukses == true) {
                 echo "block";

@@ -30,17 +30,17 @@
             $co_id = $cart_item[$i]["ca_co_id"];
 ?>
             <div class="row border px-4 pt-4 pb-3 py-lg-0" style="align-items: center;">
-                <div class="col-3">
+                <div class="col-4 col-lg-3">
                     <img src='<?= $cart_item[$i]["co_link"] ?>' class="card-img-top">
                 </div>
-                <div class="col-4">
+                <div class="col-8 col-lg-4">
                     <div class="card-body">
                         <h4 class="card-title"><?= $cart_item[$i]["br_name"] ?></h4>
                         <p class="card-text fs-5"><?= "SKU-" . $cart_item[$i]["co_id"] ?>
                         <br><?= "Rp " . number_format($cart_item[$i]["kc_price"], 0, "", ",") ?></p>
                     </div>
                 </div>
-                <div class="col-4">
+                <div class="d-none d-lg-block col-4">
                     <div class="row justify-content-end justify-content-lg-center me-1 m-lg-0 ms-lg-5">
                         <div class="col-6"><p>Stok : <?= $cart_item[$i]["kc_stock"] ?></p></div>
                     </div>
@@ -61,15 +61,35 @@
                         </div>
                     </div>
                 </div>
-                <div class="col-1">
+                <div class="d-lg-none row mt-4 justify-content-end">
+                    <div class="col-4">
+                        <p>Stok : <?= $cart_item[$i]["kc_stock"] ?></p>
+                    </div>
+                    <div class="col-1">
+                        <button class="bg-white fw-bold opacity-50" type="submit" name="remove" value='<?= $cart_item[$i]["ca_us_id"] . "~" . $cart_item[$i]["ca_co_id"] ?>' style="border: none;"><img src="storage/icons/delete.png" width="25px"></button>
+                    </div>
+                    <div class="col-7">
+                        <div class="d-flex justify-content-center">
+                            <div class="d-inline-block p-0 m-0" style="border: 2px gray solid; border-radius:5px; border-spacing: 0px;">
+                                <button type="button" class="btn" onclick="Kurang(this)" value='<?= $co_id ?>' style="border-right:2px gray solid; border-radius:0px;">-</button>
+                                <span id='<?= $co_id ?>' class="px-3" style="font-size:16px;"><?= $cart_item[$i]["ca_qty"] ?></span>
+                                <button type="button" class="btn" onclick="Tambah(this)" value='<?= $co_id ?>' style="border-left: 2px gray solid;border-radius:0px;">+</button>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-8">
+                        <p class="fw-semibold mt-4 ms-lg-5">Subtotal : <?= "Rp " . number_format($cart_item[$i]["ca_subtotal"], 0, "", ",") ?></p>
+                    </div>
+                </div>
+                <div class="d-none d-lg-block col-1">
                     <button class="bg-white fw-bold opacity-50" type="submit" name="remove" value='<?= $cart_item[$i]["ca_us_id"] . "~" . $cart_item[$i]["ca_co_id"] ?>' style="border: none;"><img src="storage/icons/delete.png" width="25px"></button>
                 </div>
             </div>
 <?php
         }
 ?>
-        <div class="row justify-content-end pb-4">
-            <div class="col-5">
+        <div class="row justify-content-center justify-content-lg-end pb-4">
+            <div class="col-12 col-lg-5">
                 <div class="row mt-3">
                     <div class="col-6 text-end">
                         Qty Total : 

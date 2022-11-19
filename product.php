@@ -434,7 +434,7 @@
                                     <div class="accordion-body">
                                         <div>
                                             <button class="p-2 px-3 border border-1" style="margin-right: -5px" type="input" >Rp</button>
-                                            <input type="number" min="0" name="harga-minimum" placeholder="Harga Minimum" class="p-2 w-70 border border-1"
+                                            <input type="number" min="0" name="harga-minimum" placeholder="Harga Minimum" class="p-2 w-75 border border-1"
                                             <?php
                                                 //BIAR HARGA TETAP ADA SETELAH REFRESH
                                                 if(isset($_SESSION["harga-minimum"])){
@@ -450,7 +450,7 @@
                                         <br>
                                         <div>
                                             <button class="p-2 px-3 border border-1" style="margin-right: -5px" type="input" >Rp</button>
-                                            <input type="number" min="0" name="harga-maximum" placeholder="Harga Maximum" class="p-2 w-70" 
+                                            <input type="number" min="0" name="harga-maximum" placeholder="Harga Maximum" class="p-2 w-75" 
                                             <?php
                                                 //BIAR HARGA TETAP ADA SETELAH REFRESH
                                                 if(isset($_SESSION["harga-maximum"])){
@@ -540,7 +540,7 @@
                                     $co_link = $result[$i]["co_link"];
                                     $br_name = $result[$i]["br_name"];
                         ?>
-                                    <div class="col-xxl-4 col-lg-4 col-6 d-flex justify-content-center">
+                                    <div class="col-lg-4 col-12 d-flex justify-content-center">
                                         <a href='<?= "detail.php?id=" . $kc_id ?>' class="text-black text-decoration-none">
                                             <div class="card text-center" style="width: 18rem; border: none;">
                                                 <img src='<?= $co_link ?>' class="card-img-top">
