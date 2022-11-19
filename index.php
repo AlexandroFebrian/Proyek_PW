@@ -22,12 +22,6 @@
         $co_id = $co_id[count($co_id) - 1];
     }
 
-    $result = [];
-    $tempresult = mysqli_query($conn, "SELECT * FROM kacamata JOIN color ON kc_id = co_kc_id JOIN brand ON kc_br_id = br_id AND br_id = 'BR008' AND kc_price > 1600000 GROUP BY co_kc_id ORDER BY kc_price DESC ");
-    while ($row = mysqli_fetch_array($tempresult)) {
-        $result[] = $row;
-    }
-
     if(isset($_SESSION["filter"])){
         unset($_SESSION["filter"]);
     }
@@ -133,8 +127,98 @@
             </div>
         </div>
 
-        <div class="container-xxl my-4">
+        <!-- Content -->
+        <div class="container-fluid my-4">
+            <!-- For Men -->
             <div class="row ms-2">
+                <div class="col">
+                    <h1>For Men</h1>
+                </div>
+            </div>
+            <div class="container-fluid py-2">
+                <div class="d-flex flex-row flex-nowrap overflow-auto">
+                    <?php
+                        $result = [];
+                        $tempresult = mysqli_query($conn, "SELECT * FROM kacamata JOIN color ON kc_id = co_kc_id JOIN brand ON kc_br_id = br_id WHERE kc_gender = 'M' GROUP BY co_kc_id ORDER BY kc_price DESC LIMIT 20");
+                        while ($row = mysqli_fetch_array($tempresult)) {
+                            $result[] = $row;
+                        }
+
+                        for ($i = 0; $i < count($result); $i++) {
+                            if (isset($result[$i])) {
+                                $kc_id = $result[$i]["kc_id"];
+                                $kc_price = $result[$i]["kc_price"];
+                                $co_id = $result[$i]["co_id"];
+                                $co_link = $result[$i]["co_link"];
+                                $br_name = $result[$i]["br_name"];
+                    ?>
+                                <div class="card card-block mx-2 shadow" style="min-width: auto;">
+                                    <div class="col text-center me-4 mb-5">
+                                        <a href='<?= "detail.php?id=" . $kc_id ?>' class="text-black text-decoration-none">
+                                            <div class="card" style="width: 18rem; border: none;">
+                                                <img src='<?= $co_link ?>' class="card-img-top">
+                                                <div class="card-body">
+                                                    <h4 class="card-title"><?= $br_name ?></h4>
+                                                    <p class="card-text fs-5"><?= "SKU-" . $co_id ?>
+                                                    <br><?= "Rp " . number_format($kc_price) ?></p>
+                                                </div>
+                                            </div>
+                                        </a>
+                                    </div>
+                                </div>
+                    <?php
+                            }
+                        }
+                    ?>
+                </div>
+            </div>
+
+            <!-- For Woman -->
+            <div class="row ms-2 mt-5">
+                <div class="col">
+                    <h1>For Woman</h1>
+                </div>
+            </div>
+            <div class="container-fluid py-2">
+                <div class="d-flex flex-row flex-nowrap overflow-auto">
+                    <?php
+                        $result = [];
+                        $tempresult = mysqli_query($conn, "SELECT * FROM kacamata JOIN color ON kc_id = co_kc_id JOIN brand ON kc_br_id = br_id WHERE kc_gender = 'W' GROUP BY co_kc_id ORDER BY kc_price DESC LIMIT 20");
+                        while ($row = mysqli_fetch_array($tempresult)) {
+                            $result[] = $row;
+                        }
+                        
+                        for ($i = 0; $i < count($result); $i++) {
+                            if (isset($result[$i])) {
+                                $kc_id = $result[$i]["kc_id"];
+                                $kc_price = $result[$i]["kc_price"];
+                                $co_id = $result[$i]["co_id"];
+                                $co_link = $result[$i]["co_link"];
+                                $br_name = $result[$i]["br_name"];
+                    ?>
+                                <div class="card card-block mx-2 shadow" style="min-width: auto;">
+                                    <div class="col text-center me-4 mb-5">
+                                        <a href='<?= "detail.php?id=" . $kc_id ?>' class="text-black text-decoration-none">
+                                            <div class="card" style="width: 18rem; border: none;">
+                                                <img src='<?= $co_link ?>' class="card-img-top">
+                                                <div class="card-body">
+                                                    <h4 class="card-title"><?= $br_name ?></h4>
+                                                    <p class="card-text fs-5"><?= "SKU-" . $co_id ?>
+                                                    <br><?= "Rp " . number_format($kc_price) ?></p>
+                                                </div>
+                                            </div>
+                                        </a>
+                                    </div>
+                                </div>
+                    <?php
+                            }
+                        }
+                    ?>
+                </div>
+            </div>
+
+            <!-- Popular Brand -->
+            <div class="row ms-2 mt-5">
                 <div class="col">
                     <h1>Popular Brand</h1>
                 </div>
@@ -142,6 +226,12 @@
             <div class="container-fluid py-2">
                 <div class="d-flex flex-row flex-nowrap overflow-auto">
                     <?php
+                        $result = [];
+                        $tempresult = mysqli_query($conn, "SELECT * FROM kacamata JOIN color ON kc_id = co_kc_id JOIN brand ON kc_br_id = br_id WHERE br_id = 'BR008' AND kc_price > 1600000 GROUP BY co_kc_id ORDER BY kc_price DESC LIMIT 20");
+                        while ($row = mysqli_fetch_array($tempresult)) {
+                            $result[] = $row;
+                        }
+
                         for ($i = 0; $i < count($result); $i++) {
                             if (isset($result[$i])) {
                                 $kc_id = $result[$i]["kc_id"];
@@ -171,6 +261,8 @@
                 </div>
             </div>
         </div>
+
+        <!-- Footer -->
         <footer>
             <div class="bg-dark" id="scrollspyHeading5">
             <div class="container-fluid bg-dark pt-3 pb-2 text-white">
