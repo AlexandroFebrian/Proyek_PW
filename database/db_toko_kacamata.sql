@@ -1678,24 +1678,6 @@ insert  into `color`(`co_id`,`co_kc_id`,`co_link`) values
 ('CO1593','KC415','storage/products/0D17b0TLJpKcaNFkKfEMewLT2cRBRUcF.jpg'),
 ('CO1594','KC415','storage/products/7zsQR2gstq7nBXY0DJvzhGu2jEZTWksd.jpg');
 
-/*Table structure for table `discount` */
-
-DROP TABLE IF EXISTS `discount`;
-
-CREATE TABLE `discount` (
-  `di_id` varchar(5) NOT NULL,
-  `di_name` varchar(50) DEFAULT NULL,
-  `di_value` int(10) DEFAULT NULL,
-  `di_type` varchar(1) DEFAULT NULL COMMENT '1 = Rp; 0 = %',
-  `di_status` varchar(1) DEFAULT NULL,
-  PRIMARY KEY (`di_id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
-
-/*Data for the table `discount` */
-
-insert  into `discount`(`di_id`,`di_name`,`di_value`,`di_type`,`di_status`) values 
-('DI001','gratisongkir',50000,'1','1');
-
 /*Table structure for table `dtrans` */
 
 DROP TABLE IF EXISTS `dtrans`;
@@ -1714,9 +1696,6 @@ CREATE TABLE `dtrans` (
 
 /*Data for the table `dtrans` */
 
-insert  into `dtrans`(`dt_co_id`,`dt_qty`,`dt_subtotal`,`dt_ht_id`) values 
-('CO1426',1,2799000,'HT0001');
-
 /*Table structure for table `htrans` */
 
 DROP TABLE IF EXISTS `htrans`;
@@ -1728,18 +1707,12 @@ CREATE TABLE `htrans` (
   `ht_total` int(12) DEFAULT NULL,
   `ht_status` varchar(1) DEFAULT NULL COMMENT '0: dibatalkan; 1: sukses; 2: menunggu pembayaran',
   `ht_us_id` varchar(6) DEFAULT NULL,
-  `ht_dc_id` varchar(5) DEFAULT NULL,
   PRIMARY KEY (`ht_id`),
   KEY `ht_us_id` (`ht_us_id`),
-  KEY `ht_dc_id` (`ht_dc_id`),
-  CONSTRAINT `htrans_ibfk_1` FOREIGN KEY (`ht_us_id`) REFERENCES `users` (`us_id`),
-  CONSTRAINT `htrans_ibfk_2` FOREIGN KEY (`ht_dc_id`) REFERENCES `discount` (`di_id`)
+  CONSTRAINT `htrans_ibfk_1` FOREIGN KEY (`ht_us_id`) REFERENCES `users` (`us_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 /*Data for the table `htrans` */
-
-insert  into `htrans`(`ht_id`,`ht_date`,`ht_invoice`,`ht_total`,`ht_status`,`ht_us_id`,`ht_dc_id`) values 
-('HT0001','2022-11-19 05:46:24','OP221119001',2799000,'1','US0001',NULL);
 
 /*Table structure for table `kacamata` */
 
