@@ -7,6 +7,6 @@
     <title>Optik Primadona</title>
 </head>
 <body>
-    <h1>Hayooo tangane glitis</h1>
+    <h1>Hayooo tangane glitis :D</h1>
 </body>
 </html>

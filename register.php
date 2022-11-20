@@ -124,7 +124,7 @@
                     echo "<label class='form-label text-danger'>$msg</label><br>";
                 }
             ?>
-            <button type="submit" class="btn btn-danger w-100" name="register">Register</button>
+            <button type="submit" class="btn btn-success w-100" name="register">Register</button>
             <div class="mb-3">
                 <label class="form-label">Have an account? <a href="login.php">Login</a></label>
             </div>

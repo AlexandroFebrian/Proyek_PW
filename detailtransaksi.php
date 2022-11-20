@@ -1,67 +1,33 @@
 <?php
-    require_once("connection.php");    
+    require_once("connection.php");
+    
+    $cart_item = [];
+    $transaksi = [];
+
+    if (!isset($_SESSION["auth_user_id"])) {
+        header("Location: index.php");
+    }
 
     if (isset($_POST["logout"])) {
         unset($_SESSION["auth_user_id"]);
         header("Location: index.php");
     }
 
-    if (isset($_POST["search-btn"])) {
-        $br_name = $_POST["search-val"];
-        $co_id = explode('-', $_POST["search-val"]);
-        $co_id = $co_id[count($co_id) - 1];
-    }
-
-    $kc_id = "KC001";
-    $co_id = "CO0001";
-    if (isset($_GET["id"])) {
-        $kc_id = $_GET["id"];
-        $max_kc_id = mysqli_fetch_array(mysqli_query($conn, "SELECT MAX(SUBSTR(kc_id, 3)) FROM kacamata"))[0];
-        if (substr($kc_id, 2) < 1 || substr($kc_id, 2) > $max_kc_id || substr($kc_id, 0, 2) != "KC" || strlen($kc_id) != 5) {
-            header("Location: detail.php?id=KC001");
+    $ht_id = "";
+    if (isset($_GET["ht_id"])) {
+        $query = mysqli_query($conn, "SELECT * FROM cart JOIN color ON ca_co_id = co_id WHERE ca_us_id = '". $_SESSION["auth_user_id"] . "'");
+        while ($row = mysqli_fetch_array($query)) {
+            $cart_item[] = $row;
         }
 
-        $color = mysqli_query($conn, "SELECT CONCAT('CO', LPAD(MIN(SUBSTR(co_id, 3)), 4, '0')) FROM color WHERE co_kc_id = '$kc_id'");
-
-        if (isset($_GET["color"])) {
-            $co_id = $_GET["color"];
-            $max_co_id = mysqli_fetch_array(mysqli_query($conn, "SELECT MAX(SUBSTR(co_id, 3)) FROM color"))[0];
-            if (substr($co_id, 2) < 1 || substr($co_id, 2) > $max_co_id || substr($co_id, 0, 2) != "CO" || strlen($co_id) != 6) {
-                header("Location: detail.php?id=KC001");
-            }
-        } else {
-            $co_id = mysqli_fetch_array(mysqli_query($conn, "SELECT co_id FROM color WHERE co_kc_id = '" . $_GET["id"] . "'"))[0];
+        $ht_id = $_GET["ht_id"];
+        $query = mysqli_query($conn, "SELECT * FROM htrans JOIN dtrans ON dt_ht_id = ht_id JOIN users ON ht_us_id = us_id JOIN color ON dt_co_id = co_id JOIN kacamata ON co_kc_id = kc_id JOIN brand ON kc_br_id = br_id WHERE ht_us_id = '" . $_SESSION["auth_user_id"] . "' AND ht_id = '$ht_id'");
+        while ($row = mysqli_fetch_array($query)) {
+            $transaksi[] = $row;
         }
+    } else {
+        header("Location: index.php");
     }
-
-    if ($kc_id != "") {
-        $result = mysqli_fetch_array(mysqli_query($conn, "SELECT * FROM kacamata JOIN color ON kc_id = co_kc_id JOIN brand ON kc_br_id = br_id WHERE kc_id = '$kc_id' AND co_id = '$co_id'"));
-        $kc_id = $result["kc_id"];
-        $kc_price = $result["kc_price"];
-        $kc_stock = $result["kc_stock"];
-        $co_id = $result["co_id"];
-        $co_link = $result["co_link"];
-        $br_name = $result["br_name"];
-    }
-
-    // if (isset($_POST["keranjang"])) {
-    //     if (isset($_SESSION["auth_user_id"])) {
-    //         $items = mysqli_fetch_array(mysqli_query($conn, "SELECT * FROM cart WHERE ca_co_id = '$co_id' AND ca_us_id = '" . $_SESSION["auth_user_id"] . "'"));
-    //         $qty = $_POST["qtyhidden"];
-    //         if ($qty == "") {
-    //             $qty = 1;
-    //         }
-    //         if (isset($items[0])) {
-    //             $query = mysqli_query($conn, "UPDATE cart SET ca_qty = '" . $qty + $items["ca_qty"] . "' WHERE ca_co_id = '$co_id' AND ca_us_id = '" . $_SESSION["auth_user_id"] . "'");
-    //             $query = mysqli_query($conn, "UPDATE cart SET ca_subtotal = '" . ($qty + $items["ca_qty"]) * $kc_price . "' WHERE ca_co_id = '$co_id' AND ca_us_id = '" . $_SESSION["auth_user_id"] . "'");
-    //         } else {
-    //             $query = mysqli_query($conn, "INSERT INTO cart VALUES('" . $_SESSION["auth_user_id"] . "', '$co_id', '$qty', '" . $qty * $kc_price . "')");
-    //         }
-    //         header("Location: detail.php?id=$kc_id&color=$co_id");
-    //     } else {
-    //         header("Location: login.php");
-    //     }
-    // }
 ?>
 
 <!DOCTYPE html>
@@ -113,8 +79,15 @@
                     <button class="btn" type="submit" name="search-btn" formaction="product.php"><img src="storage/icons/search.png" width="18px" class="opacity-50"></button>
                 </span>
                 <div class="position-relative">
-                    <a href="cart.php" id="qtycart">
-                        <!-- pake ajax -->
+                    <a href="cart.php">
+                        <?php
+                            if (count($cart_item) != 0) {
+                        ?>
+                            <p class="position-absolute bg-danger text-white fw-bold rounded-5 start-50 px-2" style="z-index: 2; font-size: 12px;"><?= count($cart_item) ?></p>
+                        <?php
+                            }
+                        ?>
+                        <img src="storage/icons/cart.png" class="mx-lg-3 mx-0 ms-3 opacity-50" width="30px">
                     </a>
                 </div>
                 <div class="fs-3 pb-2 opacity-75 d-none d-lg-block">|</div>
@@ -136,50 +109,84 @@
         <div class="container-fluid">
             <!-- Detail -->
             <?php
-                if ($kc_id != "") {
+                if (count($transaksi) != 0) {
             ?>
-                    <div class="card text-center" style="border: none;">
-                        <img src='<?= $co_link ?>' class="card-img-top w-50 mx-auto">
-                        <div class="card-body">
-                            <h4 class="card-title"><?= $br_name ?></h4>
-                            <p class="card-text fs-5"><?= "SKU-" . $co_id ?>
-                            <br><?= "Rp " . number_format($kc_price, 0, "", ",") ?></p>
-                        </div>
-                        <ul class="pagination d-flex justify-content-center">
-                            <?php
-                                $color = mysqli_query($conn, "SELECT * FROM color WHERE co_kc_id = '" . $kc_id . "'");
-                                $ctr = 1;
-                                while ($row = mysqli_fetch_array($color)) {
-                            ?>
-                                <li class="page-item"><a class="page-link text-black" href="detail.php?id=<?= $kc_id ?>&color=<?= $row["co_id"] ?>"><?= $ctr++ ?></a></li>
-                            <?php
-                                }
-                            ?>
-                        </ul>
-                        <span>Stok : <?= $kc_stock ?></span>
-                        <input type="hidden" id="stock" value='<?= $kc_stock ?>'>
-                        <div class="d-flex justify-content-center mt-3">
-                            <div class="d-inline-block p-0 m-0" style="border: 2px gray solid; border-radius:5px; border-spacing: 0px;">
-                                <button type="button" class="btn" onclick="Kurang()" style="border-right:2px gray solid; border-radius:0px;">-</button>
-                                <span id='qty' class="px-3" style="font-size:16px; width: 50px;" name="qty">1</span>
-                                <input type="hidden" name="qtyhidden" value="1" id="qtyhidden">
-                                <button type="button" class="btn" onclick="Tambah()" style="border-left: 2px gray solid;border-radius:0px;">+</button>
+                    <div class="card p-5">
+                        <h5 class="fw-bold m-0">Selesai</h5>
+                        <hr>
+                        <div class="row">
+                            <div class="col-6">
+                                <p>No. Invoice</p>
                             </div>
-                            <?php
-                                if (isset($_SESSION["auth_user_id"])) {
-                                    echo '<button class="btn btn-success fw-bold ms-4" type="button" onclick="add_cart()" data-bs-toggle="modal" data-bs-target="#exampleModal">+ Keranjang</button>';
-                                } else {
-                                    echo '<button class="btn btn-success fw-bold ms-4" formaction="login.php">+ Keranjang</button>';
-                                }
-                            ?>
+                            <div class="col-6 text-end">
+                                <p class="fw-bold text-success"><?= $transaksi[0]["ht_invoice"] ?></p>
+                            </div>
+                            <div class="col-6">
+                                <p>Tanggal Pembelian</p>
+                            </div>
+                            <div class="col-6 text-end">
+                                <p><?= date_format(date_create($transaksi[0]["ht_date"]),"d F Y, h:i A") ?></p>
+                            </div>
+                            <hr>
+                        </div>
+                        <h5 class="fw-bold">Detail Produk</h5>
+                        <?php
+                        $total_qty = 0;
+                            for ($i = 0; $i < count($transaksi); $i++) {
+                                $total_qty += $transaksi[$i]["dt_qty"];
+                        ?>
+                                <div class="row border ps-5 pt-4 pb-3 py-lg-0 rounded-4 mb-2" style="align-items: center;">
+                                    <div class="col-4 col-lg-2">
+                                        <img src='<?= $transaksi[$i]["co_link"] ?>' class="card-img-top">
+                                    </div>
+                                    <div class="col-8 col-lg-4 text-start">
+                                        <div class="card-body">
+                                            <h5 class="card-title"><?= $transaksi[$i]["br_name"] ?></h5>
+                                            <p class="m-0"><?= " SKU-" . $transaksi[$i]["co_id"] ?></p>
+                                            <p class="m-0" style="font-size: 12px;"><?= $transaksi[$i]["dt_qty"] ?> barang x <?= "Rp " . number_format($transaksi[$i]["kc_price"], 0, "", ",") ?></p>
+                                        </div>
+                                    </div>
+                                    <div class="col-lg-6">
+                                        <p>Total Harga</p>
+                                        <h5><?= "Rp " . number_format($transaksi[$i]["dt_subtotal"], 0, "", ",") ?></h5>
+                                    </div>
+                                </div>
+                        <?php
+                            }
+                        ?>
+                        <hr>
+                        <h5 class="fw-bold">Rincian Pembayaran</h5>
+                        <div class="row">
+                            <div class="col-6">
+                                <p>Total Harga (<?= $total_qty ?> barang)</p>
+                            </div>
+                            <div class="col-6 text-end">
+                                <p><?= "Rp " . number_format($transaksi[0]["ht_total"], 0, "", ",") ?></p>
+                            </div>
+                            <div class="col-6">
+                                <p>Total Ongkos Kirim</p>
+                            </div>
+                            <div class="col-6 text-end">
+                                <p>Rp 20,000</p>
+                            </div>
+                            <hr>
+                            <div class="col-6">
+                                <h5 class="fw-bold">Total Belanja</h5>
+                            </div>
+                            <div class="col-6 text-end">
+                                <h5 class="fw-bold"><?= "Rp " . number_format($transaksi[0]["ht_total"] + 20000, 0, "", ",") ?></h5>
+                            </div>
                         </div>
                     </div>
             <?php
+                } else {
+                    echo "<h1 class='text-center fw-bold mt-5 text-danger'>404 NOT FOUND</h1>";
                 }
             ?>
             
         </div>
 
+        <!-- Footer -->
         <footer>
           <div class="bg-dark mt-5" id="scrollspyHeading5">
             <div class="container-fluid bg-dark pt-3 pb-2 text-white">
@@ -254,85 +261,4 @@
     <script src="script/bootstrap.bundle.min.js"></script>
     <script src="script/jquery-3.6.1.min.js"></script>
 </body>
-<script>
-    // $("[type='number']").keypress(function (evt) {
-    //      evt.preventDefault();
-    //     // if($("[type='number']").val == ""){
-    //     //     $("[type='number']").val = 1;
-    //     // }
-    // });
-    function Tambah(obj){
-        let t = document.getElementById("qty");
-        let s = document.getElementById("stock");
-        stock = s.value;
-        stock = parseInt(stock);
-        let q = document.getElementById("qtyhidden");
-        
-        //let x = document.getElementById("kuantitiHidden"+id);
-        jmlh = t.innerHTML;
-        jmlh = parseInt(jmlh);
-        jmlh++;
-        if(jmlh > stock){
-            jmlh = stock;
-        }
-        //x.value = jmlh;
-        t.innerHTML = jmlh;
-        q.value = jmlh;
-    }
-
-    function Kurang(obj){
-        let t = document.getElementById("qty");
-        
-        //let x = document.getElementById("kuantitiHidden"+id);
-        jmlh = t.innerHTML;
-        jmlh = parseInt(jmlh);
-        jmlh--;
-        if(jmlh < 1){
-            jmlh = 1;
-        }
-        //x.value = jmlh;
-        t.innerHTML = jmlh;
-        q.value = jmlh;
-    }
-
-    function load_ajax() {
-        fetch_cart();
-    }
-
-    function fetch_cart() {
-        r = new XMLHttpRequest();
-        
-        r.onreadystatechange = function() {
-            if ((this.readyState==4) && (this.status==200)) {
-                document.getElementById("qtycart").innerHTML = this.responseText;
-            }
-        }
-        
-        r.open('GET', `tambahkeranjang.php`);
-        r.send();
-    }
-
-    function ajax_func(method, url, callback, data = "") {
-        r = new XMLHttpRequest();
-        r.onreadystatechange = function() {
-            callback(this);
-        }
-        r.open(method, url);
-        if (method.toLowerCase() == "POST") {
-            r.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
-        }
-        r.send(data);
-    }
-
-    function add_cart() {
-        qty = document.getElementById("qtyhidden").value;
-        ajax_func('GET', `tambahkeranjang.php?co_id=<?= $co_id ?>&qty=${qty}&kc_price=<?= $kc_price ?>`, refresh_table);
-    }
-
-    function refresh_table(xhttp) {
-        if ((xhttp.readyState==4) && (xhttp.status==200)) {
-            fetch_cart();
-        }
-    }
-</script>
 </html>

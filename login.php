@@ -65,7 +65,7 @@
                     echo "<label class='form-label text-danger'>$msg</label><br>";
                 }
             ?>
-            <button type="submit" class="btn btn-danger w-100" name="login">Login</button>
+            <button type="submit" class="btn btn-success w-100" name="login">Login</button>
             <div class="mb-3">
                 <label class="form-label">No account? <a href="register.php">Register</a></label>
             </div>

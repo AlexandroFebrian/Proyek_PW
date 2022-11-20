@@ -111,7 +111,7 @@
                         Ongkir : 
                     </div>
                     <div class="col-6 text-start">
-                        Rp 50,000
+                        Rp 20,000
                     </div>
                 </div>
                 <div class="row mt-3">
@@ -119,7 +119,7 @@
                         <h5 class="fw-bold">Harga Total : </h5>
                     </div>
                     <div class="col-6 text-start">
-                        <h5 class="fw-bold"><?= "Rp " . number_format($hargatotal + 50000, 0, "", ",") ?></h5>
+                        <h5 class="fw-bold"><?= "Rp " . number_format($hargatotal + 20000, 0, "", ",") ?></h5>
                     </div>
                 </div>
                 <form method="POST">

@@ -1,25 +1,27 @@
 <?php
     require_once("connection.php");
 
-    $_SESSION["gender"] = "A";    
+    $_SESSION["gender"] = "A";
     $cart_item = [];
+    $transaksi = [];
 
     if (isset($_SESSION["auth_user_id"])) {
         $query = mysqli_query($conn, "SELECT * FROM cart JOIN color ON ca_co_id = co_id WHERE ca_us_id = '". $_SESSION["auth_user_id"] . "'");
         while ($row = mysqli_fetch_array($query)) {
             $cart_item[] = $row;
         }
-    }
-    
-    if (isset($_POST["logout"])) {
-        unset($_SESSION["auth_user_id"]);
+
+        $query = mysqli_query($conn, "SELECT *, COUNT(dt_ht_id) AS 'dt_total_qty' FROM htrans JOIN dtrans ON dt_ht_id = ht_id JOIN users ON ht_us_id = us_id JOIN color ON dt_co_id = co_id JOIN kacamata ON co_kc_id = kc_id JOIN brand ON kc_br_id = br_id WHERE ht_us_id = '". $_SESSION["auth_user_id"] . "' GROUP BY ht_id");
+        while ($row = mysqli_fetch_array($query)) {
+            $transaksi[] = $row;
+        }
+    } else {
         header("Location: index.php");
     }
 
-    if (isset($_POST["search-btn"])) {
-        $br_name = $_POST["search-val"];
-        $co_id = explode('-', $_POST["search-val"]);
-        $co_id = $co_id[count($co_id) - 1];
+    if (isset($_POST["logout"])) {
+        unset($_SESSION["auth_user_id"]);
+        header("Location: index.php");
     }
 
     if(isset($_SESSION["filter"])){
@@ -65,6 +67,7 @@
                             <a class="nav-link" role="button" href="product.php?page=1">Semua Produk</a>
                         </li>
                         <li class="nav-item">
+                            <a class="nav-link" role="button" href="transaksi.php?">Transaksi</a>
                             <?php
                                 if (!isset($_SESSION["auth_user_id"])) {
                             ?>
@@ -73,7 +76,6 @@
                             <?php
                                 } else {
                             ?>
-                                <a class="nav-link" role="button" href="transaksi.php?">Transaksi</a>
                                 <button class="btn btn-danger d-block d-lg-none rounded-3 mt-3" type="submit" name="logout">Logout <img class="text-white" src="storage/icons/logout.ico" width="20px"></button>
                             <?php
                                 }
@@ -115,154 +117,59 @@
             </div>
         </nav>
 
-        <!-- Jumbotron -->
-        <div id="carouselExampleFade" class="carousel slide carousel-fade shadow" data-bs-ride="carousel">
-            <div class="carousel-inner">
-                <div class="carousel-item active" data-bs-interval="5000">
-                <img src="storage/img/fot1.png" class="d-block w-100" style="height: 100%;">
+        <!-- Isi History -->
+        <div class="container-fluid text-center">
+            <?php
+                if (count($transaksi) == 0) {
+            ?>
+                <div class="container-fuild mb-5">
+                    <img src="storage/icons/transaksi.png" class="mt-5" width="150px">
+                    <h2 class="mt-2">Tidak ada transaksi</h2>
+                    <p class="mt-2">Yuk, beli produk kacamata favoritmu!</p>
+                    <button class="btn btn-success mt-2 fw-bold" formaction="product.php">Mulai Belanja</button>
                 </div>
-                <div class="carousel-item" data-bs-interval="5000">
-                <img src="storage/img/fot2.png" class="d-block w-100" style="height: 100%;">
-                </div>
-                <div class="carousel-item" data-bs-interval="5000">
-                <img src="storage/img/fot3.png" class="d-block w-100" style="height: 100%;">
-                </div>
-            </div>
-        </div>
-
-        <!-- Content -->
-        <div class="container-fluid my-4">
-            <!-- For Men -->
-            <div class="row ms-2">
-                <div class="col">
-                    <h1>For Men</h1>
-                </div>
-            </div>
-            <div class="container-fluid py-2">
-                <div class="d-flex flex-row flex-nowrap overflow-auto">
-                    <?php
-                        $result = [];
-                        $tempresult = mysqli_query($conn, "SELECT * FROM kacamata JOIN color ON kc_id = co_kc_id JOIN brand ON kc_br_id = br_id WHERE kc_gender = 'M' GROUP BY co_kc_id ORDER BY kc_price DESC LIMIT 20");
-                        while ($row = mysqli_fetch_array($tempresult)) {
-                            $result[] = $row;
-                        }
-
-                        for ($i = 0; $i < count($result); $i++) {
-                            if (isset($result[$i])) {
-                                $kc_id = $result[$i]["kc_id"];
-                                $kc_price = $result[$i]["kc_price"];
-                                $co_id = $result[$i]["co_id"];
-                                $co_link = $result[$i]["co_link"];
-                                $br_name = $result[$i]["br_name"];
-                    ?>
-                                <div class="card card-block mx-2 shadow" style="min-width: auto;">
-                                    <div class="col text-center me-4 mb-5">
-                                        <a href='<?= "detail.php?id=" . $kc_id ?>' class="text-black text-decoration-none">
-                                            <div class="card" style="width: 18rem; border: none;">
-                                                <img src='<?= $co_link ?>' class="card-img-top">
-                                                <div class="card-body">
-                                                    <h4 class="card-title"><?= $br_name ?></h4>
-                                                    <p class="card-text fs-5"><?= "SKU-" . $co_id ?>
-                                                    <br><?= "Rp " . number_format($kc_price) ?></p>
-                                                </div>
-                                            </div>
-                                        </a>
-                                    </div>
+            <?php
+                } else {
+                    for ($i = 0; $i < count($transaksi); $i++) {
+                        $date = date_create($transaksi[$i]["ht_date"]);
+                        $date = date_format($date,"d M Y");
+            ?>
+                        <div class="row border ps-5 pt-4 pb-3 py-lg-0" style="align-items: center;">
+                            <div class="row text-start mt-3">
+                                <p><b class="text-success">Selesai</b> | <?= $date ?> | <?= $transaksi[$i]["ht_invoice"] ?></p>
+                            </div>
+                            <div class="col-4 col-lg-2">
+                                <img src='<?= $transaksi[$i]["co_link"] ?>' class="card-img-top">
+                            </div>
+                            <div class="col-8 col-lg-4 text-start">
+                                <div class="card-body">
+                                    <h5 class="card-title"><?= $transaksi[$i]["br_name"] ?></h5>
+                                    <p class="m-0"><?= " SKU-" . $transaksi[$i]["co_id"] ?></p>
+                                    <p class="m-0" style="font-size: 12px;"><?= $transaksi[$i]["dt_qty"] ?> barang x <?= "Rp " . number_format($transaksi[$i]["kc_price"], 0, "", ",") ?></p>
+                                    <p class="m-0" style="font-size: 12px;">
+                                        <?php
+                                            if ($transaksi[$i]["dt_total_qty"] > 1) {
+                                                echo "+" . $transaksi[$i]["dt_total_qty"] - 1 . " produk lainnya";
+                                            }
+                                        ?>
+                                    </p>
                                 </div>
-                    <?php
-                            }
-                        }
-                    ?>
-                </div>
-            </div>
-
-            <!-- For Woman -->
-            <div class="row ms-2 mt-5">
-                <div class="col">
-                    <h1>For Woman</h1>
-                </div>
-            </div>
-            <div class="container-fluid py-2">
-                <div class="d-flex flex-row flex-nowrap overflow-auto">
-                    <?php
-                        $result = [];
-                        $tempresult = mysqli_query($conn, "SELECT * FROM kacamata JOIN color ON kc_id = co_kc_id JOIN brand ON kc_br_id = br_id WHERE kc_gender = 'W' GROUP BY co_kc_id ORDER BY kc_price DESC LIMIT 20");
-                        while ($row = mysqli_fetch_array($tempresult)) {
-                            $result[] = $row;
-                        }
-                        
-                        for ($i = 0; $i < count($result); $i++) {
-                            if (isset($result[$i])) {
-                                $kc_id = $result[$i]["kc_id"];
-                                $kc_price = $result[$i]["kc_price"];
-                                $co_id = $result[$i]["co_id"];
-                                $co_link = $result[$i]["co_link"];
-                                $br_name = $result[$i]["br_name"];
-                    ?>
-                                <div class="card card-block mx-2 shadow" style="min-width: auto;">
-                                    <div class="col text-center me-4 mb-5">
-                                        <a href='<?= "detail.php?id=" . $kc_id ?>' class="text-black text-decoration-none">
-                                            <div class="card" style="width: 18rem; border: none;">
-                                                <img src='<?= $co_link ?>' class="card-img-top">
-                                                <div class="card-body">
-                                                    <h4 class="card-title"><?= $br_name ?></h4>
-                                                    <p class="card-text fs-5"><?= "SKU-" . $co_id ?>
-                                                    <br><?= "Rp " . number_format($kc_price) ?></p>
-                                                </div>
-                                            </div>
-                                        </a>
-                                    </div>
+                            </div>
+                            <div class="col-lg-6">
+                                <p>Total Belanja</p>
+                                <h5><?= "Rp " . number_format($transaksi[$i]["ht_total"], 0, "", ",") ?></h5>
+                            </div>
+                            <div class="row mb-3">
+                                <div class="col-6"></div>
+                                <div class="col-6">
+                                    <a class="fw-bold text-success" href="detailtransaksi.php?ht_id=<?= $transaksi[$i]["ht_id"] ?>">Lihat Detail Transaksi</a>
                                 </div>
-                    <?php
-                            }
-                        }
-                    ?>
-                </div>
-            </div>
-
-            <!-- Popular Brand -->
-            <div class="row ms-2 mt-5">
-                <div class="col">
-                    <h1>Popular Brand</h1>
-                </div>
-            </div>
-            <div class="container-fluid py-2">
-                <div class="d-flex flex-row flex-nowrap overflow-auto">
-                    <?php
-                        $result = [];
-                        $tempresult = mysqli_query($conn, "SELECT * FROM kacamata JOIN color ON kc_id = co_kc_id JOIN brand ON kc_br_id = br_id WHERE br_id = 'BR008' AND kc_price > 1600000 GROUP BY co_kc_id ORDER BY kc_price DESC LIMIT 20");
-                        while ($row = mysqli_fetch_array($tempresult)) {
-                            $result[] = $row;
-                        }
-
-                        for ($i = 0; $i < count($result); $i++) {
-                            if (isset($result[$i])) {
-                                $kc_id = $result[$i]["kc_id"];
-                                $kc_price = $result[$i]["kc_price"];
-                                $co_id = $result[$i]["co_id"];
-                                $co_link = $result[$i]["co_link"];
-                                $br_name = $result[$i]["br_name"];
-                    ?>
-                                <div class="card card-block mx-2 shadow" style="min-width: auto;">
-                                    <div class="col text-center me-4 mb-5">
-                                        <a href='<?= "detail.php?id=" . $kc_id ?>' class="text-black text-decoration-none">
-                                            <div class="card" style="width: 18rem; border: none;">
-                                                <img src='<?= $co_link ?>' class="card-img-top">
-                                                <div class="card-body">
-                                                    <h4 class="card-title"><?= $br_name ?></h4>
-                                                    <p class="card-text fs-5"><?= "SKU-" . $co_id ?>
-                                                    <br><?= "Rp " . number_format($kc_price) ?></p>
-                                                </div>
-                                            </div>
-                                        </a>
-                                    </div>
-                                </div>
-                    <?php
-                            }
-                        }
-                    ?>
-                </div>
-            </div>
+                            </div>
+                        </div>
+            <?php
+                    }
+                }
+            ?>
         </div>
 
         <!-- Footer -->

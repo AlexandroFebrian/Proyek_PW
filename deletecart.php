@@ -1,6 +1,10 @@
 <?php
     require_once("connection.php");
 
+    if (!isset($_REQUEST["co_id"])) {
+        header("Location: index.php");
+    }
+
     $us_id = $_SESSION["auth_user_id"];
     $co_id = $_REQUEST["co_id"];
 

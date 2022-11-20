@@ -273,6 +273,8 @@
                     <ul class="navbar-nav me-auto mb-2 mb-lg-0">
                         <li class="nav-item">
                             <a class="nav-link" role="button" href="product.php?page=1">Semua Produk</a>
+                        </li>
+                        <li class="nav-item">
                             <?php
                                 if (!isset($_SESSION["auth_user_id"])) {
                             ?>
@@ -281,7 +283,8 @@
                             <?php
                                 } else {
                             ?>
-                                <button class="btn btn-danger d-block d-lg-none rounded-3" type="submit" name="logout">Logout <img class="text-white" src="storage/icons/logout.ico" width="20px"></button>
+                                <a class="nav-link" role="button" href="transaksi.php?">Transaksi</a>
+                                <button class="btn btn-danger d-block d-lg-none rounded-3 mt-3" type="submit" name="logout">Logout <img class="text-white" src="storage/icons/logout.ico" width="20px"></button>
                             <?php
                                 }
                             ?>
