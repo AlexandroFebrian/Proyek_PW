@@ -167,6 +167,62 @@
 
         <!-- Print keranjang kosong / isi keranjang -->
         <div class="container-fluid text-center" id="isicart"></div>
+        <!-- Footer -->
+        <footer>
+            <div class="bg-dark mt-5" id="scrollspyHeading5">
+            <div class="container-fluid bg-dark pt-3 pb-2 text-white">
+                <div class="container">
+                <div class="row">
+                    <div class="col-12 col-lg-6 mb-4">
+                    <h2 class="fw-bold text-center">Send us Mail!</h2>
+                    <form action="halaman2.html">
+                        <div class="mb-3">
+                        <label for="exampleInputEmail1" class="form-label">Email address</label>
+                        <input type="email" class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp">
+                        <div id="emailHelp" class="form-text">We'll never share your email with anyone else.</div>
+                        </div>
+                        <div class="mb-3">
+                        <label class="form-label">Mail</label>
+                        <textarea name="mail" cols="30" rows="8" class="form-control"></textarea>
+                        </div>
+                        <div class="mb-3 form-check">
+                        <input type="checkbox" class="form-check-input" id="exampleCheck1">
+                        <label class="form-check-label" for="exampleCheck1">Let us send you an email</label>
+                        </div>
+                        <button type="submit" class="btn btn-primary fw-bold">Submit</button>
+                    </form>
+                    </div>
+                    <div class="col-12 col-lg-6 text-center mt-auto mb-auto">
+                    <p>
+                        <a class="btn btn-success fw-bold" data-bs-toggle="collapse" href="#collapseExample" role="button" aria-expanded="false" aria-controls="collapseExample">
+                        Customer Care
+                        </a>
+                    </p>
+                    <div class="collapse" id="collapseExample">
+                        <div class="card card-body text-success fw-bold mb-3">
+                        Email : careprimadona@care.co.id
+                        </div>
+                    </div>
+                    <p>
+                        <a class="btn btn-danger fw-bold" data-bs-toggle="collapse" href="#collapseExample" role="button" aria-expanded="false" aria-controls="collapseExample">
+                        Contact Person
+                        </a>
+                    </p>
+                    <div class="collapse" id="collapseExample">
+                        <div class="card card-body text-danger fw-bold">
+                        Email : optikprimadona@official.co.id <br>
+                        Phone : (031) 5231452
+                        </div>
+                    </div>
+                    </div>
+                </div>
+                </div>
+                <div class="row mt-3">
+                <p class="text-center fw-bold">Copyright &copy; 2021 Optik Primadona, Inc.</p>
+                </div>
+            </div>
+            </div>
+        </footer>
     </form>
     <script src="script/bootstrap.bundle.min.js"></script>
     <script src="script/jquery-3.6.1.min.js"></script>

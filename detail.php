@@ -1,14 +1,5 @@
 <?php
-    require_once("connection.php");
-
-    $cart_item = [];
-
-    if (isset($_SESSION["auth_user_id"])) {
-        $query = mysqli_query($conn, "SELECT * FROM cart JOIN color ON ca_co_id = co_id WHERE ca_us_id = '". $_SESSION["auth_user_id"] . "'");
-        while ($row = mysqli_fetch_array($query)) {
-            $cart_item[] = $row;
-        }
-    }
+    require_once("connection.php");    
 
     if (isset($_POST["logout"])) {
         unset($_SESSION["auth_user_id"]);
@@ -53,24 +44,24 @@
         $br_name = $result["br_name"];
     }
 
-    if (isset($_POST["keranjang"])) {
-        if (isset($_SESSION["auth_user_id"])) {
-            $items = mysqli_fetch_array(mysqli_query($conn, "SELECT * FROM cart WHERE ca_co_id = '$co_id' AND ca_us_id = '" . $_SESSION["auth_user_id"] . "'"));
-            $qty = $_POST["qtyhidden"];
-            if ($qty == "") {
-                $qty = 1;
-            }
-            if (isset($items[0])) {
-                $query = mysqli_query($conn, "UPDATE cart SET ca_qty = '" . $qty + $items["ca_qty"] . "' WHERE ca_co_id = '$co_id' AND ca_us_id = '" . $_SESSION["auth_user_id"] . "'");
-                $query = mysqli_query($conn, "UPDATE cart SET ca_subtotal = '" . ($qty + $items["ca_qty"]) * $kc_price . "' WHERE ca_co_id = '$co_id' AND ca_us_id = '" . $_SESSION["auth_user_id"] . "'");
-            } else {
-                $query = mysqli_query($conn, "INSERT INTO cart VALUES('" . $_SESSION["auth_user_id"] . "', '$co_id', '$qty', '" . $qty * $kc_price . "')");
-            }
-            header("Location: detail.php?id=$kc_id&color=$co_id");
-        } else {
-            header("Location: login.php");
-        }
-    }
+    // if (isset($_POST["keranjang"])) {
+    //     if (isset($_SESSION["auth_user_id"])) {
+    //         $items = mysqli_fetch_array(mysqli_query($conn, "SELECT * FROM cart WHERE ca_co_id = '$co_id' AND ca_us_id = '" . $_SESSION["auth_user_id"] . "'"));
+    //         $qty = $_POST["qtyhidden"];
+    //         if ($qty == "") {
+    //             $qty = 1;
+    //         }
+    //         if (isset($items[0])) {
+    //             $query = mysqli_query($conn, "UPDATE cart SET ca_qty = '" . $qty + $items["ca_qty"] . "' WHERE ca_co_id = '$co_id' AND ca_us_id = '" . $_SESSION["auth_user_id"] . "'");
+    //             $query = mysqli_query($conn, "UPDATE cart SET ca_subtotal = '" . ($qty + $items["ca_qty"]) * $kc_price . "' WHERE ca_co_id = '$co_id' AND ca_us_id = '" . $_SESSION["auth_user_id"] . "'");
+    //         } else {
+    //             $query = mysqli_query($conn, "INSERT INTO cart VALUES('" . $_SESSION["auth_user_id"] . "', '$co_id', '$qty', '" . $qty * $kc_price . "')");
+    //         }
+    //         header("Location: detail.php?id=$kc_id&color=$co_id");
+    //     } else {
+    //         header("Location: login.php");
+    //     }
+    // }
 ?>
 
 <!DOCTYPE html>
@@ -84,7 +75,7 @@
     <link rel="stylesheet" href="css/stylehome.css">
     <script src="jshome.js"></script>
 </head>
-<body>
+<body onload="load_ajax()">
 <form method="POST">
         <!-- Navbar -->
         <nav class="navbar navbar-expand-lg bg-white p-3 position-sticky top-0 w-100 border-bottom shadow" style="z-index: 5;">
@@ -119,15 +110,8 @@
                     <button class="btn" type="submit" name="search-btn" formaction="product.php"><img src="storage/icons/search.png" width="18px" class="opacity-50"></button>
                 </span>
                 <div class="position-relative">
-                    <a href="cart.php">
-                        <?php
-                            if (count($cart_item) != 0) {
-                        ?>
-                            <p class="position-absolute bg-danger text-white fw-bold rounded-5 start-50 px-2" style="z-index: 2; font-size: 12px;"><?= count($cart_item) ?></p>
-                        <?php
-                            }
-                        ?>
-                        <img src="storage/icons/cart.png" class="mx-lg-3 mx-0 ms-3 opacity-50" width="30px">
+                    <a href="cart.php" id="qtycart">
+                        <!-- pake ajax -->
                     </a>
                 </div>
                 <div class="fs-3 pb-2 opacity-75 d-none d-lg-block">|</div>
@@ -151,8 +135,6 @@
             <?php
                 if ($kc_id != "") {
             ?>
-                    <!-- <div class="col-4 text-center me-4 mb-5 mt-3">
-                        </div> -->
                     <div class="card text-center" style="border: none;">
                         <img src='<?= $co_link ?>' class="card-img-top w-50 mx-auto">
                         <div class="card-body">
@@ -180,8 +162,7 @@
                                 <input type="hidden" name="qtyhidden" value="1" id="qtyhidden">
                                 <button type="button" class="btn" onclick="Tambah()" style="border-left: 2px gray solid;border-radius:0px;">+</button>
                             </div>
-                            <!-- <input class="form-control text-center w-25" type="number" value="1" min="1" max="<?= $kc_stock ?>" step="1" name="qty"> -->
-                            <button class="btn btn-success fw-bold ms-4" type="submit" name="keranjang">+ Keranjang</button>
+                            <button class="btn btn-success fw-bold ms-4" type="button" onclick="add_cart()" data-bs-toggle="modal" data-bs-target="#exampleModal">+ Keranjang</button>
                         </div>
                     </div>
             <?php
@@ -245,6 +226,22 @@
             </div>
           </div>
         </footer>
+
+        <!-- Modal -->
+        <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h1 class="modal-title fs-5" id="exampleModalLabel">Berhasil menambahkan kacamata ke keranjang</h1>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Lanjut Belanja</button>
+                        <a href="cart.php"><button type="button" class="btn btn-success">Lihat Keranjang</button></a>
+                    </div>
+                </div>
+            </div>
+        </div>
     </form>
     <script src="script/bootstrap.bundle.min.js"></script>
     <script src="script/jquery-3.6.1.min.js"></script>
@@ -260,7 +257,7 @@
         let t = document.getElementById("qty");
         let s = document.getElementById("stock");
         stock = s.value;
-        stock = parseInt(stock)
+        stock = parseInt(stock);
         let q = document.getElementById("qtyhidden");
         
         //let x = document.getElementById("kuantitiHidden"+id);
@@ -268,7 +265,7 @@
         jmlh = parseInt(jmlh);
         jmlh++;
         if(jmlh > stock){
-            jmlh = stock
+            jmlh = stock;
         }
         //x.value = jmlh;
         t.innerHTML = jmlh;
@@ -288,6 +285,47 @@
         //x.value = jmlh;
         t.innerHTML = jmlh;
         q.value = jmlh;
+    }
+
+    function load_ajax() {
+        fetch_cart();
+    }
+
+    function fetch_cart() {
+        r = new XMLHttpRequest();
+        
+        r.onreadystatechange = function() {
+            if ((this.readyState==4) && (this.status==200)) {
+                document.getElementById("qtycart").innerHTML = this.responseText;
+                console.log(this.responseText);
+            }
+        }
+        
+        r.open('GET', `tambahkeranjang.php`);
+        r.send();
+    }
+
+    function ajax_func(method, url, callback, data = "") {
+        r = new XMLHttpRequest();
+        r.onreadystatechange = function() {
+            callback(this);
+        }
+        r.open(method, url);
+        if (method.toLowerCase() == "POST") {
+            r.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
+        }
+        r.send(data);
+    }
+
+    function add_cart() {
+        qty = document.getElementById("qtyhidden").value;
+        ajax_func('GET', `tambahkeranjang.php?co_id=<?= $co_id ?>&qty=${qty}&kc_price=<?= $kc_price ?>`, refresh_table);
+    }
+
+    function refresh_table(xhttp) {
+        if ((xhttp.readyState==4) && (xhttp.status==200)) {
+            fetch_cart();
+        }
     }
 </script>
 </html>
