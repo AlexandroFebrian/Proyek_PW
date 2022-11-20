@@ -18,7 +18,7 @@
         <img src="storage/icons/empty.png" class="mt-5" width="150px">
         <h2 class="mt-2">Keranjangmu masih kosong nih</h2>
         <p class="mt-2">Yuk, isi keranjangmu dengan kacamata favoritmu!</p>
-        <button class="btn btn-success mt-2 fw-bold" formaction="product.php">Mulai Belanja</button>
+        <a href="product.php"><button class="btn btn-success mt-2 fw-bold">Mulai Belanja</button></a>
     </div>
 <?php
     } else {
@@ -82,7 +82,7 @@
                     </div>
                 </div>
                 <div class="d-none d-lg-block col-1">
-                    <button class="bg-white fw-bold opacity-50" type="submit" name="remove" value='<?= $cart_item[$i]["ca_us_id"] . "~" . $cart_item[$i]["ca_co_id"] ?>' style="border: none;"><img src="storage/icons/delete.png" width="25px"></button>
+                    <button class="bg-white fw-bold opacity-50" onclick="confirm_delete(this)" data-bs-toggle="modal" data-bs-target="#exampleModal" value='<?= $cart_item[$i]["ca_co_id"] ?>' style="border: none;"><img src="storage/icons/delete.png" width="25px"></button>
                 </div>
             </div>
 <?php
@@ -122,7 +122,9 @@
                         <h5 class="fw-bold"><?= "Rp " . number_format($hargatotal + 50000, 0, "", ",") ?></h5>
                     </div>
                 </div>
-                <button class="btn btn-success px-5 mt-3" type="submit" name="beli">Beli</button>
+                <form method="POST">
+                    <button class="btn btn-success px-5 mt-3" type="submit" name="beli">Beli</button>
+                </form>
             </div>
         </div>
 <?php

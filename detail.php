@@ -233,11 +233,10 @@
                 <div class="modal-content">
                     <div class="modal-header">
                         <h1 class="modal-title fs-5" id="exampleModalLabel">Berhasil menambahkan kacamata ke keranjang</h1>
-                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                     </div>
                     <div class="modal-footer">
-                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Lanjut Belanja</button>
-                        <a href="cart.php"><button type="button" class="btn btn-success">Lihat Keranjang</button></a>
+                        <button type="button" class="btn btn-success" data-bs-dismiss="modal">Lanjut Belanja</button>
+                        <a href="cart.php"><button type="button" class="btn btn-secondary">Lihat Keranjang</button></a>
                     </div>
                 </div>
             </div>
@@ -297,7 +296,6 @@
         r.onreadystatechange = function() {
             if ((this.readyState==4) && (this.status==200)) {
                 document.getElementById("qtycart").innerHTML = this.responseText;
-                console.log(this.responseText);
             }
         }
         
