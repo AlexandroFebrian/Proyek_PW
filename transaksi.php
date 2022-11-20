@@ -156,13 +156,16 @@
                                 </div>
                             </div>
                             <div class="col-lg-6">
-                                <p>Total Belanja</p>
-                                <h5><?= "Rp " . number_format($transaksi[$i]["ht_total"], 0, "", ",") ?></h5>
+                                <p class="d-none d-lg-block">Total Belanja</p>
+                                <h5 class="d-none d-lg-block"><?= "Rp " . number_format($transaksi[$i]["ht_total"], 0, "", ",") ?></h5>
                             </div>
-                            <div class="row mb-3">
-                                <div class="col-6"></div>
+                            <div class="row mb-3 mt-3 mt-lg-0" style="align-items: center;">
+                                <div class="col-6 text-start">
+                                    <p class="m-0 d-block d-lg-none">Total Belanja</p>
+                                    <h5 class="m-0 d-block d-lg-none"><?= "Rp " . number_format($transaksi[$i]["ht_total"], 0, "", ",") ?></h5>
+                                </div>
                                 <div class="col-6">
-                                    <a class="fw-bold text-success" href="detailtransaksi.php?ht_id=<?= $transaksi[$i]["ht_id"] ?>">Lihat Detail Transaksi</a>
+                                    <a class="fw-bold text-success m-0" href="detailtransaksi.php?ht_id=<?= $transaksi[$i]["ht_id"] ?>">Lihat Detail Transaksi</a>
                                 </div>
                             </div>
                         </div>

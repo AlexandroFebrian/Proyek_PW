@@ -135,7 +135,7 @@
                             for ($i = 0; $i < count($transaksi); $i++) {
                                 $total_qty += $transaksi[$i]["dt_qty"];
                         ?>
-                                <div class="row border ps-5 pt-4 pb-3 py-lg-0 rounded-4 mb-2" style="align-items: center;">
+                                <div class="row border ps-5 pt-4 pb-3 py-lg-0 rounded-4 mb-2 justify-content-end" style="align-items: center;">
                                     <div class="col-4 col-lg-2">
                                         <img src='<?= $transaksi[$i]["co_link"] ?>' class="card-img-top">
                                     </div>
@@ -146,7 +146,7 @@
                                             <p class="m-0" style="font-size: 12px;"><?= $transaksi[$i]["dt_qty"] ?> barang x <?= "Rp " . number_format($transaksi[$i]["kc_price"], 0, "", ",") ?></p>
                                         </div>
                                     </div>
-                                    <div class="col-lg-6">
+                                    <div class="col-7 me-2 col-lg-6 m-lg-0">
                                         <p>Total Harga</p>
                                         <h5><?= "Rp " . number_format($transaksi[$i]["dt_subtotal"], 0, "", ",") ?></h5>
                                     </div>
@@ -158,7 +158,7 @@
                         <h5 class="fw-bold">Rincian Pembayaran</h5>
                         <div class="row">
                             <div class="col-6">
-                                <p>Total Harga (<?= $total_qty ?> barang)</p>
+                                <p>Total Harga <br class="d-block d-lg-none">(<?= $total_qty ?> barang)</p>
                             </div>
                             <div class="col-6 text-end">
                                 <p><?= "Rp " . number_format($transaksi[0]["ht_total"], 0, "", ",") ?></p>
