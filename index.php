@@ -1,6 +1,8 @@
 <?php
     require_once("connection.php");
 
+    unset($_SESSION["admin"]);
+
     $_SESSION["gender"] = "A";    
     $cart_item = [];
 
