@@ -1705,6 +1705,8 @@ CREATE TABLE `htrans` (
   `ht_date` datetime DEFAULT NULL,
   `ht_invoice` varchar(12) DEFAULT NULL,
   `ht_total` int(12) DEFAULT NULL,
+  `ht_token` varchar(255) DEFAULT NULL COMMENT 'Snap Token',
+  `ht_order_id` varchar(50) DEFAULT NULL,
   `ht_status` varchar(1) DEFAULT NULL COMMENT '0: dibatalkan; 1: sukses; 2: menunggu pembayaran',
   `ht_us_id` varchar(6) DEFAULT NULL,
   PRIMARY KEY (`ht_id`),
