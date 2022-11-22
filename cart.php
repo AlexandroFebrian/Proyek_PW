@@ -1,5 +1,10 @@
 <?php
     require_once("connection.php");
+    require_once(dirname(__FILE__) . '/midtrans.php');
+    \Midtrans\Config::$serverKey = "SB-Mid-server-vKCiBWxuxq4MuWn5dbexzL2u";
+    \Midtrans\Config::$isProduction = false;
+    \Midtrans\Config::$isSanitized = true;
+    \Midtrans\Config::$is3ds = true;
 
     $_SESSION["gender"] = "A";
     $cart_item = [];
@@ -46,8 +51,72 @@
         $query = mysqli_query($conn, "SELECT SUM(ca_subtotal) FROM cart WHERE ca_us_id = '" . $_SESSION["auth_user_id"] . "'");
         $total = mysqli_fetch_array($query)[0];
 
+        // Payment Snap Token
+        $query = mysqli_query($conn, "SELECT * FROM users WHERE us_id = '" . $_SESSION["auth_user_id"] . "'");
+        while ($row = mysqli_fetch_array($query)) {
+            $user = $row;
+        }
+        
+        $item_details = [];
+        $ctr = 0;
+        foreach ($cart_item as $key => $value) {
+            $item_details[$ctr]["id"] = $value["co_id"];
+            $item_details[$ctr]["price"] = $value["kc_price"];
+            $item_details[$ctr]["quantity"] = $value["ca_qty"];
+            $item_details[$ctr]["name"] = $value["br_name"];
+            $ctr++;
+        }
+        $item_details[$ctr]["id"] = "ONGKIR";
+        $item_details[$ctr]["price"] = 20000;
+        $item_details[$ctr]["quantity"] = 1;
+        $item_details[$ctr]["name"] = "Ongkos Kirim";
+
+        $order_id = rand();
+
+        $transaction_details = array(
+            "order_id" => $order_id,
+            "gross_amount" => $total + 20000
+        );
+
+        $billing_address = array(
+            "first_name" => $user["us_name"],
+            "last_name" => "",
+            "address" => $user["us_address"],
+            "city" => "Surabaya",
+            "postal_code" => "12345",
+            "phone" => $user["us_phone"],
+            "country_code" => "IDN"
+        );
+
+        $shipping_address = array(
+            "first_name" => $user["us_name"],
+            "last_name" => "",
+            "address" => $user["us_address"],
+            "city" => "Surabaya",
+            "postal_code" => "12345",
+            "phone" => $user["us_phone"],
+            "country_code" => "IDN"
+        );
+
+        $customer_details = array(
+            "first_name" => $user["us_name"],
+            "last_name" => "",
+            "email" => $user["us_email"],
+            "phone" => $user["us_phone"],
+            "billing_address" => $billing_address,
+            "shipping_address" => $shipping_address
+        );
+
+        $transaction = array(
+            "transaction_details" => $transaction_details,
+            "customer_details" => $customer_details,
+            "item_details" => $item_details
+        );
+
+        $snapToken = \Midtrans\Snap::getSnapToken($transaction);
+
         //Insert HTrans
-        $query = mysqli_query($conn, "INSERT INTO htrans VALUES('$new_htrans_id', '" . date("Y-m-d h:i:s") . "', '$new_invoice', '$total', '1', '" . $_SESSION["auth_user_id"] . "')");
+        $query = mysqli_query($conn, "INSERT INTO htrans VALUES('$new_htrans_id', '" . date("Y-m-d h:i:s") . "', '$new_invoice', '$total', '$snapToken', '$order_id', '2', '" . $_SESSION["auth_user_id"] . "')");
 
         /* DTRANS */
         // Insert DTrans
@@ -77,64 +146,62 @@
 </head>
 <body onload="load()" onclick="hide_popup()">
     <!-- Navbar -->
-    <nav class="navbar navbar-expand-lg bg-white p-3 position-sticky top-0 w-100 border-bottom shadow" style="z-index: 5;">
-        <div class="container-fluid">
-            <a class="navbar-brand" href="index.php"><h4 class="m-0">Optik Primadona</h4></a>
-            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
-            <span class="navbar-toggler-icon"></span>
-            </button>
-            <div class="collapse navbar-collapse" id="navbarSupportedContent">
-                <ul class="navbar-nav me-auto mb-2 mb-lg-0">
-                    <li class="nav-item">
-                        <a class="nav-link" role="button" href="product.php?page=1">Semua Produk</a>
-                    </li>
-                    <li class="nav-item">
-                        <?php
-                            if (!isset($_SESSION["auth_user_id"])) {
-                        ?>
-                            <a class="nav-link d-block d-lg-none" role="button" href="login.php">Masuk</a>
-                            <a class="nav-link d-block d-lg-none" role="button" href="register.php">Daftar</a>
-                        <?php
-                            } else {
-                        ?>
-                            <a class="nav-link" role="button" href="transaksi.php?">Transaksi</a>
-                            <form method="POST">
+    <form method="POST">
+        <nav class="navbar navbar-expand-lg bg-white p-3 position-sticky top-0 w-100 border-bottom shadow" style="z-index: 5;">
+            <div class="container-fluid">
+                <a class="navbar-brand" href="index.php"><h4 class="m-0">Optik Primadona</h4></a>
+                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+                </button>
+                <div class="collapse navbar-collapse" id="navbarSupportedContent">
+                    <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+                        <li class="nav-item">
+                            <a class="nav-link" role="button" href="product.php?page=1">Semua Produk</a>
+                        </li>
+                        <li class="nav-item">
+                            <?php
+                                if (!isset($_SESSION["auth_user_id"])) {
+                            ?>
+                                <a class="nav-link d-block d-lg-none" role="button" href="login.php">Masuk</a>
+                                <a class="nav-link d-block d-lg-none" role="button" href="register.php">Daftar</a>
+                            <?php
+                                } else {
+                            ?>
+                                <a class="nav-link" role="button" href="transaksi.php?">Transaksi</a>
                                 <button class="btn btn-danger d-block d-lg-none rounded-3 mt-3" type="submit" name="logout">Logout <img class="text-white" src="storage/icons/logout.ico" width="20px"></button>
-                            </form>
-                        <?php
-                            }
-                        ?>
-                    </li>
-                </ul>
+                            <?php
+                                }
+                            ?>
+                        </li>
+                    </ul>
+                </div>
             </div>
-        </div>
-        <div class="input-group mb-1 container-fluid mt-4 mt-lg-0">
-            <input type="text" class="form-control" placeholder="Cari brand disini" name="search-val">
-            <span class="rounded-end" style="background-color: lightgray;">
-                <button class="btn" type="submit" name="search-btn" formaction="product.php"><img src="storage/icons/search.png" width="18px" class="opacity-50"></button>
-            </span>
-            <div class="position-relative">
-                <a href="cart.php" id="qtycart">
-                    <!-- pake ajax -->
-                </a>
-            </div>
-            <div class="fs-3 pb-2 opacity-75 d-none d-lg-block">|</div>
-            <?php
-                if (!isset($_SESSION["auth_user_id"])) {
-            ?>
-                <button class="btn btn-outline-success mx-3 d-none d-lg-block rounded-3" type="submit" formaction="login.php">Masuk</button>
-                <button class="btn btn-success me-0 me-lg-2 d-none d-lg-block rounded-3" type="submit" formaction="register.php">Daftar</button>
-            <?php
-                } else {
-            ?>
-                <form method="POST">
+            <div class="input-group mb-1 container-fluid mt-4 mt-lg-0">
+                <input type="text" class="form-control" placeholder="Cari brand disini" name="search-val">
+                <span class="rounded-end" style="background-color: lightgray;">
+                    <button class="btn" type="submit" name="search-btn" formaction="product.php"><img src="storage/icons/search.png" width="18px" class="opacity-50"></button>
+                </span>
+                <div class="position-relative">
+                    <a href="cart.php" id="qtycart">
+                        <!-- pake ajax -->
+                    </a>
+                </div>
+                <div class="fs-3 pb-2 opacity-75 d-none d-lg-block">|</div>
+                <?php
+                    if (!isset($_SESSION["auth_user_id"])) {
+                ?>
+                    <button class="btn btn-outline-success mx-3 d-none d-lg-block rounded-3" type="submit" formaction="login.php">Masuk</button>
+                    <button class="btn btn-success me-0 me-lg-2 d-none d-lg-block rounded-3" type="submit" formaction="register.php">Daftar</button>
+                <?php
+                    } else {
+                ?>
                     <button class="btn btn-danger mx-3 d-none d-lg-block rounded-3" type="submit" name="logout">Logout <img class="text-white" src="storage/icons/logout.ico" width="20px"></button>
-                </form>
-            <?php
-                }
-            ?>
-        </div>
-    </nav>
+                <?php
+                    }
+                ?>
+            </div>
+        </nav>
+    </form>
 
     <!-- Print berhasil beli -->
     <div id="popup" class="shadow text-center bg-white rounded-4 position-fixed top-50 start-50" style="width: 350px; height: 400px; border: 1px solid black; margin-top: -200px; margin-left: -175px; display: 
@@ -152,7 +219,7 @@
         ?>
         <h3 class="fw-bold mt-5">Terimakasih <?= $us_name ?><br>Sudah Berbelanja</h5><br>
         <img src="storage/icons/success.png" width="100px">
-        <p class="mt-4">Invoice : <?= $new_invoice ?></p>
+        <p class="mt-4">Order ID : <?= strrev(str_replace("OP", "", $new_invoice)) ?></p>
         <p>Email : optikprimadona@official.co.id</p>
         <p>Phone : (031) 5231452</p>
     </div>
@@ -230,6 +297,7 @@
             </div>
         </div>
     </div>
+    <script src="https://app.sandbox.midtrans.com/snap/snap.js" data-client-key="SB-Mid-client-TKV1zRASAGX4eBcv"></script>
     <script src="script/bootstrap.bundle.min.js"></script>
     <script src="script/jquery-3.6.1.min.js"></script>
 </body>

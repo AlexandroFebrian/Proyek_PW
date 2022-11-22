@@ -130,26 +130,27 @@
                 </div>
             <?php
                 } else {
-                    for ($i = 0; $i < count($transaksi); $i++) {
-                        $date = date_create($transaksi[$i]["ht_date"]);
+                    $transaksi = array_reverse($transaksi);
+                    foreach ($transaksi as $key => $value) {
+                        $date = date_create($value["ht_date"]);
                         $date = date_format($date,"d M Y");
             ?>
                         <div class="row border ps-5 pt-4 pb-3 py-lg-0" style="align-items: center;">
                             <div class="row text-start mt-3">
-                                <p><b class="text-success">Selesai</b> | <?= $date ?> | <?= $transaksi[$i]["ht_invoice"] ?></p>
+                                <p><?php if ($value["ht_status"] == 1) { echo '<b class="text-success">Selesai</b>'; } elseif ($value["ht_status"] == 2) { echo '<b style="color: orange;">Menunggu Pembayaran</b>'; } else { echo '<b class="text-danger">Dibatalkan</b>'; } ?> | <?= $date ?><?php if ($value["ht_status"] == 1) {echo " | " . $value["ht_invoice"]; } else { echo " | " . strrev(str_replace("OP", "", $value["ht_invoice"])); } ?></p>
                             </div>
                             <div class="col-4 col-lg-2">
-                                <img src='<?= $transaksi[$i]["co_link"] ?>' class="card-img-top">
+                                <img src='<?= $value["co_link"] ?>' class="card-img-top">
                             </div>
                             <div class="col-8 col-lg-4 text-start">
                                 <div class="card-body">
-                                    <h5 class="card-title"><?= $transaksi[$i]["br_name"] ?></h5>
-                                    <p class="m-0"><?= " SKU-" . $transaksi[$i]["co_id"] ?></p>
-                                    <p class="m-0" style="font-size: 12px;"><?= $transaksi[$i]["dt_qty"] ?> barang x <?= "Rp " . number_format($transaksi[$i]["kc_price"], 0, "", ",") ?></p>
+                                    <h5 class="card-title"><?= $value["br_name"] ?></h5>
+                                    <p class="m-0"><?= " SKU-" . $value["co_id"] ?></p>
+                                    <p class="m-0" style="font-size: 12px;"><?= $value["dt_qty"] ?> barang x <?= "Rp " . number_format($value["kc_price"], 0, "", ",") ?></p>
                                     <p class="m-0" style="font-size: 12px;">
                                         <?php
-                                            if ($transaksi[$i]["dt_total_qty"] > 1) {
-                                                echo "+" . $transaksi[$i]["dt_total_qty"] - 1 . " produk lainnya";
+                                            if ($value["dt_total_qty"] > 1) {
+                                                echo "+" . $value["dt_total_qty"] - 1 . " produk lainnya";
                                             }
                                         ?>
                                     </p>
@@ -157,15 +158,15 @@
                             </div>
                             <div class="col-lg-6">
                                 <p class="d-none d-lg-block">Total Belanja</p>
-                                <h5 class="d-none d-lg-block"><?= "Rp " . number_format($transaksi[$i]["ht_total"], 0, "", ",") ?></h5>
+                                <h5 class="d-none d-lg-block"><?= "Rp " . number_format($value["ht_total"] + 20000, 0, "", ",") ?></h5>
                             </div>
                             <div class="row mb-3 mt-3 mt-lg-0" style="align-items: center;">
                                 <div class="col-6 text-start">
                                     <p class="m-0 d-block d-lg-none">Total Belanja</p>
-                                    <h5 class="m-0 d-block d-lg-none"><?= "Rp " . number_format($transaksi[$i]["ht_total"], 0, "", ",") ?></h5>
+                                    <h5 class="m-0 d-block d-lg-none"><?= "Rp " . number_format($value["ht_total"] + 20000, 0, "", ",") ?></h5>
                                 </div>
                                 <div class="col-6">
-                                    <a class="fw-bold text-success m-0" href="detailtransaksi.php?ht_id=<?= $transaksi[$i]["ht_id"] ?>">Lihat Detail Transaksi</a>
+                                    <a class="fw-bold text-success m-0" href="detailtransaksi.php?ht_id=<?= $value["ht_id"] ?>">Lihat Detail Transaksi</a>
                                 </div>
                             </div>
                         </div>

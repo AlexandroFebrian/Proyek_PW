@@ -1,6 +1,6 @@
 <?php
 session_start(); 
-require_once(dirname(__FILE__) . '/Veritrans.php');
+require_once(dirname(__FILE__) . '/veritrans.php');
 
 //Set Your server key
 Veritrans_Config::$serverKey = "SB-Mid-server-vKCiBWxuxq4MuWn5dbexzL2u";
