@@ -63,7 +63,8 @@
         <button type="submit" name="user">MASTER USER</button>
         <button type="submit" name="brand">MASTER BRAND</button>
         <button type="submit" name="product">MASTER PRODUCT</button>
-        <button type="submit" name="color">MASTER COLOR</button>
+        <button type="submit" name="color">MASTER COLOR</button><br><br>
+        <button type="submit" formaction="adminbrand.php">REFRESH PAGE</button>
         
         <h2>MASTER BRAND</h2>
         <table border 1px style="float: left; margin-right: 50px;">
