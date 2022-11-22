@@ -1678,23 +1678,6 @@ insert  into `color`(`co_id`,`co_kc_id`,`co_link`) values
 ('CO1593','KC415','storage/products/0D17b0TLJpKcaNFkKfEMewLT2cRBRUcF.jpg'),
 ('CO1594','KC415','storage/products/7zsQR2gstq7nBXY0DJvzhGu2jEZTWksd.jpg');
 
-/*Table structure for table `discount` */
-
-DROP TABLE IF EXISTS `discount`;
-
-CREATE TABLE `discount` (
-  `di_id` varchar(5) NOT NULL,
-  `di_name` varchar(50) DEFAULT NULL,
-  `di_value` int(10) DEFAULT NULL,
-  `di_status` varchar(1) DEFAULT NULL,
-  PRIMARY KEY (`di_id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
-
-/*Data for the table `discount` */
-
-insert  into `discount`(`di_id`,`di_name`,`di_value`,`di_status`) values 
-('DI001','gratisongkir',50000,'1');
-
 /*Table structure for table `dtrans` */
 
 DROP TABLE IF EXISTS `dtrans`;
