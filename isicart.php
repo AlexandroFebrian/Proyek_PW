@@ -66,7 +66,8 @@
                         <p>Stok : <?= $cart_item[$i]["kc_stock"] ?></p>
                     </div>
                     <div class="col-1">
-                        <button class="bg-white fw-bold opacity-50" type="submit" name="remove" value='<?= $cart_item[$i]["ca_us_id"] . "~" . $cart_item[$i]["ca_co_id"] ?>' style="border: none;"><img src="storage/icons/delete.png" width="25px"></button>
+                        
+                        <button class="bg-white fw-bold opacity-50" onclick="confirm_delete(this)" data-bs-toggle="modal" data-bs-target="#exampleModal" value='<?= $cart_item[$i]["ca_co_id"] ?>' style="border: none;"><img src="storage/icons/delete.png" width="25px"></button>
                     </div>
                     <div class="col-7">
                         <div class="d-flex justify-content-center">

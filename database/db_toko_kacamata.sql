@@ -40,11 +40,11 @@ insert  into `brand`(`br_id`,`br_name`) values
 ('BR009','Graph Belle'),
 ('BR010','FUWA CELLU'),
 ('BR011','lillybell'),
-('BR012','Cinnamoroll × OWNDAYS'),
+('BR012','Cinnamoroll x OWNDAYS'),
 ('BR013','OWNDAYS PC'),
 ('BR014','K.moriyama'),
 ('BR015','+NICHE'),
-('BR016','eco²xy'),
+('BR016','eco2xy'),
 ('BR017','AIR FIT'),
 ('BR018','Senichisaku'),
 ('BR019','Junni'),
@@ -1677,6 +1677,23 @@ insert  into `color`(`co_id`,`co_kc_id`,`co_link`) values
 ('CO1592','KC415','storage/products/9BcPDJ3ZBY8z6MZQ6WwnVZ2zDk6JehJy.jpg'),
 ('CO1593','KC415','storage/products/0D17b0TLJpKcaNFkKfEMewLT2cRBRUcF.jpg'),
 ('CO1594','KC415','storage/products/7zsQR2gstq7nBXY0DJvzhGu2jEZTWksd.jpg');
+
+/*Table structure for table `discount` */
+
+DROP TABLE IF EXISTS `discount`;
+
+CREATE TABLE `discount` (
+  `di_id` varchar(5) NOT NULL,
+  `di_name` varchar(50) DEFAULT NULL,
+  `di_value` int(10) DEFAULT NULL,
+  `di_status` varchar(1) DEFAULT NULL,
+  PRIMARY KEY (`di_id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+/*Data for the table `discount` */
+
+insert  into `discount`(`di_id`,`di_name`,`di_value`,`di_status`) values 
+('DI001','gratisongkir',50000,'1');
 
 /*Table structure for table `dtrans` */
 

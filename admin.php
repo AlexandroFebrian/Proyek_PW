@@ -2,7 +2,7 @@
     require_once("connection.php");
 
     if(!isset($_SESSION["admin"])){
-        header("Location: index.php");
+        header("Location: adminlogin.php");
     }
 
     if(isset($_POST["logout"])){
