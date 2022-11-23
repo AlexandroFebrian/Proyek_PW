@@ -64,7 +64,9 @@
                 header("Location: transaksi.php");
             }
         } catch (Exception $ex) {
-            $cancel = \Midtrans\Transaction::cancel($order_id);
+            try {
+                $cancel = \Midtrans\Transaction::cancel($order_id);
+            } catch (Exception $ex) {}
             $query = mysqli_query($conn, "UPDATE htrans SET ht_status = '0' WHERE ht_id = '$ht_id'");
             header("Location: transaksi.php");
         }
