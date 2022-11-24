@@ -146,7 +146,7 @@
                         </div>
                         <ul class="pagination d-flex justify-content-center">
                             <?php
-                                $color = mysqli_query($conn, "SELECT * FROM color WHERE co_kc_id = '" . $kc_id . "'");
+                                $color = mysqli_query($conn, "SELECT * FROM color WHERE co_kc_id = '" . $kc_id . "' AND co_status = '1'");
                                 $ctr = 1;
                                 while ($row = mysqli_fetch_array($color)) {
                             ?>
