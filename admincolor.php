@@ -37,9 +37,10 @@
     //     }
     // }
 
-    if ($_SERVER['REQUEST_METHOD'] == 'POST') 
-    {
-        if (is_uploaded_file($_FILES['photo']['tmp_name'])) 
+    if(isset($_POST["add"])){
+        $stock = $_POST["stock"];
+
+        if (is_uploaded_file($_FILES['photo']['tmp_name']) && $stock != "") 
         { 
             //First, Validate the file name
             if(empty($_FILES['photo']['name']))
@@ -62,11 +63,14 @@
 
                 $co_id = "CO".str_pad($count, 4, "0", STR_PAD_LEFT);
 
-                mysqli_query($conn, "INSERT INTO color VALUES ('$co_id', '".$_POST["filter_add"]."', '$dest2')");
+                mysqli_query($conn, "INSERT INTO color VALUES ('$co_id', '".$_POST["filter_add"]."', '$dest2', '$stock', '1')");
 
                 echo "<script>alert('BERHASIL ADD COLOR')</script>";
             }
+        }else{
+            echo "<script>alert('FIELD KOSONG')</script>";
         }
+
     }
 ?>
 <!DOCTYPE html>
@@ -111,6 +115,8 @@
                 <tr>
                     <th><?= $_POST["filter"] ?></th>
                     <th>LINK</th>
+                    <th>STOCK</th>
+                    <th>STATUS</th>
                 </tr>
             <?php
                         $result = mysqli_query($conn, "SELECT * FROM color WHERE co_kc_id = '".$_POST["filter"]."'");
@@ -120,6 +126,8 @@
                 <tr>
                     <td><?= $row["co_id"] ?></td>
                     <td><?= $row["co_link"] ?></td>
+                    <td><?= $row["co_stock"] ?></td>
+                    <td><?= $row["co_status"] ?></td>
                 </tr>
             <?php
                         }
@@ -135,6 +143,8 @@
                 <tr>
                     <th><?= $row1["kc_id"] ?></th>
                     <th>LINK</th>
+                    <th>STOCK</th>
+                    <th>STATUS</th>
                 </tr>
             <?php
                             $result2 = mysqli_query($conn, "SELECT * FROM color WHERE co_kc_id = '".$row1["kc_id"]."'");
@@ -144,6 +154,8 @@
                 <tr>
                     <td><?= $row2["co_id"] ?></td>
                     <td><?= $row2["co_link"] ?></td>
+                    <td><?= $row2["co_stock"] ?></td>
+                    <td><?= $row2["co_status"] ?></td>
                 </tr>
             <?php
                             }
@@ -161,6 +173,8 @@
                 <tr>
                     <th><?= $row1["kc_id"] ?></th>
                     <th>LINK</th>
+                    <th>STOCK</th>
+                    <th>STATUS</th>
                 </tr>
             <?php
                         $result2 = mysqli_query($conn, "SELECT * FROM color WHERE co_kc_id = '".$row1["kc_id"]."'");
@@ -170,6 +184,8 @@
                 <tr>
                     <td><?= $row2["co_id"] ?></td>
                     <td><?= $row2["co_link"] ?></td>
+                    <td><?= $row2["co_stock"] ?></td>
+                    <td><?= $row2["co_status"] ?></td>
                 </tr>
             <?php
                         }
@@ -194,6 +210,8 @@
                 }
             ?>
         </select><br><br>
+        STOCK : 
+        <input type="number" name="stock" min=1><br><br>
         PHOTO : 
         <input type="file" name="photo" accept="image/png, image/jpeg, image/jpg,image/webp"><br><br>
         <button type="submit" name="add">ADD</button>
