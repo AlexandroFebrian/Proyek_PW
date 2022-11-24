@@ -12,7 +12,7 @@
     $stock = 0;
     while ($row = mysqli_fetch_array($query)) {
         $jum = $row["ca_qty"];
-        $stock = $row["kc_stock"];
+        $stock = $row["co_stock"];
         $price = $row["kc_price"];
     }
 

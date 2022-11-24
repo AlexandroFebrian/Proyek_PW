@@ -38,7 +38,7 @@
         $result = mysqli_fetch_array(mysqli_query($conn, "SELECT * FROM kacamata JOIN color ON kc_id = co_kc_id JOIN brand ON kc_br_id = br_id WHERE kc_id = '$kc_id' AND co_id = '$co_id'"));
         $kc_id = $result["kc_id"];
         $kc_price = $result["kc_price"];
-        $kc_stock = $result["kc_stock"];
+        $co_stock = $result["co_stock"];
         $co_id = $result["co_id"];
         $co_link = $result["co_link"];
         $br_name = $result["br_name"];
@@ -73,7 +73,6 @@
     <title>Optik Primadona</title>
     <link rel="stylesheet" href="css/bootstrap.min.css">
     <link rel="stylesheet" href="css/stylehome.css">
-    <script src="jshome.js"></script>
 </head>
 <body onload="load_ajax()">
 <form method="POST">
@@ -156,8 +155,8 @@
                                 }
                             ?>
                         </ul>
-                        <span>Stok : <?= $kc_stock ?></span>
-                        <input type="hidden" id="stock" value='<?= $kc_stock ?>'>
+                        <span>Stok : <?= $co_stock ?></span>
+                        <input type="hidden" id="stock" value='<?= $co_stock ?>'>
                         <div class="d-flex justify-content-center mt-3">
                             <div class="d-inline-block p-0 m-0" style="border: 2px gray solid; border-radius:5px; border-spacing: 0px;">
                                 <button type="button" class="btn" onclick="Kurang()" style="border-right:2px gray solid; border-radius:0px;">-</button>

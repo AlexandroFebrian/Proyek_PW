@@ -42,7 +42,7 @@
                 </div>
                 <div class="d-none d-lg-block col-4">
                     <div class="row justify-content-end justify-content-lg-center me-1 m-lg-0 ms-lg-5">
-                        <div class="col-6"><p>Stok : <?= $cart_item[$i]["kc_stock"] ?></p></div>
+                        <div class="col-6"><p>Stok : <?= $cart_item[$i]["co_stock"] ?></p></div>
                     </div>
                     <div class="row justify-content-end justify-content-lg-center me-1 m-lg-0 ms-lg-5">
                         <div class="col-8">
@@ -63,7 +63,7 @@
                 </div>
                 <div class="d-lg-none row mt-4 justify-content-end">
                     <div class="col-4">
-                        <p>Stok : <?= $cart_item[$i]["kc_stock"] ?></p>
+                        <p>Stok : <?= $cart_item[$i]["co_stock"] ?></p>
                     </div>
                     <div class="col-1">
                         

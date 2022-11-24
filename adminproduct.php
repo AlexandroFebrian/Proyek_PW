@@ -28,9 +28,8 @@
     if(isset($_POST["add"])){
         $br_id = $_POST["filter_add"];
         $price = $_POST["price"];
-        $stock = $_POST["stock"];
         
-        if($price == "" || $stock == "" || !isset($_POST["gender"])){
+        if($price == "" || !isset($_POST["gender"])){
             $_SESSION["msg"] = "FIELD KOSONG";
         }else{
             $gender = $_POST["gender"];
@@ -41,7 +40,7 @@
 
             $kc_id = "KC".str_pad($count, 3, "0", STR_PAD_LEFT);
 
-            mysqli_query($conn, "INSERT INTO kacamata VALUES ('$kc_id', '$price', '$stock', '1', '$gender', '$br_id')");
+            mysqli_query($conn, "INSERT INTO kacamata VALUES ('$kc_id', '$price', '$gender', '$br_id')");
             $_SESSION["msg"] = "BERHASIL ADD PRODUCT";
         }
     }
@@ -88,10 +87,8 @@
             <tr>
                 <th>ID</th>
                 <th>Price</th>
-                <th>Stock</th>
                 <th>Gender</th>
                 <th>Brand Name</th>
-                <th>Status</th>
             </tr>
             <?php
                 $query = "SELECT * FROM kacamata JOIN brand ON kc_br_id = br_id";
@@ -113,10 +110,8 @@
             <tr>
                 <td><?= $row["kc_id"] ?></td>
                 <td><?= $row["kc_price"] ?></td>
-                <td><?= $row["kc_stock"] ?></td>
                 <td><?= $row["kc_gender"] ?></td>
                 <td><?= $row["br_name"] ?></td>
-                <td><?= $row["kc_status"] ?></td>
             </tr>
             <?php
                 }
@@ -138,8 +133,6 @@
         </select><br><br>
         PRICE : 
         <input type="number" name="price" min=1><br><br>
-        STOCK : 
-        <input type="number" name="stock" min=1><br><br>
         GENDER : 
         <input type="radio" name="gender" id="M" value="M">
         <label for="M">MAN</label>
