@@ -74,6 +74,11 @@
     <link rel="stylesheet" href="css/bootstrap.min.css">
     <link rel="stylesheet" href="css/stylehome.css">
 </head>
+<style>
+    ul{
+        list-style-type: none;
+    }
+</style>
 <body onload="load_ajax()">
 <form method="POST">
         <!-- Navbar -->
@@ -179,61 +184,55 @@
             
         </div>
 
-        <footer>
-          <div class="bg-dark mt-5" id="scrollspyHeading5">
-            <div class="container-fluid bg-dark pt-3 pb-2 text-white">
-              <div class="container">
-                <div class="row">
-                  <div class="col-12 col-lg-6 mb-4">
-                    <h2 class="fw-bold text-center">Send us Mail!</h2>
-                    <form action="halaman2.html">
-                      <div class="mb-3">
-                        <label for="exampleInputEmail1" class="form-label">Email address</label>
-                        <input type="email" class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp">
-                        <div id="emailHelp" class="form-text">We'll never share your email with anyone else.</div>
-                      </div>
-                      <div class="mb-3">
-                        <label class="form-label">Mail</label>
-                        <textarea name="mail" cols="30" rows="8" class="form-control"></textarea>
-                      </div>
-                      <div class="mb-3 form-check">
-                        <input type="checkbox" class="form-check-input" id="exampleCheck1">
-                        <label class="form-check-label" for="exampleCheck1">Let us send you an email</label>
-                      </div>
-                      <button type="submit" class="btn btn-primary fw-bold">Submit</button>
-                    </form>
-                  </div>
-                  <div class="col-12 col-lg-6 text-center mt-auto mb-auto">
-                    <p>
-                      <a class="btn btn-success fw-bold" data-bs-toggle="collapse" href="#collapseExample" role="button" aria-expanded="false" aria-controls="collapseExample">
-                        Customer Care
-                      </a>
-                    </p>
-                    <div class="collapse" id="collapseExample">
-                      <div class="card card-body text-success fw-bold mb-3">
-                        Email : careprimadona@care.co.id
-                      </div>
-                    </div>
-                    <p>
-                      <a class="btn btn-danger fw-bold" data-bs-toggle="collapse" href="#collapseExample" role="button" aria-expanded="false" aria-controls="collapseExample">
-                        Contact Person
-                      </a>
-                    </p>
-                    <div class="collapse" id="collapseExample">
-                      <div class="card card-body text-danger fw-bold">
-                        Email : optikprimadona@official.co.id <br>
-                        Phone : (031) 5231452
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              </div>
-              <div class="row mt-3">
-                <p class="text-center fw-bold">Copyright &copy; 2021 Optik Primadona, Inc.</p>
-              </div>
+    <footer class="mt-5 bg-secondary bg-opacity-25">
+        <div class="container-xxl pt-5 d-flex d-flex justify-content-around">
+            <ul>
+                <li><h6>Pencarian Produk</h6></li>
+                <li>Kacamata</li>
+                <li>Daftar Brand</li>
+                <li>Harga kacamata</li>
+            </ul>
+            <ul>
+                <li><h6>Optik Primadona</h6></li>
+                <li>Tentang kami</li>
+                <li>Mencari toko</li>
+                <li>Daftar layanan</li>
+                <li></li>
+                <li></li>
+            </ul>
+        
+            <ul>
+                <li><h6>Bantuan dan Panduan</h6></li>
+                <li>FAQ</li>
+                <li>Syarat dan Ketentuan</li>
+                <li>Kebijakan Privasi</li>
+                <li>Mitra</li>
+                <li>Metode Pembayaran</li>
+            </ul>
+        
+            <ul>
+                <li><h6>CONTACT US</h6></li>
+                <li><h5>031-5231452</h5></li><br>
+                <li><h6>E-MAIL</h6></li>
+                <li><h5>optikprimadona@official.co.id</h5></li>
+            </ul>
+        </div>
+        <div class="container-xxl pb-5 mt-2">
+            <div class="justify-content-center d-flex">
+                <a href="#">
+                    <img src="storage/icons/facebook.webp" alt="" style="width: 20px;" class="mx-2">
+                </a>
+                <a href="#">
+                    <img src="storage/icons/instagram.png" alt="" style="width: 20px;" class="mx-2">
+                </a>
+                <a href="#">
+                    <img src="storage/icons/twitter.png" alt="" style="width: 20px;" class="mx-2">
+                </a>
             </div>
-          </div>
-        </footer>
+            <hr>
+            <div class="text-secondary text-center">Disclaimer cuman tugas proyek kuliah</div>
+        </div>
+    </footer>
 
         <!-- Modal -->
         <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">

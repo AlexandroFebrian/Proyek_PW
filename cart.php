@@ -259,11 +259,23 @@
         
             <ul>
                 <li><h6>CONTACT US</h6></li>
-                <li><h4>kontak</h4></li>
+                <li><h5>031-5231452</h5></li><br>
+                <li><h6>E-MAIL</h6></li>
+                <li><h5>optikprimadona@official.co.id</h5></li>
             </ul>
         </div>
         <div class="container-xxl pb-5 mt-2">
-            <h5 class="text-center">Ini logo sosmed</h5>
+            <div class="justify-content-center d-flex">
+                <a href="#">
+                    <img src="storage/icons/facebook.webp" alt="" style="width: 20px;" class="mx-2">
+                </a>
+                <a href="#">
+                    <img src="storage/icons/instagram.png" alt="" style="width: 20px;" class="mx-2">
+                </a>
+                <a href="#">
+                    <img src="storage/icons/twitter.png" alt="" style="width: 20px;" class="mx-2">
+                </a>
+            </div>
             <hr>
             <div class="text-secondary text-center">Disclaimer cuman tugas proyek kuliah</div>
         </div>
