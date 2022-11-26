@@ -263,7 +263,7 @@
             </ul>
         </div>
         <div class="container-xxl pb-5 mt-2">
-            <h5 class="text-center">Ini foto sosmed</h5>
+            <h5 class="text-center">Ini logo sosmed</h5>
             <hr>
             <div class="text-secondary text-center">Disclaimer cuman tugas proyek kuliah</div>
         </div>
