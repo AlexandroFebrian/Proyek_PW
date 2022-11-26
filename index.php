@@ -120,13 +120,13 @@
         <div id="carouselExampleFade" class="carousel slide carousel-fade shadow" data-bs-ride="carousel">
             <div class="carousel-inner">
                 <div class="carousel-item active" data-bs-interval="5000">
-                <img src="storage/img/fot1.png" class="d-block w-100" style="height: 100%;">
+                <a href="product.php"><img src="storage/img/fot1.webp" class="d-block w-100" style="height: 100%;"></a>
                 </div>
                 <div class="carousel-item" data-bs-interval="5000">
-                <img src="storage/img/fot2.png" class="d-block w-100" style="height: 100%;">
+                <img src="storage/img/fot2.webp" class="d-block w-100" style="height: 100%;">
                 </div>
                 <div class="carousel-item" data-bs-interval="5000">
-                <img src="storage/img/fot3.png" class="d-block w-100" style="height: 100%;">
+                <img src="storage/img/fot3.webp" class="d-block w-100" style="height: 100%;">
                 </div>
             </div>
         </div>
