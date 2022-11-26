@@ -6,6 +6,14 @@
     $_SESSION["gender"] = "A";    
     $cart_item = [];
 
+    if (isset($_GET["produkbaru"])) {
+        $filter = [];
+        $filter[] = $_GET["produkbaru"];
+        $_SESSION["filter"] = $filter;
+        //echo "<script>alert('" . $_GET["produkbaru"] . "')</script>";
+        header("Location: product.php");
+    }
+
     if (isset($_SESSION["auth_user_id"])) {
         $query = mysqli_query($conn, "SELECT * FROM cart JOIN color ON ca_co_id = co_id WHERE ca_us_id = '". $_SESSION["auth_user_id"] . "'");
         while ($row = mysqli_fetch_array($query)) {
@@ -24,7 +32,7 @@
         $co_id = $co_id[count($co_id) - 1];
     }
 
-    if(isset($_SESSION["filter"])){
+    if(isset($_SESSION["filter"]) && !isset($_GET["produkbaru"])){
         unset($_SESSION["filter"]);
     }
 
@@ -123,10 +131,10 @@
                 <a href="product.php"><img src="storage/img/fot1.webp" class="d-block w-100" style="height: 100%;"></a>
                 </div>
                 <div class="carousel-item" data-bs-interval="5000">
-                <img src="storage/img/fot2.webp" class="d-block w-100" style="height: 100%;">
+                <a href="index.php?produkbaru=BR006"><img src="storage/img/fot2.webp" class="d-block w-100" style="height: 100%;"></a>
                 </div>
                 <div class="carousel-item" data-bs-interval="5000">
-                <img src="storage/img/fot3.webp" class="d-block w-100" style="height: 100%;">
+                <a href="index.php?produkbaru=BR012"><img src="storage/img/fot3.webp" class="d-block w-100" style="height: 100%;"></a>
                 </div>
             </div>
         </div>
