@@ -14,7 +14,7 @@
 <?php
     if (count($cart_item) == 0) {
 ?>
-    <div class="container-fuild">
+    <div class="container-fuild my-5 py-5 ">
         <img src="storage/icons/empty.png" class="mt-5" width="150px">
         <h2 class="mt-2">Keranjangmu masih kosong nih</h2>
         <p class="mt-2">Yuk, isi keranjangmu dengan kacamata favoritmu!</p>
