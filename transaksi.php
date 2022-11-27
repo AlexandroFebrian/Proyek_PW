@@ -55,14 +55,6 @@
     ul{
         list-style-type: none;
     }
-
-    .push-kosong{
-        height: 100px;
-    }
-
-    .push-isi{
-        height: 200px;
-    }
 </style>
 <body>
     <form method="POST" class="position-relative" style="min-height: 100vh; padding-bottom: 370px;">
@@ -139,7 +131,6 @@
                     <h2 class="mt-2">Tidak ada transaksi</h2>
                     <p class="mt-2">Yuk, beli produk kacamata favoritmu!</p>
                     <button class="btn btn-success mt-2 fw-bold" formaction="product.php">Mulai Belanja</button>
-                    <!-- <div class="push-kosong"></div> -->
                 </div>
             <?php
                 } else {
@@ -182,7 +173,6 @@
                                     <a class="fw-bold text-success m-0" href="detailtransaksi.php?ht_id=<?= $value["ht_id"] ?>">Lihat Detail Transaksi</a>
                                 </div>
                             </div>
-                            <!-- <div class="push-isi"></div> -->
                         </div>
             <?php
                     }
