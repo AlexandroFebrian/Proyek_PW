@@ -260,7 +260,7 @@
     <link rel="stylesheet" href="css/product.css">
 </head>
 <body>
-    <form method="POST">
+    <form method="POST" class="position-relative" style="min-height: 100vh; padding-bottom: 370px;">
         <!-- Navbar -->
         <nav class="navbar navbar-expand-lg bg-white p-3 position-sticky top-0 w-100 border-bottom shadow" style="z-index: 5;">
             <div class="container-fluid">
@@ -619,56 +619,56 @@
                 </div>
             </div>
         </div>
-    </form>
-    <footer class="mt-5 bg-secondary bg-opacity-25">
-        <div class="container-xxl pt-5 d-flex d-flex justify-content-around">
-            <ul>
-                <li><h6>Pencarian Produk</h6></li>
-                <li>Kacamata</li>
-                <li>Daftar Brand</li>
-                <li>Harga kacamata</li>
-            </ul>
-            <ul>
-                <li><h6>Optik Primadona</h6></li>
-                <li>Tentang kami</li>
-                <li>Mencari toko</li>
-                <li>Daftar layanan</li>
-                <li></li>
-                <li></li>
-            </ul>
-        
-            <ul>
-                <li><h6>Bantuan dan Panduan</h6></li>
-                <li>FAQ</li>
-                <li>Syarat dan Ketentuan</li>
-                <li>Kebijakan Privasi</li>
-                <li>Mitra</li>
-                <li>Metode Pembayaran</li>
-            </ul>
-        
-            <ul>
-                <li><h6>CONTACT US</h6></li>
-                <li><h5>031-5231452</h5></li><br>
-                <li><h6>E-MAIL</h6></li>
-                <li><h5>optikprimadona@official.co.id</h5></li>
-            </ul>
-        </div>
-        <div class="container-xxl pb-5 mt-2">
-            <div class="justify-content-center d-flex">
-                <a href="#">
-                    <img src="storage/icons/facebook.webp" alt="" style="width: 20px;" class="mx-2">
-                </a>
-                <a href="#">
-                    <img src="storage/icons/instagram.png" alt="" style="width: 20px;" class="mx-2">
-                </a>
-                <a href="#">
-                    <img src="storage/icons/twitter.png" alt="" style="width: 20px;" class="mx-2">
-                </a>
+        <footer class="mt-5 bg-secondary bg-opacity-25 position-absolute bottom-0 w-100">
+            <div class="container-xxl pt-5 d-flex d-flex justify-content-around">
+                <ul>
+                    <li><h6>Pencarian Produk</h6></li>
+                    <li>Kacamata</li>
+                    <li>Daftar Brand</li>
+                    <li>Harga kacamata</li>
+                </ul>
+                <ul>
+                    <li><h6>Optik Primadona</h6></li>
+                    <li>Tentang kami</li>
+                    <li>Mencari toko</li>
+                    <li>Daftar layanan</li>
+                    <li></li>
+                    <li></li>
+                </ul>
+            
+                <ul>
+                    <li><h6>Bantuan dan Panduan</h6></li>
+                    <li>FAQ</li>
+                    <li>Syarat dan Ketentuan</li>
+                    <li>Kebijakan Privasi</li>
+                    <li>Mitra</li>
+                    <li>Metode Pembayaran</li>
+                </ul>
+            
+                <ul>
+                    <li><h6>CONTACT US</h6></li>
+                    <li><h5>031-5231452</h5></li><br>
+                    <li><h6>E-MAIL</h6></li>
+                    <li><h5>optikprimadona@official.co.id</h5></li>
+                </ul>
             </div>
-            <hr>
-            <div class="text-secondary text-center">Disclaimer cuman tugas proyek kuliah</div>
-        </div>
-    </footer>
+            <div class="container-xxl pb-5 mt-2">
+                <div class="justify-content-center d-flex">
+                    <a href="#">
+                        <img src="storage/icons/facebook.webp" alt="" style="width: 20px;" class="mx-2">
+                    </a>
+                    <a href="#">
+                        <img src="storage/icons/instagram.png" alt="" style="width: 20px;" class="mx-2">
+                    </a>
+                    <a href="#">
+                        <img src="storage/icons/twitter.png" alt="" style="width: 20px;" class="mx-2">
+                    </a>
+                </div>
+                <hr>
+                <div class="text-secondary text-center">Disclaimer cuman tugas proyek kuliah</div>
+            </div>
+        </footer>
+    </form>
 
 
 
