@@ -147,6 +147,16 @@
     ul{
         list-style-type: none;
     }
+
+    .form{
+        padding-bottom: 600px;
+    }
+    
+    @media screen and (min-width: 1400px) {
+        .form{
+            padding-bottom: 370px;
+        }
+    }
 </style>
 <body onload="load()" onclick="hide_popup()">
     <!-- Navbar -->
@@ -215,7 +225,7 @@
         } else {
             echo "none";
         }
-    ?>;">
+    ?>; z-index: 5;">
         <?php
             $query = mysqli_query($conn, "SELECT us_name FROM users WHERE us_id = '" . $_SESSION["auth_user_id"] . "'");
             $us_name = mysqli_fetch_array($query)[0];
@@ -228,58 +238,86 @@
         <p>Phone : (031) 5231452</p>
     </div>
 
-    <!-- Print keranjang kosong / isi keranjang -->
-    <div class="container-fluid text-center" id="isicart"></div>
-    <!-- Footer -->
-    <footer class="mt-5 bg-secondary bg-opacity-25">
-        <div class="container-xxl pt-5 d-flex d-flex justify-content-around">
-            <ul>
-                <li><h6>Pencarian Produk</h6></li>
-                <li>Kacamata</li>
-                <li>Daftar Brand</li>
-                <li>Harga kacamata</li>
-            </ul>
-            <ul>
-                <li><h6>Optik Primadona</h6></li>
-                <li>Tentang kami</li>
-                <li>Mencari toko</li>
-                <li>Daftar layanan</li>
-                <li></li>
-                <li></li>
-            </ul>
-        
-            <ul>
-                <li><h6>Bantuan dan Panduan</h6></li>
-                <li>FAQ</li>
-                <li>Syarat dan Ketentuan</li>
-                <li>Kebijakan Privasi</li>
-                <li>Mitra</li>
-                <li>Metode Pembayaran</li>
-            </ul>
-        
-            <ul>
-                <li><h6>CONTACT US</h6></li>
-                <li><h5>031-5231452</h5></li><br>
-                <li><h6>E-MAIL</h6></li>
-                <li><h5>optikprimadona@official.co.id</h5></li>
-            </ul>
-        </div>
-        <div class="container-xxl pb-5 mt-2">
-            <div class="justify-content-center d-flex">
-                <a href="#">
-                    <img src="storage/icons/facebook.webp" alt="" style="width: 20px;" class="mx-2">
-                </a>
-                <a href="#">
-                    <img src="storage/icons/instagram.png" alt="" style="width: 20px;" class="mx-2">
-                </a>
-                <a href="#">
-                    <img src="storage/icons/twitter.png" alt="" style="width: 20px;" class="mx-2">
-                </a>
+    <div  class="position-relative form" style="min-height: 100vh;">
+
+        <!-- Print keranjang kosong / isi keranjang -->
+        <div class="container-fluid text-center" id="isicart"></div>
+        <!-- Footer -->
+        <footer class="mt-5 bg-secondary bg-opacity-25 position-absolute bottom-0 w-100">
+            <div class="container-xxl pt-5">
+                <div class="row">
+                    <div class="col-xxl-3 col-md-4 d-md-block d-none">
+                        <div class="d-flex justify-content-center">
+                            <ul>
+                                <li><h6>Pencarian Produk</h6></li>
+                                <li>Kacamata</li>
+                                <li>Daftar Brand</li>
+                                <li>Harga kacamata</li>
+                            </ul>
+                        </div>
+                        
+                    </div>
+                    <div class="col-xxl-3 col-md-4 col-6">
+                        <div class="d-flex justify-content-center">
+                            <ul>
+                                <li><h6>Optik Primadona</h6></li>
+                                <li>Tentang kami</li>
+                                <li>Mencari toko</li>
+                                <li>Daftar layanan</li>
+                                <li></li>
+                                <li></li>
+                            </ul>
+    
+                        </div>
+    
+                    </div>
+                    <div class="col-xxl-3 col-md-4 col-6">
+                        <div class="d-flex justify-content-center">
+                            <ul>
+                                <li><h6>Bantuan dan Panduan</h6></li>
+                                <li>FAQ</li>
+                                <li>Syarat dan Ketentuan</li>
+                                <li>Kebijakan Privasi</li>
+                                <li>Mitra</li>
+                                <li>Metode Pembayaran</li>
+                            </ul>
+    
+                        </div>
+    
+                    </div>
+                    <div class="col-xxl-3 col-lg-12 text-center text-xxl-start">
+                        <div class="d-flex justify-content-center">
+                            <ul>
+                                <li><h6>CONTACT US</h6></li>
+                                <li><h5>031-5231452</h5></li><br>
+                                <li><h6>E-MAIL</h6></li>
+                                <li><h5>optikprimadona@official.co.id</h5></li>
+                            </ul>
+    
+                        </div>
+    
+                    </div>
+                </div>
+            
+            
             </div>
-            <hr>
-            <div class="text-secondary text-center">Disclaimer cuman tugas proyek kuliah</div>
-        </div>
-    </footer>
+            <div class="container-xxl pb-5 mt-2">
+                <div class="justify-content-center d-flex">
+                    <a href="#">
+                        <img src="storage/icons/facebook.webp" alt="" style="width: 20px;" class="mx-2">
+                    </a>
+                    <a href="#">
+                        <img src="storage/icons/instagram.png" alt="" style="width: 20px;" class="mx-2">
+                    </a>
+                    <a href="#">
+                        <img src="storage/icons/twitter.png" alt="" style="width: 20px;" class="mx-2">
+                    </a>
+                </div>
+                <hr>
+                <div class="text-secondary text-center">Disclaimer cuman tugas proyek kuliah</div>
+            </div>
+        </footer>
+    </div>
 
     <!-- Modal -->
     <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
