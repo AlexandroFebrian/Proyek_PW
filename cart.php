@@ -9,6 +9,7 @@
     $_SESSION["gender"] = "A";
     $cart_item = [];
     $sukses = false;
+    $error = false;
     
     if (isset($_POST["logout"])) {
         unset($_SESSION["auth_user_id"]);
@@ -29,107 +30,127 @@
     }
 
     if (isset($_POST["beli"]) && count($cart_item) != 0) {
-        /* HTRANS */
-        // Generate ID
-        $query = mysqli_query($conn, "SELECT MAX(SUBSTR(ht_id, 3)) FROM htrans");
-        $new_htrans_id = "HT" . str_pad(mysqli_fetch_array($query)[0] + 1, 4, "0", STR_PAD_LEFT);
+        /* Cek Stok */
+        $cek = true;
+        foreach ($cart_item as $key => $value) {
+            $stock = mysqli_fetch_array(mysqli_query($conn, "SELECT co_stock FROM color WHERE co_id = '" . $value["co_id"] . "'"))[0];
+            if ($value["ca_qty"] > $stock) {
+                $cek = false;
+                break;
+            }
+        }
+        if ($cek) {
+            /* HTRANS */
+            // Generate ID
+            $query = mysqli_query($conn, "SELECT MAX(SUBSTR(ht_id, 3)) FROM htrans");
+            $new_htrans_id = "HT" . str_pad(mysqli_fetch_array($query)[0] + 1, 4, "0", STR_PAD_LEFT);
 
-        // Generate Invoice
-        $new_invoice = "OP";
-        $new_invoice .= str_pad(date("y"), 2, "0", STR_PAD_LEFT);
-        $new_invoice .= str_pad(date("m"), 2, "0", STR_PAD_LEFT);
-        $new_invoice .= str_pad(date("d"), 2, "0", STR_PAD_LEFT);
+            // Generate Invoice
+            $new_invoice = "OP";
+            $new_invoice .= str_pad(date("y"), 2, "0", STR_PAD_LEFT);
+            $new_invoice .= str_pad(date("m"), 2, "0", STR_PAD_LEFT);
+            $new_invoice .= str_pad(date("d"), 2, "0", STR_PAD_LEFT);
 
-        $query = mysqli_query($conn, "SELECT MAX(SUBSTR(ht_invoice, 9) + 1) FROM htrans WHERE ht_invoice LIKE '$new_invoice%'");
-        if (!$row = mysqli_fetch_array($query)[0]) {
-            $new_invoice .= "001";
+            $query = mysqli_query($conn, "SELECT MAX(SUBSTR(ht_invoice, 9) + 1) FROM htrans WHERE ht_invoice LIKE '$new_invoice%'");
+            if (!$row = mysqli_fetch_array($query)[0]) {
+                $new_invoice .= "001";
+            } else {
+                $new_invoice .= str_pad($row, 3, "0", STR_PAD_LEFT);
+            }
+
+            // Get Total
+            $query = mysqli_query($conn, "SELECT SUM(ca_subtotal) FROM cart WHERE ca_us_id = '" . $_SESSION["auth_user_id"] . "'");
+            $total = mysqli_fetch_array($query)[0];
+
+            // Payment Snap Token
+            $query = mysqli_query($conn, "SELECT * FROM users WHERE us_id = '" . $_SESSION["auth_user_id"] . "'");
+            while ($row = mysqli_fetch_array($query)) {
+                $user = $row;
+            }
+            
+            $item_details = [];
+            $ctr = 0;
+            foreach ($cart_item as $key => $value) {
+                $item_details[$ctr]["id"] = $value["co_id"];
+                $item_details[$ctr]["price"] = $value["kc_price"];
+                $item_details[$ctr]["quantity"] = $value["ca_qty"];
+                $item_details[$ctr]["name"] = $value["br_name"];
+                $ctr++;
+            }
+            $item_details[$ctr]["id"] = "ONGKIR";
+            $item_details[$ctr]["price"] = 20000;
+            $item_details[$ctr]["quantity"] = 1;
+            $item_details[$ctr]["name"] = "Ongkos Kirim";
+
+            $order_id = rand();
+
+            $transaction_details = array(
+                "order_id" => $order_id,
+                "gross_amount" => $total + 20000
+            );
+
+            $billing_address = array(
+                "first_name" => $user["us_name"],
+                "last_name" => "",
+                "address" => $user["us_address"],
+                "city" => "Surabaya",
+                "postal_code" => "12345",
+                "phone" => $user["us_phone"],
+                "country_code" => "IDN"
+            );
+
+            $shipping_address = array(
+                "first_name" => $user["us_name"],
+                "last_name" => "",
+                "address" => $user["us_address"],
+                "city" => "Surabaya",
+                "postal_code" => "12345",
+                "phone" => $user["us_phone"],
+                "country_code" => "IDN"
+            );
+
+            $customer_details = array(
+                "first_name" => $user["us_name"],
+                "last_name" => "",
+                "email" => $user["us_email"],
+                "phone" => $user["us_phone"],
+                "billing_address" => $billing_address,
+                "shipping_address" => $shipping_address
+            );
+
+            $transaction = array(
+                "transaction_details" => $transaction_details,
+                "customer_details" => $customer_details,
+                "item_details" => $item_details
+            );
+
+            $snapToken = \Midtrans\Snap::getSnapToken($transaction);
+
+            //Insert HTrans
+            $query = mysqli_query($conn, "INSERT INTO htrans VALUES('$new_htrans_id', '" . date("Y-m-d h:i:s") . "', '$new_invoice', '$total', '$snapToken', '$order_id', '2', '" . $_SESSION["auth_user_id"] . "')");
+
+            /* DTRANS */
+            // Insert DTrans
+            foreach ($cart_item as $key => $value) {
+                // Kurangi Stock Kacamata
+                $stock = mysqli_fetch_array(mysqli_query($conn, "SELECT co_stock FROM color WHERE co_id = '" . $value["co_id"] . "'"))[0];
+                $updatestock = mysqli_query($conn, "UPDATE color SET co_stock = '" . $stock - $value["ca_qty"] . "' WHERE co_id = '" . $value["co_id"] . "'");
+                if ($stock - $value["ca_qty"] == 0) {
+                    $updatestatus = mysqli_query($conn, "UPDATE color SET co_status = '0' WHERE co_id = '" . $value["co_id"] . "'");
+                }
+
+                $query = mysqli_query($conn, "INSERT INTO dtrans VALUES('" . $value["co_id"] . "', '" . $value["ca_qty"] . "', '" . $value["ca_subtotal"] . "', '$new_htrans_id')");
+            }
+
+            // Clear Cart
+            $query = mysqli_query($conn, "DELETE FROM cart WHERE ca_us_id = '" . $_SESSION["auth_user_id"] . "'");
+            $cart_item = [];
+
+            $sukses = true;
+            unset($_POST["beli"]);
         } else {
-            $new_invoice .= str_pad($row, 3, "0", STR_PAD_LEFT);
+            $error = true;
         }
-
-        // Get Total
-        $query = mysqli_query($conn, "SELECT SUM(ca_subtotal) FROM cart WHERE ca_us_id = '" . $_SESSION["auth_user_id"] . "'");
-        $total = mysqli_fetch_array($query)[0];
-
-        // Payment Snap Token
-        $query = mysqli_query($conn, "SELECT * FROM users WHERE us_id = '" . $_SESSION["auth_user_id"] . "'");
-        while ($row = mysqli_fetch_array($query)) {
-            $user = $row;
-        }
-        
-        $item_details = [];
-        $ctr = 0;
-        foreach ($cart_item as $key => $value) {
-            $item_details[$ctr]["id"] = $value["co_id"];
-            $item_details[$ctr]["price"] = $value["kc_price"];
-            $item_details[$ctr]["quantity"] = $value["ca_qty"];
-            $item_details[$ctr]["name"] = $value["br_name"];
-            $ctr++;
-        }
-        $item_details[$ctr]["id"] = "ONGKIR";
-        $item_details[$ctr]["price"] = 20000;
-        $item_details[$ctr]["quantity"] = 1;
-        $item_details[$ctr]["name"] = "Ongkos Kirim";
-
-        $order_id = rand();
-
-        $transaction_details = array(
-            "order_id" => $order_id,
-            "gross_amount" => $total + 20000
-        );
-
-        $billing_address = array(
-            "first_name" => $user["us_name"],
-            "last_name" => "",
-            "address" => $user["us_address"],
-            "city" => "Surabaya",
-            "postal_code" => "12345",
-            "phone" => $user["us_phone"],
-            "country_code" => "IDN"
-        );
-
-        $shipping_address = array(
-            "first_name" => $user["us_name"],
-            "last_name" => "",
-            "address" => $user["us_address"],
-            "city" => "Surabaya",
-            "postal_code" => "12345",
-            "phone" => $user["us_phone"],
-            "country_code" => "IDN"
-        );
-
-        $customer_details = array(
-            "first_name" => $user["us_name"],
-            "last_name" => "",
-            "email" => $user["us_email"],
-            "phone" => $user["us_phone"],
-            "billing_address" => $billing_address,
-            "shipping_address" => $shipping_address
-        );
-
-        $transaction = array(
-            "transaction_details" => $transaction_details,
-            "customer_details" => $customer_details,
-            "item_details" => $item_details
-        );
-
-        $snapToken = \Midtrans\Snap::getSnapToken($transaction);
-
-        //Insert HTrans
-        $query = mysqli_query($conn, "INSERT INTO htrans VALUES('$new_htrans_id', '" . date("Y-m-d h:i:s") . "', '$new_invoice', '$total', '$snapToken', '$order_id', '2', '" . $_SESSION["auth_user_id"] . "')");
-
-        /* DTRANS */
-        // Insert DTrans
-        foreach ($cart_item as $key => $value) {
-            $query = mysqli_query($conn, "INSERT INTO dtrans VALUES('" . $value["co_id"] . "', '" . $value["ca_qty"] . "', '" . $value["ca_subtotal"] . "', '$new_htrans_id')");
-        }
-
-        // Clear Cart
-        $query = mysqli_query($conn, "DELETE FROM cart WHERE ca_us_id = '" . $_SESSION["auth_user_id"] . "'");
-        $cart_item = [];
-
-        $sukses = true;
-        unset($_POST["beli"]);
     }
 ?>
 <!DOCTYPE html>
@@ -236,6 +257,21 @@
         <p class="mt-4">Order ID : <?= strrev(str_replace("OP", "", $new_invoice)) ?></p>
         <p>Email : optikprimadona@official.co.id</p>
         <p>Phone : (031) 5231452</p>
+    </div>
+
+    <!-- Print stock tidak mencukupi -->
+    <div id="popupx" class="shadow text-center bg-white rounded-4 position-fixed top-50 start-50" style="width: 350px; height: 400px; border: 1px solid black; margin-top: -200px; margin-left: -175px; display: 
+    <?php
+        if ($error == true) {
+            echo "block";
+        } else {
+            echo "none";
+        }
+    ?>; z-index: 5;">
+        <h3 class="fw-bold mt-5">Maaf <?= $us_name ?><br>Stock Kami Tidak Mencukupi</h5><br>
+        <img src="storage/icons/error.png" width="100px">
+        <p class="mt-4">Mohon cek kembali ketersediaan stock kami</p>
+        <p>Terimakasih</p>
     </div>
 
     <div  class="position-relative form" style="min-height: 100vh;">
@@ -450,6 +486,7 @@
 
     function hide_popup() {
         $('#popup').hide();
+        $('#popupx').hide();
     }
 </script>
 </html>
