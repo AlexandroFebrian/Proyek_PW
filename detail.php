@@ -38,30 +38,13 @@
         $result = mysqli_fetch_array(mysqli_query($conn, "SELECT * FROM kacamata JOIN color ON kc_id = co_kc_id JOIN brand ON kc_br_id = br_id WHERE kc_id = '$kc_id' AND co_id = '$co_id'"));
         $kc_id = $result["kc_id"];
         $kc_price = $result["kc_price"];
+        $kc_gender = $result["kc_gender"];
+        $kc_weight = $result["kc_weight"];
         $co_stock = $result["co_stock"];
         $co_id = $result["co_id"];
         $co_link = $result["co_link"];
         $br_name = $result["br_name"];
     }
-
-    // if (isset($_POST["keranjang"])) {
-    //     if (isset($_SESSION["auth_user_id"])) {
-    //         $items = mysqli_fetch_array(mysqli_query($conn, "SELECT * FROM cart WHERE ca_co_id = '$co_id' AND ca_us_id = '" . $_SESSION["auth_user_id"] . "'"));
-    //         $qty = $_POST["qtyhidden"];
-    //         if ($qty == "") {
-    //             $qty = 1;
-    //         }
-    //         if (isset($items[0])) {
-    //             $query = mysqli_query($conn, "UPDATE cart SET ca_qty = '" . $qty + $items["ca_qty"] . "' WHERE ca_co_id = '$co_id' AND ca_us_id = '" . $_SESSION["auth_user_id"] . "'");
-    //             $query = mysqli_query($conn, "UPDATE cart SET ca_subtotal = '" . ($qty + $items["ca_qty"]) * $kc_price . "' WHERE ca_co_id = '$co_id' AND ca_us_id = '" . $_SESSION["auth_user_id"] . "'");
-    //         } else {
-    //             $query = mysqli_query($conn, "INSERT INTO cart VALUES('" . $_SESSION["auth_user_id"] . "', '$co_id', '$qty', '" . $qty * $kc_price . "')");
-    //         }
-    //         header("Location: detail.php?id=$kc_id&color=$co_id");
-    //     } else {
-    //         header("Location: login.php");
-    //     }
-    // }
 ?>
 
 <!DOCTYPE html>
@@ -152,42 +135,70 @@
             <?php
                 if ($kc_id != "") {
             ?>
-                    <div class="card text-center" style="border: none;">
-                        <img src='<?= $co_link ?>' class="card-img-top w-50 mx-auto">
-                        <div class="card-body">
-                            <h4 class="card-title"><?= $br_name ?></h4>
-                            <p class="card-text fs-5"><?= "SKU-" . $co_id ?>
-                            <br><?= "Rp " . number_format($kc_price, 0, "", ",") ?></p>
-                        </div>
-                        <ul class="pagination d-flex justify-content-center">
-                            <?php
-                                $color = mysqli_query($conn, "SELECT * FROM color WHERE co_kc_id = '" . $kc_id . "' AND co_status = '1'");
-                                $ctr = 1;
-                                while ($row = mysqli_fetch_array($color)) {
-                            ?>
-                                <li class="page-item"><a class="page-link text-black" href="detail.php?id=<?= $kc_id ?>&color=<?= $row["co_id"] ?>"><?= $ctr++ ?></a></li>
-                            <?php
-                                }
-                            ?>
-                        </ul>
-                        <span>Stok : <?= $co_stock ?></span>
-                        <input type="hidden" id="stock" value='<?= $co_stock ?>'>
-                        <div class="d-flex justify-content-center mt-3">
-                            <div class="d-inline-block p-0 m-0" style="border: 2px gray solid; border-radius:5px; border-spacing: 0px;">
-                                <button type="button" class="btn" onclick="Kurang()" style="border-right:2px gray solid; border-radius:0px;">-</button>
-                                <span id='qty' class="px-3" style="font-size:16px; width: 50px;" name="qty">1</span>
-                                <input type="hidden" name="qtyhidden" value="1" id="qtyhidden">
-                                <button type="button" class="btn" onclick="Tambah()" style="border-left: 2px gray solid;border-radius:0px;">+</button>
-                            </div>
-                            <?php
-                                if (isset($_SESSION["auth_user_id"])) {
-                                    echo '<button class="btn btn-success fw-bold ms-4" type="button" onclick="add_cart()" data-bs-toggle="modal" data-bs-target="#exampleModal">+ Keranjang</button>';
-                                } else {
-                                    echo '<button class="btn btn-success fw-bold ms-4" formaction="login.php">+ Keranjang</button>';
-                                }
-                            ?>
+                <div class="row mt-4">
+                    <div class="col-12 col-lg-4">
+                        <div class="card text-center" style="border: none;">
+                            <img src='<?= $co_link ?>' class="card-img-top w-50 mx-auto">
+                            <ul class="pagination d-flex justify-content-center">
+                                <?php
+                                    $color = mysqli_query($conn, "SELECT * FROM color WHERE co_kc_id = '" . $kc_id . "' AND co_status = '1'");
+                                    $ctr = 1;
+                                    while ($row = mysqli_fetch_array($color)) {
+                                ?>
+                                    <li class="page-item"><a class="page-link text-black" href="detail.php?id=<?= $kc_id ?>&color=<?= $row["co_id"] ?>"><?= $ctr++ ?></a></li>
+                                <?php
+                                    }
+                                ?>
+                            </ul>
                         </div>
                     </div>
+                    <div class="col-12 col-lg-4">
+                        <div class="card text-start" style="border: none;">
+                            <div class="card-body">
+                                <h4 class="card-title"><?= $br_name ?></h4>
+                                <p class="fs-4 fw-bold"><?= "Rp " . number_format($kc_price, 0, "", ",") ?></p>
+                                <hr>
+                                <p class="card-text"><b>Pilihan warna : </b><?= $co_id ?></p>
+                                <hr>
+                                <b>Detail</b>
+                                <hr>
+                                <p>
+                                    Kondisi : <b class="fw-semibold">Baru</b><br>
+                                    Berat : <b class="fw-semibold"><?= $kc_weight ?> g</b><br>
+                                    Gender : <b class="fw-semibold"><?php if ($kc_gender == "M") {echo "Men";} else {echo "Women";} ?></b><br>
+                                </p>
+                                <p>Kacamata produksi prima<br> Produk berkualitas dari brand <?= $br_name ?></p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-12 col-lg-3">
+                        <div class="card text-start p-4">
+                            <h6 class="fw-bold">Atur Jumlah</h6>
+                            <div class="d-flex mt-2" style="align-items: center;">
+                                <img src='<?= $co_link ?>' width="15%">
+                                <p class="card-text ms-3"><?= $co_id ?></p>
+                            </div>
+                            <hr>
+                            <input type="hidden" id="stock" value='<?= $co_stock ?>'>
+                            <div class="d-flex justify-content-start mt-3 flex-wrap" style="align-items: center;">
+                                <div class="d-inline-block p-0 m-0" style="border: 2px gray solid; border-radius:5px; border-spacing: 0px;">
+                                    <button type="button" class="btn" onclick="Kurang()" style="border-right:2px gray solid; border-radius:0px;">-</button>
+                                    <span id='qty' class="px-3" style="font-size:16px; width: 50px;" name="qty">1</span>
+                                    <input type="hidden" name="qtyhidden" value="1" id="qtyhidden">
+                                    <button type="button" class="btn" onclick="Tambah()" style="border-left: 2px gray solid;border-radius:0px;">+</button>
+                                </div>
+                                <span class="ms-2">Stok : <?= $co_stock ?></span>
+                                <?php
+                                    if (isset($_SESSION["auth_user_id"])) {
+                                        echo '<button class="btn btn-success fw-bold mt-3 w-100" type="button" onclick="add_cart()" data-bs-toggle="modal" data-bs-target="#exampleModal">+ Keranjang</button>';
+                                    } else {
+                                        echo '<button class="btn btn-success fw-bold mt-3 w-100" formaction="login.php">+ Keranjang</button>';
+                                    }
+                                ?>
+                            </div>
+                        </div>
+                    </div>
+                </div>
             <?php
                 }
             ?>
