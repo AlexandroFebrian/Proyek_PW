@@ -141,7 +141,7 @@
                             <img src='<?= $co_link ?>' class="card-img-top w-50 mx-auto">
                             <ul class="pagination d-flex justify-content-center">
                                 <?php
-                                    $color = mysqli_query($conn, "SELECT * FROM color WHERE co_kc_id = '" . $kc_id . "' AND co_status = '1'");
+                                    $color = mysqli_query($conn, "SELECT * FROM color WHERE co_kc_id = '" . $kc_id . "'");
                                     $ctr = 1;
                                     while ($row = mysqli_fetch_array($color)) {
                                 ?>
@@ -182,17 +182,21 @@
                             <input type="hidden" id="stock" value='<?= $co_stock ?>'>
                             <div class="d-flex justify-content-start mt-3 flex-wrap" style="align-items: center;">
                                 <div class="d-inline-block p-0 m-0" style="border: 2px gray solid; border-radius:5px; border-spacing: 0px;">
-                                    <button type="button" class="btn" onclick="Kurang()" style="border-right:2px gray solid; border-radius:0px;">-</button>
+                                    <button type="button" class="btn" onclick="Kurang()" style="border-right:2px gray solid; border-radius:0px;" <?php if ($co_stock == 0) echo 'disabled' ?>>-</button>
                                     <span id='qty' class="px-3" style="font-size:16px; width: 50px;" name="qty">1</span>
                                     <input type="hidden" name="qtyhidden" value="1" id="qtyhidden">
-                                    <button type="button" class="btn" onclick="Tambah()" style="border-left: 2px gray solid;border-radius:0px;">+</button>
+                                    <button type="button" class="btn" onclick="Tambah()" style="border-left: 2px gray solid;border-radius:0px;" <?php if ($co_stock == 0) echo 'disabled' ?>>+</button>
                                 </div>
-                                <span class="ms-2">Stok : <?= $co_stock ?></span>
+                                <span class="ms-2 <?php if ($co_stock == 0) echo 'text-danger' ?>">Stok : <?= $co_stock ?></span>
                                 <?php
                                     if (isset($_SESSION["auth_user_id"])) {
-                                        echo '<button class="btn btn-success fw-bold mt-3 w-100" type="button" onclick="add_cart()" data-bs-toggle="modal" data-bs-target="#exampleModal">+ Keranjang</button>';
+                                ?>
+                                        <button class="btn btn-success fw-bold mt-3 w-100" type="button" onclick="add_cart()" data-bs-toggle="modal" data-bs-target="#exampleModal" <?php if ($co_stock == 0) echo 'disabled' ?>>+ Keranjang</button>
+                                <?php
                                     } else {
-                                        echo '<button class="btn btn-success fw-bold mt-3 w-100" formaction="login.php">+ Keranjang</button>';
+                                ?>
+                                        <button class="btn btn-success fw-bold mt-3 w-100" formaction="login.php">+ Keranjang</button>
+                                <?php
                                     }
                                 ?>
                             </div>
