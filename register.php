@@ -34,7 +34,7 @@
                     // Insert DB
                     $password = password_hash($password, PASSWORD_BCRYPT);
 
-                    $query = "INSERT INTO users VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)";
+                    $query = "INSERT INTO users VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, '1')";
                     $inserting = $conn -> prepare($query);
                     $inserting -> bind_param("sssssssss", $new_us_id, $username, $email, $password, $name, $birth, $gender, $phone, $address);
                     $inserting -> execute();

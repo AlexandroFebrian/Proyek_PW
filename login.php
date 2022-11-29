@@ -20,8 +20,12 @@
             $searching = mysqli_fetch_array($searching);
             if (isset($searching[0])) {
                 if (password_verify($password, $searching["us_password"])) {
-                    $_SESSION["auth_user_id"] = $searching["us_id"];
-                    header("Location: index.php");
+                    if ($searching["us_status"] == 1) {
+                        $_SESSION["auth_user_id"] = $searching["us_id"];
+                        header("Location: index.php");
+                    } else {
+                        $msg = "Akun anda telah diblokir, hubungi kontak kami untuk info lebih!";
+                    }
                 } else {
                     $msg = "Password salah";
                 }
