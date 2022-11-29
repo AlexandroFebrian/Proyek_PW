@@ -40,12 +40,19 @@
             $mail -> setFrom("optikprimadona@official.co.id", "Optik Primadona");
             $mail -> addAddress($transaksi[0]["us_email"], $transaksi[0]["us_name"]);
             $mail -> Subject = "Email Coba";
+            if ($transaksi[0]["ht_status"] == 1) { 
+                $mail -> Subject = "Lampiran Invoice";
+            } elseif ($transaksi[0]["ht_status"] == 2) {
+                $mail -> Subject = "Menunggu Pembayaran";
+            } else {
+                $mail -> Subject = "Pesanan Dibatalkan";
+            }
             
         
             $body = '<div style="margin: 5px; padding: 50px; border: 1px solid gray; border-radius: 20px;">
             <h5 style="font-size: 16px; margin: 0px;">';
-            if ($transaksi[0]["ht_status"] == 1) { 
-                $body .= '<b style="color: green;">Selesai</b>'; 
+            if ($transaksi[0]["ht_status"] == 1) {
+                $body .= '<b style="color: green;">Selesai</b>';
             } elseif ($transaksi[0]["ht_status"] == 2) {
                 $body .= '<b style="color: orange;">Menunggu Pembayaran</b>';
             } else {

@@ -36,6 +36,8 @@
                 $status = (array)$status;
                 if ($status["transaction_status"] == "settlement" && $transaksi[0]["ht_status"] == 2) {
                     $query = mysqli_query($conn, "UPDATE htrans SET ht_status = '1' WHERE ht_id = '$ht_id'");
+                    $_SESSION["email"] = "OK";
+                    require_once("mailer.php");
                     header("Location: detailtransaksi.php?ht_id=$ht_id");
                 }
             } catch (Exception $ex) {}
@@ -79,6 +81,8 @@
             $query = mysqli_query($conn, "UPDATE htrans SET ht_status = '0' WHERE ht_id = '$ht_id'");
             header("Location: transaksi.php");
         }
+        $_SESSION["email"] = "OK";
+        require_once("mailer.php");
     }
 ?>
 
