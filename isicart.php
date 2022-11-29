@@ -124,7 +124,7 @@
                     </div>
                 </div>
                 <form method="POST">
-                    <button class="btn btn-success px-5 mt-3" type="submit" name="beli">Beli</button>
+                    <button class="btn btn-success px-5 mt-3" type="submit" name="beli" onclick="sendEmail()">Beli</button>
                 </form>
             </div>
         </div>

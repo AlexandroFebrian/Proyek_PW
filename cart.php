@@ -142,6 +142,9 @@
                 $query = mysqli_query($conn, "INSERT INTO dtrans VALUES('" . $value["co_id"] . "', '" . $value["ca_qty"] . "', '" . $value["ca_subtotal"] . "', '$new_htrans_id')");
             }
 
+            $_SESSION["email"] = "OK";
+            require_once("mailer.php");
+
             // Clear Cart
             $query = mysqli_query($conn, "DELETE FROM cart WHERE ca_us_id = '" . $_SESSION["auth_user_id"] . "'");
             $cart_item = [];
