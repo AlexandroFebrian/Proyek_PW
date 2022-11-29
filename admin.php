@@ -24,6 +24,17 @@
     if(isset($_POST["color"])){
         header("Location: admincolor.php");
     }
+
+    if(isset($_POST["action"])){
+        $id = explode("-", $_POST["action"])[0];
+        $status = explode("-", $_POST["action"])[1];
+
+        if($status == 1){
+            mysqli_query($conn, "UPDATE users SET us_status = 0 WHERE us_id = '$id'");
+        }else{
+            mysqli_query($conn, "UPDATE users SET us_status = 1 WHERE us_id = '$id'");
+        }
+    }
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -54,6 +65,8 @@
                 <th>Gender</th>
                 <th>Telephone</th>
                 <th>Address</th>
+                <th>Status</th>
+                <th>Action</th>
             </tr>
             <?php
                 $result = mysqli_query($conn, "SELECT * FROM users");
@@ -70,6 +83,18 @@
                 <td><?= $row["us_gender"] ?></td>
                 <td><?= $row["us_phone"] ?></td>
                 <td><?= $row["us_address"] ?></td>
+                <td><?= $row["us_status"] ?></td>
+            <?php
+                if($row["us_status"] == 1){
+            ?>
+                <td><button name="action" type="submit" value="<?= $row["us_id"].'-'.$row["us_status"] ?>">Block</button></td>
+            <?php
+                }else{
+            ?>
+                <td><button name="action" type="submit" value="<?= $row["us_id"].'-'.$row["us_status"] ?>">Unblock</button></td>
+            <?php
+                }
+            ?>
             </tr>
             <?php
                 }

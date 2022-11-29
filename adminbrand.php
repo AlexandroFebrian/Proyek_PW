@@ -71,6 +71,7 @@
             <tr>
                 <th>ID</th>
                 <th>Brand Name</th>
+                <th>Action</th>
             </tr>
             <?php
                 $result = mysqli_query($conn, "SELECT * FROM brand");
@@ -80,6 +81,7 @@
             <tr>
                 <td><?= $row["br_id"] ?></td>
                 <td><?= $row["br_name"] ?></td>
+                <td><button type="submit" name="action" value="<?= $row["br_id"] ?>">Edit</button></td>
             </tr>
             <?php
                 }
