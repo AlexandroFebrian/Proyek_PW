@@ -85,7 +85,7 @@ CREATE TABLE `color` (
 /*Data for the table `color` */
 
 insert  into `color`(`co_id`,`co_kc_id`,`co_link`,`co_stock`,`co_status`) values 
-('CO0001','KC001','storage/products/899ad57f-7e7e-40d1-a899-7487cb7a5696.webp',22,'1'),
+('CO0001','KC001','storage/products/899ad57f-7e7e-40d1-a899-7487cb7a5696.webp',80,'1'),
 ('CO0002','KC001','storage/products/0f5e52f7-03f2-435d-8570-c61924cd7e72.jpeg',67,'1'),
 ('CO0003','KC001','storage/products/e4f0e0c4-73c2-4027-a8e3-b776a32868e1.jpeg',81,'1'),
 ('CO0004','KC001','storage/products/a6c60504-eb49-4900-af5c-6cbd2463a599.jpeg',100,'1'),
@@ -2166,14 +2166,15 @@ CREATE TABLE `users` (
   `us_gender` varchar(1) DEFAULT NULL,
   `us_phone` varchar(15) DEFAULT NULL,
   `us_address` varchar(255) DEFAULT NULL,
+  `us_status` varchar(1) DEFAULT NULL COMMENT '1 = aktif; 0 = block',
   PRIMARY KEY (`us_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 /*Data for the table `users` */
 
-insert  into `users`(`us_id`,`us_username`,`us_email`,`us_password`,`us_name`,`us_birth`,`us_gender`,`us_phone`,`us_address`) values 
-('US0001','razzking','akuncitcs@gmail.com','$2y$10$voDod5ewBV6hb.uZznnzHe9QJXRClw0uOVPUfbQ1JLOsRW7WbKmWS','Ivan Susanto','2003-02-08','M','82140001230','Surabaya'),
-('US0002','feb','febrian@gmail.com','$2y$10$VV6C33d2Cob5Y8dizdcTIOVitqrWG9wyV2y2IRVlCO4.qIqxOikbG','Febrian Alexandro','2003-02-03','M','82140001230','Surabaya');
+insert  into `users`(`us_id`,`us_username`,`us_email`,`us_password`,`us_name`,`us_birth`,`us_gender`,`us_phone`,`us_address`,`us_status`) values 
+('US0001','razzking','akuncitcs@gmail.com','$2y$10$voDod5ewBV6hb.uZznnzHe9QJXRClw0uOVPUfbQ1JLOsRW7WbKmWS','Ivan Susanto','2003-02-08','M','82140001230','Surabaya','1'),
+('US0002','feb','febrian@gmail.com','$2y$10$VV6C33d2Cob5Y8dizdcTIOVitqrWG9wyV2y2IRVlCO4.qIqxOikbG','Febrian Alexandro','2003-02-03','M','82140001230','Surabaya','1');
 
 /*!40101 SET SQL_MODE=@OLD_SQL_MODE */;
 /*!40014 SET FOREIGN_KEY_CHECKS=@OLD_FOREIGN_KEY_CHECKS */;
