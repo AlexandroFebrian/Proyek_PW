@@ -410,7 +410,7 @@
                                                     }
                                                 ?>
                                                 >
-                                                <label for='M'>Man</label>
+                                                <label for='M'>Men</label>
                                             </li>
                                             <li>
                                                 <input type="radio" name='gender' value='W' class="me-2" id='W' style="width: 20px; height: 20px"
@@ -419,7 +419,7 @@
                                                         echo "checked";
                                                     }
                                                 ?>>
-                                                <label for='W'>Woman</label>
+                                                <label for='W'>Women</label>
                                             </li>
                                             <li>
                                                 <input type="radio" name='gender' value='A' class="me-2" id='A' style="width: 20px; height: 20px"

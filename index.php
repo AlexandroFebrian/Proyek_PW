@@ -200,10 +200,10 @@
                 </div>
             </div>
 
-            <!-- For Woman -->
+            <!-- For Women -->
             <div class="row ms-2 mt-5">
                 <div class="col">
-                    <h1>For Woman</h1>
+                    <h1>For Women</h1>
                 </div>
             </div>
             <div class="container-fluid py-2">
