@@ -95,7 +95,7 @@
                     <div class="col-6 text-end">
                         Qty Total : 
                     </div>
-                    <div class="col-6 text-start">
+                    <div class="col-5 col-lg-3 text-end">
                         <?= number_format($qtytotal, 0, "", ",") ?>
                     </div>
                 </div>
@@ -103,7 +103,7 @@
                     <div class="col-6 text-end">
                         Harga Total Barang : 
                     </div>
-                    <div class="col-6 text-start">
+                    <div class="col-5 col-lg-3 text-end">
                     <?= "Rp " . number_format($hargatotal, 0, "", ",") ?>
                     </div>
                 </div>
@@ -111,7 +111,7 @@
                     <div class="col-6 text-end">
                         Ongkir : 
                     </div>
-                    <div class="col-6 text-start">
+                    <div class="col-5 col-lg-3 text-end">
                         Rp 20,000
                     </div>
                 </div>
@@ -119,7 +119,7 @@
                     <div class="col-6 text-end">
                         <h5 class="fw-bold">Harga Total : </h5>
                     </div>
-                    <div class="col-6 text-start">
+                    <div class="col-5 col-lg-3 text-end">
                         <h5 class="fw-bold"><?= "Rp " . number_format($hargatotal + 20000, 0, "", ",") ?></h5>
                     </div>
                 </div>
