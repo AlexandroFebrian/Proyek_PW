@@ -29,16 +29,17 @@
         while ($row = mysqli_fetch_array($query)) {
             $transaksi[] = $row;
         }
-
-        $order_id = $transaksi[0]["ht_order_id"];
-        try {
-            $status = \Midtrans\Transaction::status($order_id);
-            $status = (array)$status;
-            if ($status["transaction_status"] == "settlement" && $transaksi[0]["ht_status"] == 2) {
-                $query = mysqli_query($conn, "UPDATE htrans SET ht_status = '1' WHERE ht_id = '$ht_id'");
-                header("Location: detailtransaksi.php?ht_id=$ht_id");
-            }
-        } catch (Exception $ex) {}
+        if (count($transaksi) != 0) {
+            $order_id = $transaksi[0]["ht_order_id"];
+            try {
+                $status = \Midtrans\Transaction::status($order_id);
+                $status = (array)$status;
+                if ($status["transaction_status"] == "settlement" && $transaksi[0]["ht_status"] == 2) {
+                    $query = mysqli_query($conn, "UPDATE htrans SET ht_status = '1' WHERE ht_id = '$ht_id'");
+                    header("Location: detailtransaksi.php?ht_id=$ht_id");
+                }
+            } catch (Exception $ex) {}
+        }
     } else {
         header("Location: index.php");
     }
@@ -60,6 +61,10 @@
                 header("Location: detailtransaksi.php?ht_id=$ht_id");
             } else {
                 $cancel = \Midtrans\Transaction::cancel($order_id);
+                $query = mysqli_query($conn, "SELECT * FROM dtrans JOIN htrans ON dt_ht_id = ht_id WHERE ht_id = '$ht_id' AND ht_status != '0'");
+                while ($row = mysqli_fetch_array($query)) {
+                    $update = mysqli_query($conn, "UPDATE color SET co_stock = co_stock + '" . $row["dt_qty"] . "' WHERE co_id = '" . $row["dt_co_id"] . "'");
+                }
                 $query = mysqli_query($conn, "UPDATE htrans SET ht_status = '0' WHERE ht_id = '$ht_id'");
                 header("Location: transaksi.php");
             }
@@ -67,6 +72,10 @@
             try {
                 $cancel = \Midtrans\Transaction::cancel($order_id);
             } catch (Exception $ex) {}
+            $query = mysqli_query($conn, "SELECT * FROM dtrans JOIN htrans ON dt_ht_id = ht_id WHERE ht_id = '$ht_id' AND ht_status != '0'");
+            while ($row = mysqli_fetch_array($query)) {
+                $update = mysqli_query($conn, "UPDATE color SET co_stock = co_stock + '" . $row["dt_qty"] . "' WHERE co_id = '" . $row["dt_co_id"] . "'");
+            }
             $query = mysqli_query($conn, "UPDATE htrans SET ht_status = '0' WHERE ht_id = '$ht_id'");
             header("Location: transaksi.php");
         }
