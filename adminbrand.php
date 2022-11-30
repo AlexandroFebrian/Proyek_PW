@@ -47,6 +47,16 @@
         echo "<script>alert('".$_SESSION["msg"]."')</script>";
         unset($_SESSION["msg"]);
     }
+
+    if(isset($_POST["yes"])){
+        if($_POST["yes"] != ""){
+            $id = $_POST["yes"];
+            $name = $_POST["after"];
+            mysqli_query($conn, "UPDATE brand SET br_name = '$name' WHERE br_id = '$id'");
+
+            $_SESSION["msg"] = "BERHASIL GANTI NAMA";
+        }
+    }
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -67,31 +77,81 @@
         <button type="submit" formaction="adminbrand.php">REFRESH PAGE</button>
         
         <h2>MASTER BRAND</h2>
-        <table border 1px style="float: left; margin-right: 50px;">
-            <tr>
-                <th>ID</th>
-                <th>Brand Name</th>
-                <th>Action</th>
-            </tr>
-            <?php
-                $result = mysqli_query($conn, "SELECT * FROM brand");
+        <div style="float: left; margin-right: 50px;">
+            <table border 1px>
+                <tr>
+                    <th>ID</th>
+                    <th>Brand Name</th>
+                    <th>Action</th>
+                </tr>
+                <?php
+                    $result = mysqli_query($conn, "SELECT * FROM brand");
+    
+                    while($row = mysqli_fetch_array($result)){
+                ?>
+                <tr>
+                    <td><?= $row["br_id"] ?></td>
+                    <td><?= $row["br_name"] ?></td>
+                    <td><button type="button" value="<?= $row["br_id"].'-'.$row["br_name"] ?>" onclick="edit(this)">Edit</button></td>
+                </tr>
+                <?php
+                    }
+                ?>
+            </table>
 
-                while($row = mysqli_fetch_array($result)){
-            ?>
-            <tr>
-                <td><?= $row["br_id"] ?></td>
-                <td><?= $row["br_name"] ?></td>
-                <td><button type="submit" name="action" value="<?= $row["br_id"] ?>">Edit</button></td>
-            </tr>
-            <?php
-                }
-            ?>
-        </table>
+        </div>
         
-        <h3>ADD BRAND</h3>
-        NEW BRAND : 
-        <input type="text" name="br_name" id="">
-        <button type="submit" name="add">Add Brand</button>
+        <div style="float: left;">
+            <h3>ADD BRAND</h3>
+            NEW BRAND : 
+            <input type="text" name="br_name" id="">
+            <button type="submit" name="add">Add Brand</button><br><br>
+    
+            <div id="edit" style="display: none;">
+                <h3>EDIT BRAND NAME</h3>
+                BEFORE : 
+                <input type="text" id="before" disabled><br><br>
+                AFTER : 
+                <input type="text" name="after"><br><br>
+                <button type="button" onclick="change()">Change</button>
+                <button type="button" onclick="cancel()">Cancel</button>
+            </div><br><br>
+            <div id="confirm" style="display: none; border: 1px solid black; border-radius: 5px; padding: 20px;">
+                    <h2 style="margin: 0px;">CONFIRM CHANGE</h2><br>
+                    ARE YOU SURE?<br><br>
+                    <button type="submit" name="yes" id="yes" value="">YES</button>
+                    <button type="button" onclick="cancel()">NO</button>
+            </div>
+
+        </div>
+
     </form>
 </body>
+<script>
+    isi = document.getElementById("edit")
+    conf = document.getElementById("confirm")
+    id = ""
+    name = ""
+
+    function edit(obj){
+        isi.style.display = "block"
+
+        id = obj.value.split("-")[0]
+        name = obj.value.split("-")[1]
+
+        document.getElementById("before").value = name
+    }
+
+    function cancel(){
+        isi.style.display = "none"
+        conf.style.display = "none"
+        document.getElementById("yes").value = ""
+    }
+
+    function change(){
+        conf.style.display = "block"
+
+        document.getElementById("yes").value = id
+    }
+</script>
 </html>

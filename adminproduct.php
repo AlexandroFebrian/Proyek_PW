@@ -118,28 +118,31 @@
             ?>
         </table>
 
-        <h3>ADD PRODUCT</h3>
-        BRAND : 
-        <select name="filter_add" id="">
-            <?php
-                $result = mysqli_query($conn, "SELECT * FROM brand");
+        <div style="float:left;">
+            <h3>ADD PRODUCT</h3>
+            BRAND : 
+            <select name="filter_add" id="">
+                <?php
+                    $result = mysqli_query($conn, "SELECT * FROM brand");
+    
+                    while($row = mysqli_fetch_array($result)){
+                ?>
+                <option value='<?= $row["br_id"] ?>'><?= $row["br_name"] ?></option>
+                <?php
+                    }
+                ?>
+            </select><br><br>
+            PRICE : 
+            <input type="number" name="price" min=1><br><br>
+            GENDER : 
+            <input type="radio" name="gender" id="M" value="M">
+            <label for="M">MAN</label>
+            <input type="radio" name="gender" id="W" value="W">
+            <label for="W">WOMAN</label><br><br>
+    
+            <button type="submit" name="add">ADD</button>
 
-                while($row = mysqli_fetch_array($result)){
-            ?>
-            <option value='<?= $row["br_id"] ?>'><?= $row["br_name"] ?></option>
-            <?php
-                }
-            ?>
-        </select><br><br>
-        PRICE : 
-        <input type="number" name="price" min=1><br><br>
-        GENDER : 
-        <input type="radio" name="gender" id="M" value="M">
-        <label for="M">MAN</label>
-        <input type="radio" name="gender" id="W" value="W">
-        <label for="W">WOMAN</label><br><br>
-
-        <button type="submit" name="add">ADD</button>
+        </div>
     </form>
 </body>
 </html>
