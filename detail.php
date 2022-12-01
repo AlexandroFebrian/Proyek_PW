@@ -1,5 +1,5 @@
 <?php
-    require_once("connection.php");    
+    require_once("connection.php");
 
     if (isset($_POST["logout"])) {
         unset($_SESSION["auth_user_id"]);
