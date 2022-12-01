@@ -41,6 +41,7 @@
         $kc_gender = $result["kc_gender"];
         $kc_weight = $result["kc_weight"];
         $co_stock = $result["co_stock"];
+        $co_status = $result["co_status"];
         $co_id = $result["co_id"];
         $co_link = $result["co_link"];
         $br_name = $result["br_name"];
@@ -182,20 +183,20 @@
                             <input type="hidden" id="stock" value='<?= $co_stock ?>'>
                             <div class="d-flex justify-content-start mt-3 flex-wrap" style="align-items: center;">
                                 <div class="d-inline-block p-0 m-0" style="border: 2px gray solid; border-radius:5px; border-spacing: 0px;">
-                                    <button type="button" class="btn" onclick="Kurang()" style="border-right:2px gray solid; border-radius:0px;" <?php if ($co_stock == 0) echo 'disabled' ?>>-</button>
+                                    <button type="button" class="btn" onclick="Kurang()" style="border-right:2px gray solid; border-radius:0px;" <?php if ($co_status == 0) echo 'disabled' ?>>-</button>
                                     <span id='qty' class="px-3" style="font-size:16px; width: 50px;" name="qty">1</span>
                                     <input type="hidden" name="qtyhidden" value="1" id="qtyhidden">
-                                    <button type="button" class="btn" onclick="Tambah()" style="border-left: 2px gray solid;border-radius:0px;" <?php if ($co_stock == 0) echo 'disabled' ?>>+</button>
+                                    <button type="button" class="btn" onclick="Tambah()" style="border-left: 2px gray solid;border-radius:0px;" <?php if ($co_status == 0) echo 'disabled' ?>>+</button>
                                 </div>
-                                <span class="ms-2 <?php if ($co_stock == 0) echo 'text-danger' ?>">Stok : <?= $co_stock ?></span>
+                                <span class="ms-2 <?php if ($co_stock == 0 || $co_status == 0) echo 'text-danger' ?>"><?php if ($co_stock == 0) {echo "Stok : $co_stock";} else {echo "Produk sedang nonaktif";} ?></span>
                                 <?php
                                     if (isset($_SESSION["auth_user_id"])) {
                                 ?>
-                                        <button class="btn btn-success fw-bold mt-3 w-100" type="button" onclick="add_cart()" data-bs-toggle="modal" data-bs-target="#exampleModal" <?php if ($co_stock == 0) echo 'disabled' ?>>+ Keranjang</button>
+                                        <button class="btn btn-success fw-bold mt-3 w-100" type="button" onclick="add_cart()" data-bs-toggle="modal" data-bs-target="#exampleModal" <?php if ($co_stock == 0 || $co_status == 0) echo 'disabled' ?>>+ Keranjang</button>
                                 <?php
                                     } else {
                                 ?>
-                                        <button class="btn btn-success fw-bold mt-3 w-100" formaction="login.php">+ Keranjang</button>
+                                        <button class="btn btn-success fw-bold mt-3 w-100" formaction="login.php" <?php if ($co_stock == 0 || $co_status == 0) echo 'disabled' ?>>+ Keranjang</button>
                                 <?php
                                     }
                                 ?>
