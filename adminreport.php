@@ -24,6 +24,13 @@
     if(isset($_POST["color"])){
         header("Location: admincolor.php");
     }
+
+    $bulan = "%%";
+    $tahun = date("Y");
+    if (isset($_POST["filtering"])) {
+        $bulan = $_POST["bulan"];
+        $tahun = $_POST["tahun"];
+    }
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -34,7 +41,7 @@
     <title>Document</title>
 </head>
 <body>
-    <form action="" method="POST">
+    <form method="POST">
         <h1>ADMIN</h1>
         <button type="submit" name="logout">LOGOUT</button>
         <button type="submit" name="user">MASTER USER</button>
@@ -44,28 +51,33 @@
         <button type="submit" formaction="adminreport.php">REPORT</button><br><br>
         <button type="submit" formaction="adminreport.php">REFRESH PAGE</button>
         
-        <h2>Report</h2>
+        <h2>REPORT</h2>
         <div style="float: left; margin-right: 50px;">
             
                 <?php
-                    $user_htrans = mysqli_query($conn, "SELECT * FROM htrans JOIN users ON us_id = ht_us_id GROUP BY ht_us_id");
+                    $grandtotal = 0;
+                    $totalqty = 0;
+                    $user_htrans = mysqli_query($conn, "SELECT * FROM htrans JOIN users ON us_id = ht_us_id WHERE YEAR(ht_date) = '$tahun' GROUP BY ht_us_id");
                     while ($us = mysqli_fetch_array($user_htrans)) {
                 ?>
                     <table border 1px>
                             <tr>
-                                <th style="text-align: left;" colspan="5"><?= $us["us_name"] ?></th>
+                                <th style="text-align: left;" colspan="6"><?= $us["us_name"] ?></th>
                             </tr>
                             <?php
-                                $htrans = mysqli_query($conn, "SELECT * FROM htrans WHERE ht_us_id = '" . $us["us_id"] . "'");
+                                $htrans = mysqli_query($conn, "SELECT * FROM htrans WHERE MONTH(ht_date) LIKE '$bulan' AND YEAR(ht_date) = '$tahun' AND ht_us_id = '" . $us["us_id"] . "'");
                                 while ($ht = mysqli_fetch_array($htrans)) {
+                                    $ht_date = date_create($ht["ht_date"]);
+                                    $ht_date = date_format($ht_date,"d F Y H:i:s");
                             ?>
                                 <tr>
-                                    <th style="text-align: left;" colspan="5"><?= $ht["ht_id"] ?></th>
+                                    <th style="text-align: left;" colspan="6"><?= $ht["ht_id"] . " (" . $ht_date . ")" ?></th>
                                 </tr>
                                 <tr>
                                     <th>No</th>
                                     <th>Brand Name</th>
                                     <th>Color</th>
+                                    <th>Price</th>
                                     <th>Qty</th>
                                     <th>Subtotal</th>
                                 </tr>
@@ -78,15 +90,18 @@
                                         <td><?= $nomor++ ?></td>
                                         <td><?= $dt["br_name"] ?></td>
                                         <td><?= $dt["co_id"] ?></td>
+                                        <td><?= "Rp " . number_format($dt["kc_price"], 0, "", ",") ?></td>
                                         <td><?= $dt["dt_qty"] ?></td>
                                         <td><?= "Rp " . number_format($dt["dt_subtotal"], 0, "", ",") ?></td>
                                     </tr>
                         <?php
+                                    $totalqty += $dt["dt_qty"];
                                 }
+                                $grandtotal += $ht["ht_total"];
                         ?>
                                 <tr>
-                                    <th colspan="4">TOTAL</th>
-                                    <td><?= "Rp" . number_format($ht["ht_total"], 0, "", ",") ?></td>
+                                    <th colspan="5">TOTAL</th>
+                                    <td><?= "Rp " . number_format($ht["ht_total"], 0, "", ",") ?></td>
                                 </tr>
                     <?php
                             }
@@ -96,32 +111,42 @@
                 <?php
                     }
                 ?>
+                <table border 1px>
+                    <tr>
+                        
+                        <th colspan="5">TOTAL QTY</th>
+                        <td><?= $totalqty ?></td>
+                    </tr>
+                    <tr>
+                        <th colspan="5">GRAND TOTAL</th>
+                        <td><?= "Rp" . number_format($grandtotal, 0, "", ",") ?></td>
+                    </tr>
+                </table>
         </div>
         
         <div style="float: left;">
-            <h3>ADD BRAND</h3>
-            NEW BRAND : 
-            <input type="text" name="br_name" id="">
-            <button type="submit" name="add">Add Brand</button><br><br>
-    
-            <div id="edit" style="display: none;">
-                <h3>EDIT BRAND NAME</h3>
-                BEFORE : 
-                <input type="text" id="before" disabled><br><br>
-                AFTER : 
-                <input type="text" name="after"><br><br>
-                <button type="button" onclick="change()">Change</button>
-                <button type="button" onclick="cancel()">Cancel</button>
-            </div><br><br>
-            <div id="confirm" style="display: none; border: 1px solid black; border-radius: 5px; padding: 20px;">
-                    <h2 style="margin: 0px;">CONFIRM CHANGE</h2><br>
-                    ARE YOU SURE?<br><br>
-                    <button type="submit" name="yes" id="yes" value="">YES</button>
-                    <button type="button" onclick="cancel()">NO</button>
-            </div>
-
+            <h3>FILTER</h3>
+            BULAN : 
+            <select name="bulan">
+                <option value="%%">ALL</option>
+                <option value="1">January</option>
+                <option value="2">February</option>
+                <option value="3">March</option>
+                <option value="4">April</option>
+                <option value="5">May</option>
+                <option value="6">June</option>
+                <option value="7">July</option>
+                <option value="8">August</option>
+                <option value="9">September</option>
+                <option value="10">October</option>
+                <option value="11">November</option>
+                <option value="12">December</option>
+            </select><br><br>
+            TAHUN : 
+            <input type="number" name="tahun" value="2022" min="2000" max="<?= date("Y") ?>"><br><br>
+            <button type="submit" name="filtering">Filter</button>
+            <button><a style="color: black; text-decoration: none;" href="printreport.php?bulan=<?= $bulan ?>&tahun=<?= $tahun ?>">Print as excel</a></button>
         </div>
-
     </form>
 </body>
 </html>
