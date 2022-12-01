@@ -188,7 +188,7 @@
                                     <input type="hidden" name="qtyhidden" value="1" id="qtyhidden">
                                     <button type="button" class="btn" onclick="Tambah()" style="border-left: 2px gray solid;border-radius:0px;" <?php if ($co_status == 0) echo 'disabled' ?>>+</button>
                                 </div>
-                                <span class="ms-2 <?php if ($co_stock == 0 || $co_status == 0) echo 'text-danger' ?>"><?php if ($co_stock == 0) {echo "Stok : $co_stock";} else {echo "Produk sedang nonaktif";} ?></span>
+                                <span class="ms-2 <?php if ($co_stock == 0 || $co_status == 0) echo 'text-danger' ?>"><?php if ($co_stock >= 0 && $co_status == 1) {echo "Stok : $co_stock";} else {echo "Produk sedang nonaktif";} ?></span>
                                 <?php
                                     if (isset($_SESSION["auth_user_id"])) {
                                 ?>
