@@ -85,11 +85,11 @@ CREATE TABLE `color` (
 /*Data for the table `color` */
 
 insert  into `color`(`co_id`,`co_kc_id`,`co_link`,`co_stock`,`co_status`) values 
-('CO0001','KC001','storage/products/899ad57f-7e7e-40d1-a899-7487cb7a5696.webp',80,'1'),
+('CO0001','KC001','storage/products/899ad57f-7e7e-40d1-a899-7487cb7a5696.webp',69,'1'),
 ('CO0002','KC001','storage/products/0f5e52f7-03f2-435d-8570-c61924cd7e72.jpeg',67,'1'),
 ('CO0003','KC001','storage/products/e4f0e0c4-73c2-4027-a8e3-b776a32868e1.jpeg',81,'1'),
 ('CO0004','KC001','storage/products/a6c60504-eb49-4900-af5c-6cbd2463a599.jpeg',100,'1'),
-('CO0005','KC002','storage/products/04659a6c-a414-4fed-bd62-11ed9ee942a4.jpeg',68,'1'),
+('CO0005','KC002','storage/products/04659a6c-a414-4fed-bd62-11ed9ee942a4.jpeg',61,'1'),
 ('CO0006','KC002','storage/products/ad1346e3-210b-4c05-8a25-95fd4f53ecb3.jpeg',31,'1'),
 ('CO0007','KC002','storage/products/72e63837-c5b0-4ab1-81e9-8b7dc8e7b07a.jpeg',33,'1'),
 ('CO0008','KC002','storage/products/8bfd607f-5c17-498b-8127-58e00a6691ed.jpeg',62,'1'),
@@ -97,15 +97,15 @@ insert  into `color`(`co_id`,`co_kc_id`,`co_link`,`co_stock`,`co_status`) values
 ('CO0010','KC003','storage/products/0edd99ff-8a44-4ddc-902d-f29902feddc9.jpeg',77,'1'),
 ('CO0011','KC003','storage/products/d12910ed-658c-4337-be58-23c79f0d011b.jpeg',48,'1'),
 ('CO0012','KC003','storage/products/84a05c35-8397-4962-bbc8-e8b56ec9cab7.webp',91,'1'),
-('CO0013','KC004','storage/products/85956be0-bee4-4616-bc13-cb78bd611562.webp',29,'1'),
+('CO0013','KC004','storage/products/85956be0-bee4-4616-bc13-cb78bd611562.webp',24,'1'),
 ('CO0014','KC004','storage/products/5775f82a-599f-4f61-ab93-39a9892d6433.jpeg',45,'1'),
 ('CO0015','KC004','storage/products/b0aae3eb-d63e-4629-b4fb-66c8fed1aa22.jpeg',36,'1'),
 ('CO0016','KC004','storage/products/1547b7b0-3c0f-4168-9ecb-7fb5101446ae.jpeg',37,'1'),
-('CO0017','KC005','storage/products/swc2HYtkTc78CN0FOme6tW73LjphVh4DQzD0jCIs.jpeg',67,'1'),
+('CO0017','KC005','storage/products/swc2HYtkTc78CN0FOme6tW73LjphVh4DQzD0jCIs.jpeg',49,'1'),
 ('CO0018','KC005','storage/products/ExHqq7CbsqI9zxJI4tZ2JNq0iZNCn8nOJws3yMB6.jpeg',34,'1'),
 ('CO0019','KC005','storage/products/281deCdRmPodOPOxxZVnwwso9VY6Apfzn74sFDaA.jpeg',48,'1'),
 ('CO0020','KC005','storage/products/15YvHlwmH8x3FCfcka9wwxCzDhLZLaBk34yXB8xz.jpeg',40,'1'),
-('CO0021','KC006','storage/products/8IqoKRYA3bl5jdVkSyVgTkXcnxuEi8owIrZlO5XA.jpeg',45,'1'),
+('CO0021','KC006','storage/products/8IqoKRYA3bl5jdVkSyVgTkXcnxuEi8owIrZlO5XA.jpeg',43,'1'),
 ('CO0022','KC006','storage/products/SuATTvOsiMDrTzIdUdcjI2Fq48Hqc8zQXp1gXto8.jpeg',95,'1'),
 ('CO0023','KC006','storage/products/r75Hxa1IBxy5bRi6w2pZfv2G8yq9v0kmXn09AlSU.jpeg',58,'1'),
 ('CO0024','KC006','storage/products/i2e1NdDswKyaHSR4APfSkUeQFqTtDqWdbjaMaLmu.jpeg',85,'1'),
@@ -2173,7 +2173,7 @@ CREATE TABLE `users` (
 /*Data for the table `users` */
 
 insert  into `users`(`us_id`,`us_username`,`us_email`,`us_password`,`us_name`,`us_birth`,`us_gender`,`us_phone`,`us_address`,`us_status`) values 
-('US0001','razzking','akuncitcs@gmail.com','$2y$10$voDod5ewBV6hb.uZznnzHe9QJXRClw0uOVPUfbQ1JLOsRW7WbKmWS','Ivan Susanto','2003-02-08','M','82140001230','Surabaya','1'),
+('US0001','razzking','xxlaunch12xx@gmail.com','$2y$10$voDod5ewBV6hb.uZznnzHe9QJXRClw0uOVPUfbQ1JLOsRW7WbKmWS','Ivan Susanto','2003-02-08','M','82140001230','Surabaya','1'),
 ('US0002','feb','febrian@gmail.com','$2y$10$VV6C33d2Cob5Y8dizdcTIOVitqrWG9wyV2y2IRVlCO4.qIqxOikbG','Febrian Alexandro','2003-02-03','M','82140001230','Surabaya','1');
 
 /*!40101 SET SQL_MODE=@OLD_SQL_MODE */;
