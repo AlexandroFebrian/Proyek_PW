@@ -152,6 +152,15 @@
             ?>
         </select>
         <button type="submit" name="apply">APPLY</button><br><br>
+
+        SEARCH BY STATUS : 
+        <select name="filterstat" id="">
+            <option value=""></option>
+            <option value='1'>Active</option>
+            <option value='0'>Inactive</option>
+        </select>
+        <button type="submit" name="applystat">APPLY</button><br><br>
+
         <div style="float: left; margin-right: 50px;">
             <?php
                 if(isset($_POST["apply"])){
@@ -166,7 +175,13 @@
                     <th>ACTION</th>
                 </tr>
             <?php
-                        $result = mysqli_query($conn, "SELECT * FROM color WHERE co_kc_id = '".$_POST["filter"]."'");
+                        $query = "SELECT * FROM color WHERE co_kc_id = '".$_POST["filter"]."'";
+                        if(isset($_POST["applystat"])){
+                            if($_POST["filterstat"] != ""){
+                                $query .= " AND co_status = '".$_POST["filterstat"]."'";
+                            }
+                        }
+                        $result = mysqli_query($conn, $query);
 
                         while($row = mysqli_fetch_array($result)){
             ?>
@@ -209,7 +224,13 @@
                     <th>ACTION</th>
                 </tr>
             <?php
-                            $result2 = mysqli_query($conn, "SELECT * FROM color WHERE co_kc_id = '".$row1["kc_id"]."'");
+                            $query = "SELECT * FROM color WHERE co_kc_id = '".$row1["kc_id"]."'";
+                            if(isset($_POST["applystat"])){
+                                if($_POST["filterstat"] != ""){
+                                    $query .= " AND co_status = '".$_POST["filterstat"]."'";
+                                }
+                            }
+                            $result2 = mysqli_query($conn, $query);
 
                             while($row2 = mysqli_fetch_array($result2)){
             ?>
@@ -254,7 +275,13 @@
                     <th>ACTION</th>
                 </tr>
             <?php
-                        $result2 = mysqli_query($conn, "SELECT * FROM color WHERE co_kc_id = '".$row1["kc_id"]."'");
+                        $query = "SELECT * FROM color WHERE co_kc_id = '".$row1["kc_id"]."'";
+                        if(isset($_POST["applystat"])){
+                            if($_POST["filterstat"] != ""){
+                                $query .= " AND co_status = '".$_POST["filterstat"]."'";
+                            }
+                        }
+                        $result2 = mysqli_query($conn, $query);
 
                         while($row2 = mysqli_fetch_array($result2)){
             ?>
