@@ -72,6 +72,51 @@
         }
 
     }
+
+    if(isset($_POST["yes"])){
+        if($_POST["yes"] != ""){
+            $id = $_POST["yes"];
+            $stock = $_POST["after"];
+            if($stock != ""){
+                if($stock > 0){
+                    mysqli_query($conn, "UPDATE color SET co_stock = '$stock', co_status = 1 WHERE co_id = '$id'");
+                }else{
+                    mysqli_query($conn, "UPDATE color SET co_stock = '$stock', co_status = 0 WHERE co_id = '$id'");
+                }
+    
+                $_SESSION["msg"] = "BERHASIL GANTI STOCK";
+            }else{
+                $_SESSION["msg"] = "FIELD KOSONG";
+            }
+        }
+    }
+
+    if(isset($_POST["activate"])){
+        $id = explode("-", $_POST["activate"])[0];
+        $stock = explode("-", $_POST["activate"])[1];
+
+        if($stock == 0){
+            $_SESSION["msg"] = "GAGAL ACTIVATE";
+        }else{
+            mysqli_query($conn, "UPDATE color SET co_status = 1 WHERE co_id = '$id'");
+
+            $_SESSION["msg"] = "BERHASIL ACTIVATE";
+        }
+    }
+
+    if(isset($_POST["deactivate"])){
+        $id = explode("-", $_POST["deactivate"])[0];
+        $stock = explode("-", $_POST["deactivate"])[1];
+
+        mysqli_query($conn, "UPDATE color SET co_status = 0 WHERE co_id = '$id'");
+
+        $_SESSION["msg"] = "BERHASIL DEACTIVATE";
+    }
+
+    if(isset($_SESSION["msg"])){
+        echo "<script>alert('".$_SESSION["msg"]."')</script>";
+        unset($_SESSION["msg"]);
+    }
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -117,6 +162,7 @@
                     <th>LINK</th>
                     <th>STOCK</th>
                     <th>STATUS</th>
+                    <th>ACTION</th>
                 </tr>
             <?php
                         $result = mysqli_query($conn, "SELECT * FROM color WHERE co_kc_id = '".$_POST["filter"]."'");
@@ -128,6 +174,20 @@
                     <td><?= $row["co_link"] ?></td>
                     <td><?= $row["co_stock"] ?></td>
                     <td><?= $row["co_status"] ?></td>
+                    <td>
+                        <button type="button" value="<?= $row["co_id"].'-'.$row["co_stock"] ?>" onclick="edit(this)">Edit Stock</button>
+                        <?php 
+                            if($row["co_status"] == 1){
+                        ?>
+                            <button name="deactivate" value='<?= $row["co_id"].'-'.$row["co_stock"] ?>'>Deactivate</button>
+                        <?php
+                            }else{
+                        ?>
+                            <button name="activate" value='<?= $row["co_id"].'-'.$row["co_stock"] ?>'>Activate</button>
+                        <?php
+                            }
+                        ?>
+                    </td>
                 </tr>
             <?php
                         }
@@ -145,6 +205,7 @@
                     <th>LINK</th>
                     <th>STOCK</th>
                     <th>STATUS</th>
+                    <th>ACTION</th>
                 </tr>
             <?php
                             $result2 = mysqli_query($conn, "SELECT * FROM color WHERE co_kc_id = '".$row1["kc_id"]."'");
@@ -156,6 +217,20 @@
                     <td><?= $row2["co_link"] ?></td>
                     <td><?= $row2["co_stock"] ?></td>
                     <td><?= $row2["co_status"] ?></td>
+                    <td>
+                        <button type="button" value="<?= $row2["co_id"].'-'.$row2["co_stock"] ?>" onclick="edit(this)">Edit Stock</button>
+                        <?php 
+                            if($row2["co_status"] == 1){
+                        ?>
+                            <button name="deactivate" value='<?= $row2["co_id"].'-'.$row2["co_stock"] ?>'>Deactivate</button>
+                        <?php
+                            }else{
+                        ?>
+                            <button name="activate" value='<?= $row2["co_id"].'-'.$row2["co_stock"] ?>'>Activate</button>
+                        <?php
+                            }
+                        ?>
+                    </td>
                 </tr>
             <?php
                             }
@@ -175,6 +250,7 @@
                     <th>LINK</th>
                     <th>STOCK</th>
                     <th>STATUS</th>
+                    <th>ACTION</th>
                 </tr>
             <?php
                         $result2 = mysqli_query($conn, "SELECT * FROM color WHERE co_kc_id = '".$row1["kc_id"]."'");
@@ -186,6 +262,20 @@
                     <td><?= $row2["co_link"] ?></td>
                     <td><?= $row2["co_stock"] ?></td>
                     <td><?= $row2["co_status"] ?></td>
+                    <td>
+                        <button type="button" value="<?= $row2["co_id"].'-'.$row2["co_stock"] ?>" onclick="edit(this)">Edit Stock</button>
+                        <?php 
+                            if($row2["co_status"] == 1){
+                        ?>
+                            <button name="deactivate" value='<?= $row2["co_id"].'-'.$row2["co_stock"] ?>'>Deactivate</button>
+                        <?php
+                            }else{
+                        ?>
+                            <button name="activate" value='<?= $row2["co_id"].'-'.$row2["co_stock"] ?>'>Activate</button>
+                        <?php
+                            }
+                        ?>
+                    </td>
                 </tr>
             <?php
                         }
@@ -197,27 +287,76 @@
             ?>
 
         </div>
-        <h3>ADD COLOR</h3>
-        PRODUCT : 
-        <select name="filter_add" id="">
-            <?php
-                $result = mysqli_query($conn, "SELECT * FROM kacamata");
 
-                while($row = mysqli_fetch_array($result)){
-            ?>
-            <option value='<?= $row["kc_id"] ?>'><?= $row["kc_id"] ?></option>
-            <?php
-                }
-            ?>
-        </select><br><br>
-        STOCK : 
-        <input type="number" name="stock" min=1><br><br>
-        PHOTO : 
-        <input type="file" name="photo" accept="image/png, image/jpeg, image/jpg,image/webp"><br><br>
-        <button type="submit" name="add">ADD</button>
+        <div style="float: left;">
+            <h3>ADD COLOR</h3>
+            PRODUCT : 
+            <select name="filter_add" id="">
+                <?php
+                    $result = mysqli_query($conn, "SELECT * FROM kacamata");
+    
+                    while($row = mysqli_fetch_array($result)){
+                ?>
+                <option value='<?= $row["kc_id"] ?>'><?= $row["kc_id"] ?></option>
+                <?php
+                    }
+                ?>
+            </select><br><br>
+            STOCK : 
+            <input type="number" name="stock" min=1><br><br>
+            PHOTO : 
+            <input type="file" name="photo" accept="image/png, image/jpeg, image/jpg,image/webp"><br><br>
+            <button type="submit" name="add">ADD</button>
+            
+            <div id="edit" style="display: none;">
+                <h3>EDIT STOCK</h3>
+                <h4 id="idstock"></h4>
+                BEFORE : 
+                <input type="number" id="before" disabled><br><br>
+                AFTER : 
+                <input type="number" name="after" min=0><br><br>
+                <button type="button" onclick="change()">Change</button>
+                <button type="button" onclick="cancel()">Cancel</button>
+            </div><br><br>
+            <div id="confirm" style="display: none; border: 1px solid black; border-radius: 5px; padding: 20px;">
+                <h2 style="margin: 0px;">CONFIRM CHANGE</h2><br>
+                ARE YOU SURE?<br><br>
+                <button type="submit" name="yes" id="yes" value="">YES</button>
+                <button type="button" onclick="no()">NO</button>
+            </div>
+        </div>
     </form>
 </body>
-<?php
-    
-?>
+<script>
+    isi = document.getElementById("edit")
+    conf = document.getElementById("confirm")
+    id = ""
+    stock = 0
+
+    function edit(obj){
+        isi.style.display = "block"
+
+        id = obj.value.split("-")[0]
+        stock = obj.value.split("-")[1]
+
+        document.getElementById("idstock").innerHTML = id
+        document.getElementById("before").value = stock
+    }
+
+    function cancel(){
+        isi.style.display = "none"
+        no()
+    }
+
+    function no(){
+        conf.style.display = "none"
+        document.getElementById("yes").value = ""
+    }
+
+    function change(){
+        conf.style.display = "block"
+
+        document.getElementById("yes").value = id
+    }
+</script>
 </html>

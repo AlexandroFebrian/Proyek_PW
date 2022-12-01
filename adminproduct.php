@@ -28,8 +28,9 @@
     if(isset($_POST["add"])){
         $br_id = $_POST["filter_add"];
         $price = $_POST["price"];
+        $weight = $_POST["weight"];
         
-        if($price == "" || !isset($_POST["gender"])){
+        if($price == "" || $weight == "" || !isset($_POST["gender"])){
             $_SESSION["msg"] = "FIELD KOSONG";
         }else{
             $gender = $_POST["gender"];
@@ -40,8 +41,32 @@
 
             $kc_id = "KC".str_pad($count, 3, "0", STR_PAD_LEFT);
 
-            mysqli_query($conn, "INSERT INTO kacamata VALUES ('$kc_id', '$price', '$gender', '$br_id')");
+            mysqli_query($conn, "INSERT INTO kacamata VALUES ('$kc_id', '$price', '$gender', '$weight', '$br_id')");
             $_SESSION["msg"] = "BERHASIL ADD PRODUCT";
+        }
+    }
+
+    if(isset($_POST["yesprice"])){
+        if($_POST["yesprice"] != ""){
+            $id = $_POST["yesprice"];
+            $price = $_POST["after"];
+            if($price != ""){
+                mysqli_query($conn, "UPDATE kacamata SET kc_price = '$price' WHERE kc_id = '$id'");
+    
+                $_SESSION["msg"] = "BERHASIL GANTI HARGA";
+            }else{
+                $_SESSION["msg"] = "FIELD KOSONG";
+            }
+        }
+    }
+
+    if(isset($_POST["yesgender"])){
+        if($_POST["yesgender"] != ""){
+            $id = $_POST["yesgender"];
+            $gender = $_POST["genderedit"];
+            mysqli_query($conn, "UPDATE kacamata SET kc_gender = '$gender' WHERE kc_id = '$id'");
+
+            $_SESSION["msg"] = "BERHASIL GANTI GENDER";
         }
     }
 
@@ -88,7 +113,9 @@
                 <th>ID</th>
                 <th>Price</th>
                 <th>Gender</th>
+                <th>Weight</th>
                 <th>Brand Name</th>
+                <th>Action</th>
             </tr>
             <?php
                 $query = "SELECT * FROM kacamata JOIN brand ON kc_br_id = br_id";
@@ -110,8 +137,13 @@
             <tr>
                 <td><?= $row["kc_id"] ?></td>
                 <td><?= $row["kc_price"] ?></td>
-                <td><?= $row["kc_gender"] ?></td>
+                <td id="g"><?= $row["kc_gender"] ?></td>
+                <td><?= $row["kc_weight"] ?>g</td>
                 <td><?= $row["br_name"] ?></td>
+                <td>
+                    <button type="button" name="price" onclick="editprice(this)" value='<?= $row["kc_id"].'-'.$row["kc_price"] ?>'>Edit Price</button>
+                    <button type="button" name="gender" onclick="editgender(this)" value='<?= $row["kc_id"].'-'.$row["kc_gender"] ?>'>Edit Gender</button>
+                </td>
             </tr>
             <?php
                 }
@@ -134,6 +166,8 @@
             </select><br><br>
             PRICE : 
             <input type="number" name="price" min=1><br><br>
+            WEIGHT : 
+            <input type="number" name="weight" min=1><br><br>
             GENDER : 
             <input type="radio" name="gender" id="M" value="M">
             <label for="M">MAN</label>
@@ -141,8 +175,100 @@
             <label for="W">WOMAN</label><br><br>
     
             <button type="submit" name="add">ADD</button>
+                
+            <div id="editprice" style="display: none;">
+                <h3>EDIT PRICE</h3>
+                <h4 id="idprice"></h4>
+                BEFORE : 
+                <input type="number" id="before" disabled><br><br>
+                AFTER : 
+                <input type="number" name="after" min=1><br><br>
+                <button type="button" onclick="changeprice()">Change</button>
+                <button type="button" onclick="cancel()">Cancel</button>
+            </div><br>
+            <div id="confirmprice" style="display: none; border: 1px solid black; border-radius: 5px; padding: 20px;">
+                <h2 style="margin: 0px;">CONFIRM CHANGE</h2><br>
+                ARE YOU SURE?<br><br>
+                <button type="submit" name="yesprice" id="yesprice" value="">YES</button>
+                <button type="button" onclick="no()">NO</button>
+            </div>
+
+            <div id="editgender" style="display: none;">
+                <h3>EDIT GENDER</h3>
+                <h4 id="idgender"></h4>
+                <input type="radio" name="genderedit" id="ME" value="M">
+                <label for="ME">MAN</label>
+                <input type="radio" name="genderedit" id="WE" value="W">
+                <label for="WE">WOMAN</label><br><br>
+                <button type="button" onclick="changegender()">Change</button>
+                <button type="button" onclick="cancel()">Cancel</button>
+            </div><br>
+            <div id="confirmgender" style="display: none; border: 1px solid black; border-radius: 5px; padding: 20px;">
+                <h2 style="margin: 0px;">CONFIRM CHANGE</h2><br>
+                ARE YOU SURE?<br><br>
+                <button type="submit" name="yesgender" id="yesgender" value="">YES</button>
+                <button type="button" onclick="no()">NO</button>
+            </div>
 
         </div>
     </form>
 </body>
+<script>
+    isiprice = document.getElementById("editprice")
+    isigender = document.getElementById("editgender")
+    id = ""
+    price = ""
+    gender = ""
+
+    function editprice(obj){
+        isiprice.style.display = "block"
+        isigender.style.display = "none"
+
+        id = obj.value.split("-")[0]
+        price = obj.value.split("-")[1]
+
+        document.getElementById("idprice").innerHTML = id
+        document.getElementById("before").value = price
+    }
+
+    function editgender(obj){
+        isigender.style.display = "block"
+        isiprice.style.display = "none"
+
+        id = obj.value.split("-")[0]
+        gender = obj.value.split("-")[1]
+
+        document.getElementById("idgender").innerHTML = id
+        if(gender == "M"){
+            document.getElementById("ME").checked = true
+        }else{
+            document.getElementById("WE").checked = true
+        }
+    }
+
+    function cancel(){
+        isigender.style.display = "none"
+        isiprice.style.display = "none"
+
+        no()
+    }
+
+    function changeprice(){
+        document.getElementById("confirmprice").style.display = "block"
+        document.getElementById("yesprice").value = id
+    }
+
+    function changegender(){
+        document.getElementById("confirmgender").style.display = "block"
+        document.getElementById("yesgender").value = id
+    }
+
+    function no(){
+        document.getElementById("confirmprice").style.display = "none"
+        document.getElementById("confirmgender").style.display = "none"
+
+        document.getElementById("yesprice").value = ""
+        document.getElementById("yesgender").value = ""
+    }
+</script>
 </html>

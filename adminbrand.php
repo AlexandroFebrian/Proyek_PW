@@ -43,20 +43,25 @@
         }
     }
 
+    if(isset($_POST["yes"])){
+        if($_POST["yes"] != ""){
+            $id = $_POST["yes"];
+            $name = $_POST["after"];
+            if($name != ""){
+                mysqli_query($conn, "UPDATE brand SET br_name = '$name' WHERE br_id = '$id'");
+    
+                $_SESSION["msg"] = "BERHASIL GANTI NAMA";
+            }else{
+                $_SESSION["msg"] = "FIELD KOSONG";
+            }
+        }
+    }
+
     if(isset($_SESSION["msg"])){
         echo "<script>alert('".$_SESSION["msg"]."')</script>";
         unset($_SESSION["msg"]);
     }
 
-    if(isset($_POST["yes"])){
-        if($_POST["yes"] != ""){
-            $id = $_POST["yes"];
-            $name = $_POST["after"];
-            mysqli_query($conn, "UPDATE brand SET br_name = '$name' WHERE br_id = '$id'");
-
-            $_SESSION["msg"] = "BERHASIL GANTI NAMA";
-        }
-    }
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -120,7 +125,7 @@
                     <h2 style="margin: 0px;">CONFIRM CHANGE</h2><br>
                     ARE YOU SURE?<br><br>
                     <button type="submit" name="yes" id="yes" value="">YES</button>
-                    <button type="button" onclick="cancel()">NO</button>
+                    <button type="button" onclick="no()">NO</button>
             </div>
 
         </div>
@@ -144,6 +149,10 @@
 
     function cancel(){
         isi.style.display = "none"
+        no()
+    }
+    
+    function no(){
         conf.style.display = "none"
         document.getElementById("yes").value = ""
     }
