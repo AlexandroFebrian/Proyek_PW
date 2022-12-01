@@ -3,7 +3,6 @@
 
     //Parameter untuk mysqli_connection -> host, user, password, db_name
     $conn = mysqli_connect("localhost", "root", "", "db_toko_kacamata");
-    //$conn = new mysqli("localhost", "root", "", "db_toko_kacamata");
 
     //Untuk melakukan check apabila ada error atau tidak
     if(mysqli_connect_errno()){

@@ -26,50 +26,6 @@
     $result = [];
 
     $query = "SELECT * FROM kacamata JOIN color ON kc_id = co_kc_id JOIN brand ON kc_br_id = br_id ";
-    
-    // if(isset($_GET["apply-filter"])){
-    //     $filter_brand = mysqli_query($conn, "SELECT * FROM brand");
-        
-    //     $tempfilter = [];
-        // while($row = mysqli_fetch_array($filter_brand)){
-        //     if(isset($_GET[$row["br_id"]])){
-        //         $tempfilter[] = $row;
-        //     }
-        // }
-
-        // if(sizeof($tempfilter) > 0){
-        //     $query .= "WHERE ";
-
-        //     for($i = 0; $i < sizeof($tempfilter); $i++){
-        //         $query .= "br_id = '".$tempfilter[$i]["br_id"]."'";
-        //         if($i != sizeof($tempfilter)-1){
-        //             $query .= " OR ";
-        //         }else{
-        //             $query .= " ";
-        //         }
-        //     }
-        // }
-
-        // if(isset($_GET["harga-minimum"])){
-        //     if($_GET["harga-minimum"] != ""){
-        //         $query .= "AND kc_price >= ".$_GET["harga-minimum"]." ";
-        //     }
-        // }
-        // if(isset($_GET["harga-minimum"]) && isset($_GET["harga-maximum"])){
-        //     if(($_GET["harga-minimum"] != "" && $_GET["harga-maximum"] != "") || ($_GET["harga-minimum"] == "" && $_GET["harga-maximum"] != "")){
-        //         $query .= "AND ";
-        //     }
-        // }
-        // if(isset($_GET["harga-maximum"])){
-        //     if($_GET["harga-maximum"] != ""){
-        //         $query .= "kc_price <= ".$_GET["harga-maximum"]." ";
-        //     }
-        // }
-    // }
-
-    // if(isset($_POST["search-btn"])){
-    //     if
-    // }
 
     if(isset($_POST["apply-filter"])){
         unset($_SESSION["search-val"]);
@@ -83,13 +39,11 @@
         }
         if($_POST["search-val"] != ""){
             $_SESSION["search-val"] = $_POST["search-val"];
-            //$query .= "WHERE (br_name LIKE '%".$_POST["search-val"]."%' OR co_id LIKE '%".$_POST["search-val"]."%') ";
             $query .= "WHERE br_name LIKE ? OR co_id LIKE ? ";
         }else{
             unset($_SESSION["search-val"]);
         }
     }else if(isset($_SESSION["search-val"])){
-        //$query .= "WHERE (br_name LIKE '%".$_SESSION["search-val"]."%' OR co_id LIKE '%".$_SESSION["search-val"]."%') ";
         $query .= "WHERE br_name LIKE ? OR co_id LIKE ? ";
     }
 
@@ -219,10 +173,8 @@
         }
 
     }
-/* <?php echo "<script>alert('tex')</script>"?> SELECT * FROM users WHERE TRUE */
     $query .= "GROUP BY co_kc_id";
     
-    //$tempresult = mysqli_query($conn, $query);
     $tempresult = $conn->prepare($query);
     if(isset($_SESSION["search-val"])){
         $search = "%".$_SESSION["search-val"]."%";
@@ -256,7 +208,6 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Optik Primadona</title>
     <link rel="stylesheet" href="css/bootstrap.min.css">
-    <!-- <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-Zenh87qX5JnK2Jl0vWa8Ck2rdkQ2Bzep5IDxbcnCeuOxjzrPF/et3URy9Bv1WTRi" crossorigin="anonymous"> -->
     <link rel="stylesheet" href="css/product.css">
 </head>
 <style>
@@ -336,14 +287,8 @@
         </nav>
         
         <div class="container-fluid pt-4">
-            <!-- FILTER WIDTH KECIL -->
-            <!-- <div class="d-lg-none d-block">
-                <h1>test</h1>
-            </div>     -->
 
             <div class="row d-flex justify-content-center">
-                <!-- <div class="col-1 col-lg-1"></div> -->
-
                 <!-- FILTER WIDTH BESAR -->
                 <div class="" style="width: 320px;">
                     <h2 class="mt-2 ms-3">Filter</h2>
@@ -718,7 +663,4 @@
     <script src="script/bootstrap.bundle.min.js"></script>
     <script src="script/jquery-3.6.1.min.js"></script>
 </body>
-<script>
-
-</script>
 </html>

@@ -25,18 +25,6 @@
         header("Location: admincolor.php");
     }
 
-    // if(isset($_POST["add"])){
-    //     if(is_uploaded_file($_FILES['photo']['name'])){
-    //         if(!empty($_FILES['photo']['name']))
-    //         {
-    //             $target_dir = "";
-    //             $target_file = $target_dir . basename($_FILES["photo"]["name"]);
-    //             move_uploaded_file($_FILES['photo']['tmp_name'], $target_file);
-    //         }
-
-    //     }
-    // }
-
     if(isset($_POST["add"])){
         $stock = $_POST["stock"];
 
