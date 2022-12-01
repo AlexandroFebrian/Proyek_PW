@@ -57,7 +57,7 @@
                 <?php
                     $grandtotal = 0;
                     $totalqty = 0;
-                    $user_htrans = mysqli_query($conn, "SELECT * FROM htrans JOIN users ON us_id = ht_us_id WHERE YEAR(ht_date) = '$tahun' GROUP BY ht_us_id");
+                    $user_htrans = mysqli_query($conn, "SELECT * FROM htrans JOIN users ON us_id = ht_us_id WHERE MONTH(ht_date) LIKE '$bulan' AND YEAR(ht_date) = '$tahun' GROUP BY ht_us_id");
                     while ($us = mysqli_fetch_array($user_htrans)) {
                 ?>
                     <table border 1px>
