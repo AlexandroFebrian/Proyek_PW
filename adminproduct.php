@@ -70,6 +70,20 @@
         }
     }
 
+    if(isset($_POST["yesweight"])){
+        if($_POST["yesweight"] != ""){
+            $id = $_POST["yesweight"];
+            $weight = $_POST["afterweight"];
+            if($weight != ""){
+                mysqli_query($conn, "UPDATE kacamata SET kc_weight = '$weight' WHERE kc_id = '$id'");
+    
+                $_SESSION["msg"] = "BERHASIL GANTI BERAT";
+            }else{
+                $_SESSION["msg"] = "FIELD KOSONG";
+            }
+        }
+    }
+
     if(isset($_SESSION["msg"])){
         echo "<script>alert('".$_SESSION["msg"]."')</script>";
         unset($_SESSION["msg"]);
@@ -144,6 +158,7 @@
                 <td>
                     <button type="button" name="price" onclick="editprice(this)" value='<?= $row["kc_id"].'-'.$row["kc_price"] ?>'>Edit Price</button>
                     <button type="button" name="gender" onclick="editgender(this)" value='<?= $row["kc_id"].'-'.$row["kc_gender"] ?>'>Edit Gender</button>
+                    <button type="button" name="gender" onclick="editweight(this)" value='<?= $row["kc_id"].'-'.$row["kc_weight"] ?>'>Edit Weight</button>
                 </td>
             </tr>
             <?php
@@ -210,20 +225,39 @@
                 <button type="submit" name="yesgender" id="yesgender" value="">YES</button>
                 <button type="button" onclick="no()">NO</button>
             </div>
-
+            
+            <div id="editweight" style="display: none;">
+                <h3>EDIT PRICE</h3>
+                <h4 id="idweight"></h4>
+                BEFORE : 
+                <input type="number" id="beforeweight" disabled><br><br>
+                AFTER : 
+                <input type="number" name="afterweight" min=1><br><br>
+                <button type="button" onclick="changeweight()">Change</button>
+                <button type="button" onclick="cancel()">Cancel</button>
+            </div><br>
+            <div id="confirmweight" style="display: none; border: 1px solid black; border-radius: 5px; padding: 20px;">
+                <h2 style="margin: 0px;">CONFIRM CHANGE</h2><br>
+                ARE YOU SURE?<br><br>
+                <button type="submit" name="yesweight" id="yesweight" value="">YES</button>
+                <button type="button" onclick="no()">NO</button>
+            </div>
         </div>
     </form>
 </body>
 <script>
     isiprice = document.getElementById("editprice")
     isigender = document.getElementById("editgender")
+    isiweight = document.getElementById("editweight")
     id = ""
     price = ""
     gender = ""
+    weight = ""
 
     function editprice(obj){
         isiprice.style.display = "block"
         isigender.style.display = "none"
+        isiweight.style.display = "none"
 
         id = obj.value.split("-")[0]
         price = obj.value.split("-")[1]
@@ -235,6 +269,7 @@
     function editgender(obj){
         isigender.style.display = "block"
         isiprice.style.display = "none"
+        isiweight.style.display = "none"
 
         id = obj.value.split("-")[0]
         gender = obj.value.split("-")[1]
@@ -247,9 +282,22 @@
         }
     }
 
+    function editweight(obj){
+        isiweight.style.display = "block"
+        isigender.style.display = "none"
+        isiprice.style.display = "none"
+
+        id = obj.value.split("-")[0]
+        weight = obj.value.split("-")[1]
+
+        document.getElementById("idweight").innerHTML = id
+        document.getElementById("beforeweight").value = weight
+    }
+
     function cancel(){
         isigender.style.display = "none"
         isiprice.style.display = "none"
+        isiweight.style.display = "none"
 
         no()
     }
@@ -264,12 +312,19 @@
         document.getElementById("yesgender").value = id
     }
 
+    function changeweight(){
+        document.getElementById("confirmweight").style.display = "block"
+        document.getElementById("yesweight").value = id
+    }
+
     function no(){
         document.getElementById("confirmprice").style.display = "none"
         document.getElementById("confirmgender").style.display = "none"
+        document.getElementById("confirmweight").style.display = "none"
 
         document.getElementById("yesprice").value = ""
         document.getElementById("yesgender").value = ""
+        document.getElementById("yesweight").value = ""
     }
 </script>
 </html>
