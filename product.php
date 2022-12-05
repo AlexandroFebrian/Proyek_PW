@@ -21,6 +21,7 @@
         unset($_SESSION["harga-maximum"]);
         unset($_SESSION["search-val"]);
         $_SESSION["gender"] = "A";
+        $_SESSION["urutkan"] = "asc";
     }
     
     $result = [];
@@ -46,7 +47,6 @@
     }else if(isset($_SESSION["search-val"])){
         $query .= "WHERE br_name LIKE ? OR co_id LIKE ? ";
     }
-
     
     if(isset($_POST["apply-filter"])){
         $filter_brand = mysqli_query($conn, "SELECT * FROM brand");
@@ -117,6 +117,16 @@
         }else{
             $_SESSION["gender"] = "A";
         }
+
+        $query .= "GROUP BY co_kc_id";
+
+        if($_POST["urutkan"] != "asc"){
+            $_SESSION["urutkan"] = "desc";
+            $query .= " ORDER BY kc_price ".$_SESSION["urutkan"]." ";
+        }else{
+            $_SESSION["urutkan"] = "asc";
+            $query .= " ORDER BY kc_price ".$_SESSION["urutkan"]." ";
+        }
     }
     else if(isset($_SESSION["filter"])){
         if(sizeof($_SESSION["filter"]) > 0){
@@ -172,8 +182,19 @@
 
         }
 
+        $query .= "GROUP BY co_kc_id";
+
+        if($_SESSION["urutkan"] != "asc"){
+            $query .= " ORDER BY kc_price ".$_SESSION["urutkan"]." ";
+        } else {
+            $query .= " ORDER BY kc_price ".$_SESSION["urutkan"]." ";
+        }
+
     }
-    $query .= "GROUP BY co_kc_id";
+    
+    if (!str_contains($query, "GROUP BY")) {
+        $query .= "GROUP BY co_kc_id";
+    }
     
     $tempresult = $conn->prepare($query);
     if(isset($_SESSION["search-val"])){
@@ -390,6 +411,27 @@
                                 </h2>
                                 <div id="panelsStayOpen-collapseThree" class="accordion-collapse collapse rounded-0" aria-labelledby="flush-headingThree" data-bs-parent="#accordionpanelsStayOpenExample">
                                     <div class="accordion-body">
+                                        Urutkan berdasarkan : <br>
+                                        <input type="radio" name="urutkan" value="desc"
+                                        <?php
+                                            //BIAR SORT HARGA TETAP ADA SETELAH REFRESH
+                                            if(isset($_SESSION["urutkan"])){
+                                                if($_SESSION["urutkan"] == "desc"){
+                                                    echo " checked";
+                                                }
+
+                                            }
+                                        ?>> Harga Tertinggi <br>
+                                        <input type="radio" name="urutkan" value="asc"
+                                        <?php
+                                            //BIAR SORT HARGA TETAP ADA SETELAH REFRESH
+                                            if(isset($_SESSION["urutkan"])){
+                                                if($_SESSION["urutkan"] == "asc"){
+                                                    echo " checked";
+                                                }
+
+                                            }
+                                        ?>> Harga Terendah <br><br>
                                         <div>
                                             <button class="p-2 px-3 border border-1" style="margin-right: -5px" type="input" >Rp</button>
                                             <input type="number" min="0" name="harga-minimum" placeholder="Harga Minimum" class="p-2 w-75 border border-1"
@@ -403,7 +445,6 @@
                                                 }
                                             ?>
                                             >
-
                                         </div>
                                         <br>
                                         <div>
@@ -419,7 +460,6 @@
                                                 }
                                             ?>
                                             >
-
                                         </div>
                                     </div>
                                 </div>
