@@ -112,6 +112,7 @@
             NEW BRAND : 
             <input type="text" name="br_name" id="">
             <button type="submit" name="add">Add Brand</button><br><br>
+            <button><a style="color: black; text-decoration: none;" href="printbrand.php">Print Semua Brand</a></button>
     
             <div id="edit" style="display: none;">
                 <h3>EDIT BRAND NAME</h3>
