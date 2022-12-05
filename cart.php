@@ -241,7 +241,7 @@
     </form>
 
     <!-- Print berhasil beli -->
-    <div id="popup" class="shadow text-center bg-white rounded-4 position-fixed top-50 start-50" style="width: 350px; height: 400px; border: 1px solid black; margin-top: -200px; margin-left: -175px; display: 
+    <div id="popup" class="shadow text-center bg-white rounded-4 position-fixed top-50 start-50" style="width: 350px; height: 480px; border: 1px solid black; margin-top: -240px; margin-left: -175px; display: 
     <?php
         if ($sukses == true) {
             echo "block";
@@ -259,6 +259,9 @@
         <p class="mt-4">Order ID : <?= strrev(str_replace("OP", "", $new_invoice)) ?></p>
         <p>Email : optikprimadona@official.co.id</p>
         <p>Phone : (031) 5231452</p>
+        <div class="d-flex justify-content-center">
+            <a href="detailtransaksi.php?ht_id=<?= $new_htrans_id ?>"><button class="btn btn-success mt-1 rounded-3">Lanjutkan ke Pembayaran</button></a>
+        </div>
     </div>
 
     <!-- Print stock tidak mencukupi -->
@@ -385,14 +388,6 @@
     }
 
     function Tambah(obj){
-        // let t = document.getElementById(obj.value);
-        // //let x = document.getElementById("kuantitiHidden"+id);
-        // jmlh = t.innerHTML;
-        // jmlh = parseInt(jmlh);
-        // jmlh++;
-        // //x.value = jmlh;
-        // t.innerHTML = jmlh;
-
         r = new XMLHttpRequest();
         r.onreadystatechange = function() {
             if ((this.readyState==4) && (this.status==200)) {
@@ -408,17 +403,6 @@
     }
 
     function Kurang(obj){
-        // let t = document.getElementById(obj.value);
-        // //let x = document.getElementById("kuantitiHidden"+id);
-        // jmlh = t.innerHTML;
-        // jmlh = parseInt(jmlh);
-        // jmlh--;
-        // if(jmlh < 1){
-        //     jmlh = 1;
-        // }
-        // //x.value = jmlh;
-        // t.innerHTML = jmlh;
-
         r = new XMLHttpRequest();
         r.onreadystatechange = function() {
             if ((this.readyState==4) && (this.status==200)) {
