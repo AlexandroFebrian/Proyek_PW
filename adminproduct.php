@@ -191,6 +191,8 @@
             <label for="W">WOMAN</label><br><br>
     
             <button type="submit" name="add">ADD</button>
+            <br><br>
+            <button><a style="color: black; text-decoration: none;" href="printproduct.php">Print Semua Product</a></button>
                 
             <div id="editprice" style="display: none;">
                 <h3>EDIT PRICE</h3>
