@@ -4,15 +4,15 @@
     $msg = "";
 
     if (isset($_POST["register"])) {
-        $username = $_POST["username"];
-        $email = $_POST["email"];
-        $password = $_POST["password"];
-        $cpassword = $_POST["cpassword"];
-        $name = $_POST["name"];
-        $birth = $_POST["birth"];
-        $gender = $_POST["gender"];
-        $phone = $_POST["phone"];
-        $address = $_POST["address"];
+        $username = strip_tags($_POST["username"]);
+        $email = strip_tags($_POST["email"]);
+        $password = strip_tags($_POST["password"]);
+        $cpassword = strip_tags($_POST["cpassword"]);
+        $name = strip_tags($_POST["name"]);
+        $birth = strip_tags($_POST["birth"]);
+        $gender = strip_tags($_POST["gender"]);
+        $phone = strip_tags($_POST["phone"]);
+        $address = strip_tags($_POST["address"]);
 
         if ($username != "" && $email != "" && $password != "" && $cpassword != "" && $name != "" && $birth != "" && $gender != "" && $phone != "" && $address != "") {
             if ($password == $cpassword) {
