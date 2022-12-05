@@ -175,7 +175,7 @@
             ?>
                 <tr>
                     <td><?= $row["co_id"] ?></td>
-                    <td><?= $row["co_link"] ?></td>
+                    <td><img src="<?= $row['co_link'] ?>" width="100px"></td>
                     <td><?= $row["co_stock"] ?></td>
                     <td><?= $row["co_status"] ?></td>
                     <td>
@@ -224,7 +224,7 @@
             ?>
                 <tr>
                     <td><?= $row2["co_id"] ?></td>
-                    <td><?= $row2["co_link"] ?></td>
+                    <td><img src="<?= $row2['co_link'] ?>" width="100px"></td>
                     <td><?= $row2["co_stock"] ?></td>
                     <td><?= $row2["co_status"] ?></td>
                     <td>
@@ -275,7 +275,7 @@
             ?>
                 <tr>
                     <td><?= $row2["co_id"] ?></td>
-                    <td><?= $row2["co_link"] ?></td>
+                    <td><img src="<?= $row2['co_link'] ?>" width="100px"></td>
                     <td><?= $row2["co_stock"] ?></td>
                     <td><?= $row2["co_status"] ?></td>
                     <td>
