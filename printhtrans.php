@@ -27,7 +27,7 @@
 <body>
     <?php
         header("Content-Type: application/vnd.ms-excel");
-        header("Content-Disposition: attachment; filename=Optik Primadona Financial Report.xls");
+        header("Content-Disposition: attachment; filename=Laporan Transaksi.xls");
     ?>
     <table border 1px>
         <?php
