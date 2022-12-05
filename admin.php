@@ -56,6 +56,8 @@
         <button type="submit" formaction="admin.php">REFRESH PAGE</button>
         
         <h2>MASTER USER</h2>
+        <button><a style="color: black; text-decoration: none;" href="printuser.php">Print Semua User</a></button>
+        <br><br>
         <table border 1px>
             <tr>
                 <th>ID</th>
