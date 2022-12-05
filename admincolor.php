@@ -323,6 +323,8 @@
             PHOTO : 
             <input type="file" name="photo" accept="image/png, image/jpeg, image/jpg,image/webp"><br><br>
             <button type="submit" name="add">ADD</button>
+            <br><br>
+            <button><a style="color: black; text-decoration: none;" href="printcolor.php">Print Semua Color</a></button>
             
             <div id="edit" style="display: none;">
                 <h3>EDIT STOCK</h3>

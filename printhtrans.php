@@ -31,10 +31,8 @@
     ?>
     <table border 1px>
         <?php
-            $grandtotal = 0;
-            $totalqty = 0;
-            $user_htrans = mysqli_query($conn, "SELECT * FROM htrans WHERE MONTH(ht_date) LIKE '$bulan' AND YEAR(ht_date) = '$tahun'");
-            while ($row = mysqli_fetch_array($user_htrans)) {
+            $query = mysqli_query($conn, "SELECT * FROM htrans WHERE MONTH(ht_date) LIKE '$bulan' AND YEAR(ht_date) = '$tahun'");
+            while ($row = mysqli_fetch_array($query)) {
         ?>
             <tr>
                 <td><?= $row["ht_id"] ?></td>

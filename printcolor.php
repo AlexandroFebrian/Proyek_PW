@@ -6,15 +6,6 @@
     if(!isset($_SESSION["admin"])){
         header("Location: index.php");
     }
-
-    $bulan = "%%";
-    $tahun = date("Y");
-    if (isset($_REQUEST["bulan"])) {
-        $bulan = $_REQUEST["bulan"];
-        $tahun = $_REQUEST["tahun"];
-    } else {
-        header("Location: adminreport.php");
-    }
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -27,17 +18,17 @@
 <body>
     <?php
         header("Content-Type: application/vnd.ms-excel");
-        header("Content-Disposition: attachment; filename=Laporan Barang Terjual.xls");
+        header("Content-Disposition: attachment; filename=Data Color.xls");
     ?>
     <table border 1px>
         <?php
-            $query = mysqli_query($conn, "SELECT * FROM dtrans JOIN htrans ON ht_id = dt_ht_id JOIN color ON co_id = dt_co_id JOIN kacamata ON kc_id = co_kc_id JOIN brand ON br_id = kc_br_id WHERE MONTH(ht_date) LIKE '$bulan' AND YEAR(ht_date) = '$tahun'");
+            $query = mysqli_query($conn, "SELECT * FROM color");
             while ($row = mysqli_fetch_array($query)) {
         ?>
             <tr>
                 <td><?= $row["co_id"] ?></td>
-                <td><?= $row["dt_qty"] ?></td>
-                <td><?= $row["dt_subtotal"] ?></td>
+                <td><?= $row["co_stock"] ?></td>
+                <td><?= $row["co_status"] ?></td>
             </tr>
         <?php
             }

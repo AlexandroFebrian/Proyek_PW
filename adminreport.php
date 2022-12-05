@@ -123,6 +123,7 @@
             TAHUN : 
             <input type="number" name="tahun" value="2022" min="2000" max="<?= date("Y") ?>"><br><br>
             <button type="submit" name="filtering">Filter</button>
+            <br><br>
             <button><a style="color: black; text-decoration: none;" href="printhtrans.php?bulan=<?= $bulan ?>&tahun=<?= $tahun ?>">Print Laporan Transaksi</a></button>
             <button><a style="color: black; text-decoration: none;" href="printdtrans.php?bulan=<?= $bulan ?>&tahun=<?= $tahun ?>">Print Laporan Barang Terjual</a></button>
         </div>
