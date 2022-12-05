@@ -12,6 +12,8 @@
     if (isset($_REQUEST["bulan"])) {
         $bulan = $_REQUEST["bulan"];
         $tahun = $_REQUEST["tahun"];
+    } else {
+        header("Location: adminreport.php");
     }
 ?>
 <!DOCTYPE html>
