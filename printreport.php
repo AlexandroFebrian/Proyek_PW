@@ -1,6 +1,8 @@
 <?php
     require_once("connection.php");
 
+    ob_start();
+
     if(!isset($_SESSION["admin"])){
         header("Location: index.php");
     }
@@ -26,12 +28,6 @@
         header("Content-Disposition: attachment; filename=Optik Primadona Financial Report.xls");
     ?>
     <table border 1px>
-        <tr>
-            <th>ID Transaksi</th>
-            <th>Tanggal Transaksi</th>
-            <th>Invoice</th>
-            <th>Total</th>
-        </tr>
         <?php
             $grandtotal = 0;
             $totalqty = 0;
