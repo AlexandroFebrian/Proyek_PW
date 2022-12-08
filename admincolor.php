@@ -61,6 +61,35 @@
 
     }
 
+    if(isset($_POST["yesimg"])){
+        $id = $_POST["yesimg"];
+        if (is_uploaded_file($_FILES['photoedit']['tmp_name'])) 
+        { 
+            //First, Validate the file name
+            if(empty($_FILES['photoedit']['name']))
+            {
+                echo " File name is empty! ";
+                exit;
+            }
+        
+            $upload_file_name = $_FILES['photoedit']['name'];
+        
+            //Save the file
+            $dest = __DIR__.'/storage/products/'.$upload_file_name;
+            $dest2 = 'storage/products/'.$upload_file_name;
+            if (move_uploaded_file($_FILES['photoedit']['tmp_name'], $dest)) 
+            {
+
+                mysqli_query($conn, "UPDATE color SET co_link = '$dest2' WHERE co_id = '$id'");
+
+                echo "<script>alert('$id')</script>";
+            }
+        }else{
+            echo "<script>alert('FIELD KOSONG')</script>";
+        }
+
+    }
+
     if(isset($_POST["yes"])){
         if($_POST["yes"] != ""){
             $id = $_POST["yes"];
@@ -180,6 +209,7 @@
                     <td><?= $row["co_status"] ?></td>
                     <td>
                         <button type="button" value="<?= $row["co_id"].'-'.$row["co_stock"] ?>" onclick="edit(this)">Edit Stock</button>
+                        <button type="button" value="<?= $row["co_id"].'|'.$row["co_link"] ?>" onclick="editimg(this)">Edit Image</button>
                         <?php 
                             if($row["co_status"] == 1){
                         ?>
@@ -229,6 +259,7 @@
                     <td><?= $row2["co_status"] ?></td>
                     <td>
                         <button type="button" value="<?= $row2["co_id"].'-'.$row2["co_stock"] ?>" onclick="edit(this)">Edit Stock</button>
+                        <button type="button" value="<?= $row2["co_id"].'|'.$row2["co_link"] ?>" onclick="editimg(this)">Edit Image</button>
                         <?php 
                             if($row2["co_status"] == 1){
                         ?>
@@ -280,6 +311,7 @@
                     <td><?= $row2["co_status"] ?></td>
                     <td>
                         <button type="button" value="<?= $row2["co_id"].'-'.$row2["co_stock"] ?>" onclick="edit(this)">Edit Stock</button>
+                        <button type="button" value="<?= $row2["co_id"].'|'.$row2["co_link"] ?>" onclick="editimg(this)">Edit Image</button>
                         <?php 
                             if($row2["co_status"] == 1){
                         ?>
@@ -336,10 +368,27 @@
                 <button type="button" onclick="change()">Change</button>
                 <button type="button" onclick="cancel()">Cancel</button>
             </div><br><br>
+            <div id="editimg" style="display: none;">
+                <h3>EDIT PHOTO</h3>
+                <h4 id="idimg"></h4>
+                BEFORE : 
+                <img src="" alt="asd" id="beforeimg" style="width: 200px;"><br><br>
+                CHANGE IMG :  
+                <input type="file" name="photoedit" accept="image/png, image/jpeg, image/jpg,image/webp"><br><br>
+                <button type="button" onclick="changeimg()">Change</button>
+                <button type="button" onclick="cancel()">Cancel</button>
+            </div><br><br>
+
             <div id="confirm" style="display: none; border: 1px solid black; border-radius: 5px; padding: 20px;">
                 <h2 style="margin: 0px;">CONFIRM CHANGE</h2><br>
                 ARE YOU SURE?<br><br>
                 <button type="submit" name="yes" id="yes" value="">YES</button>
+                <button type="button" onclick="no()">NO</button>
+            </div>
+            <div id="confirmimg" style="display: none; border: 1px solid black; border-radius: 5px; padding: 20px;">
+                <h2 style="margin: 0px;">CONFIRM CHANGE</h2><br>
+                ARE YOU SURE?<br><br>
+                <button type="submit" name="yesimg" id="yesimg" value="">YES</button>
                 <button type="button" onclick="no()">NO</button>
             </div>
         </div>
@@ -347,12 +396,15 @@
 </body>
 <script>
     isi = document.getElementById("edit")
+    isiimg = document.getElementById("editimg")
     conf = document.getElementById("confirm")
+    confimg = document.getElementById("confirmimg")
     id = ""
     stock = 0
 
     function edit(obj){
         isi.style.display = "block"
+        isiimg.style.display = "none"
 
         id = obj.value.split("-")[0]
         stock = obj.value.split("-")[1]
@@ -361,13 +413,27 @@
         document.getElementById("before").value = stock
     }
 
+    function editimg(obj){
+        isiimg.style.display = "block"
+        isi.style.display = "none"
+
+        id = obj.value.split("|")[0]
+        link = obj.value.split("|")[1]
+
+        document.getElementById("idimg").innerHTML = id
+        document.getElementById("beforeimg").src = link
+    }
+
     function cancel(){
         isi.style.display = "none"
+        isiimg.style.display = "none"
+        
         no()
     }
 
     function no(){
         conf.style.display = "none"
+        confimg.style.display = "none"
         document.getElementById("yes").value = ""
     }
 
@@ -375,6 +441,12 @@
         conf.style.display = "block"
 
         document.getElementById("yes").value = id
+    }
+
+    function changeimg(){
+        confimg.style.display = "block"
+
+        document.getElementById("yesimg").value = id
     }
 </script>
 </html>
