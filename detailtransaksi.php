@@ -35,8 +35,8 @@
                 $status = \Midtrans\Transaction::status($order_id);
                 $status = (array)$status;
                 if ($status["transaction_status"] == "settlement" && $transaksi[0]["ht_status"] == 2) {
-                    $query = mysqli_query($conn, "UPDATE htrans SET ht_status = '1' WHERE ht_id = '$ht_id'");
-                    $_SESSION["email"] = "OK";
+                    $query = mysqli_query($conn, "UPDATE htrans SET ht_status = '3' WHERE ht_id = '$ht_id'");
+                    $_SESSION["email"] = $ht_id;
                     require_once("mailer.php");
                     header("Location: detailtransaksi.php?ht_id=$ht_id");
                 }
@@ -59,7 +59,7 @@
             $status = \Midtrans\Transaction::status($order_id);
             $status = (array)$status;
             if ($status["transaction_status"] == "settlement" && $transaksi[0]["ht_status"] == 2) {
-                $query = mysqli_query($conn, "UPDATE htrans SET ht_status = '1' WHERE ht_id = '$ht_id'");
+                $query = mysqli_query($conn, "UPDATE htrans SET ht_status = '3' WHERE ht_id = '$ht_id'");
                 header("Location: detailtransaksi.php?ht_id=$ht_id");
             } else {
                 $cancel = \Midtrans\Transaction::cancel($order_id);
@@ -81,7 +81,7 @@
             $query = mysqli_query($conn, "UPDATE htrans SET ht_status = '0' WHERE ht_id = '$ht_id'");
             header("Location: transaksi.php");
         }
-        $_SESSION["email"] = "OK";
+        $_SESSION["email"] = $ht_id;
         require_once("mailer.php");
     }
 ?>
@@ -184,11 +184,11 @@
                 if (count($transaksi) != 0) {
             ?>
                     <div class="card p-5 mt-5">
-                        <h5 class="fw-bold m-0"><?php if ($transaksi[0]["ht_status"] == 1) { echo '<b class="text-success">Selesai</b>'; } elseif ($transaksi[0]["ht_status"] == 2) { echo '<b style="color: orange;">Menunggu Pembayaran</b>'; } else { echo '<b class="text-danger">Dibatalkan</b>'; } ?></h5>
+                        <h5 class="fw-bold m-0"><?php if ($transaksi[0]["ht_status"] == 1) { echo '<b class="text-success">Selesai</b>'; } elseif ($transaksi[0]["ht_status"] == 2) { echo '<b style="color: orange;">Menunggu Pembayaran</b>'; } elseif ($transaksi[0]["ht_status"] == 3) { echo '<b style="color: orange;">Menunggu Dikirim</b>'; } else { echo '<b class="text-danger">Dibatalkan</b>'; } ?></h5>
                         <hr>
                         <div class="row">
                             <?php
-                                if ($transaksi[0]["ht_status"] == 1) {
+                                if ($transaksi[0]["ht_status"] == 1 || $transaksi[0]["ht_status"] == 3) {
                             ?>
                                     <div class="col-6">
                                         <p>No. Invoice</p>

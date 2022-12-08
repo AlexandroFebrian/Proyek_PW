@@ -35,6 +35,12 @@
             mysqli_query($conn, "UPDATE users SET us_status = 1 WHERE us_id = '$id'");
         }
     }
+
+    if (isset($_POST["selesai"])) {
+        mysqli_query($conn, "UPDATE htrans SET ht_status = '1' WHERE ht_id = '" . $_POST["selesai"] . "'");
+        $_SESSION["email"] = $_POST["selesai"];
+        require_once("mailer.php");
+    }
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -73,7 +79,6 @@
             </tr>
             <?php
                 $result = mysqli_query($conn, "SELECT * FROM users");
-
                 
                 while($row = mysqli_fetch_array($result)){
             ?>
@@ -98,6 +103,34 @@
             <?php
                 }
             ?>
+            </tr>
+            <?php
+                }
+            ?>
+        </table>
+        <br><br>
+        <h2>TRANSAKSI BERJALAN</h2>
+        <table border 1px>
+            <tr>
+                <th>ID</th>
+                <th>Tanggal</th>
+                <th>Invoice</th>
+                <th>Total Belanja</th>
+                <th>Nama Pembeli</th>
+                <th>Action</th>
+            </tr>
+            <?php
+                $result = mysqli_query($conn, "SELECT * FROM htrans JOIN users ON us_id = ht_us_id WHERE ht_status = '3'");
+
+                while($row = mysqli_fetch_array($result)){
+            ?>
+            <tr>
+                <td><?= $row["ht_id"] ?></td>
+                <td><?= date_format(date_create($row["ht_date"]),"d F Y") ?></td>
+                <td><?= $row["ht_invoice"] ?></td>
+                <td><?= "Rp " . number_format($row["ht_total"], 0, "", ",") ?></td>
+                <td><?= $row["us_name"] ?></td>
+                <td><button name="selesai" type="submit" value="<?= $row["ht_id"] ?>">Sudah Dikirim</button></td>
             </tr>
             <?php
                 }

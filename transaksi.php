@@ -150,7 +150,7 @@
             ?>
                         <div class="row border ps-5 pt-4 pb-3 py-lg-0" style="align-items: center;">
                             <div class="row text-start mt-3">
-                                <p><?php if ($value["ht_status"] == 1) { echo '<b class="text-success">Selesai</b>'; } elseif ($value["ht_status"] == 2) { echo '<b style="color: orange;">Menunggu Pembayaran</b>'; } else { echo '<b class="text-danger">Dibatalkan</b>'; } ?> | <?= $date ?><?php if ($value["ht_status"] == 1) {echo " | " . $value["ht_invoice"]; } else { echo " | " . strrev(str_replace("OP", "", $value["ht_invoice"])); } ?></p>
+                                <p><?php if ($value["ht_status"] == 1) { echo '<b class="text-success">Selesai</b>'; } elseif ($value["ht_status"] == 2) { echo '<b style="color: orange;">Menunggu Pembayaran</b>'; } elseif ($value["ht_status"] == 3) { echo '<b style="color: orange;">Menunggu Dikirim</b>'; } else { echo '<b class="text-danger">Dibatalkan</b>'; } ?> | <?= $date ?><?php if ($value["ht_status"] == 1 || $value["ht_status"] == 3) {echo " | " . $value["ht_invoice"]; } else { echo " | " . strrev(str_replace("OP", "", $value["ht_invoice"])); } ?></p>
                             </div>
                             <div class="col-4 col-lg-2">
                                 <img src='<?= $value["co_link"] ?>' class="card-img-top">

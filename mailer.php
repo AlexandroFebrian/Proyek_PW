@@ -12,11 +12,11 @@
     use PHPMailer\PHPMailer\Exception;
 
     if (isset($_SESSION["email"])) {
-        unset($_SESSION["email"]);
         $cart_item = [];
         $transaksi = [];
-    
-        $ht_id = mysqli_fetch_array(mysqli_query($conn, "SELECT MAX(ht_id) FROM htrans"))[0];
+        
+        $ht_id = $_SESSION["email"];
+        unset($_SESSION["email"]);
         $query = mysqli_query($conn, "SELECT * FROM htrans JOIN dtrans ON dt_ht_id = ht_id JOIN users ON ht_us_id = us_id JOIN color ON dt_co_id = co_id JOIN kacamata ON co_kc_id = kc_id JOIN brand ON kc_br_id = br_id WHERE ht_id = '$ht_id'");
         while ($row = mysqli_fetch_array($query)) {
             $transaksi[] = $row;
@@ -44,6 +44,8 @@
                 $mail -> Subject = "Lampiran Invoice";
             } elseif ($transaksi[0]["ht_status"] == 2) {
                 $mail -> Subject = "Menunggu Pembayaran";
+            } elseif ($transaksi[0]["ht_status"] == 3) {
+                $mail -> Subject = "Menunggu Dikirim";
             } else {
                 $mail -> Subject = "Pesanan Dibatalkan";
             }
@@ -55,6 +57,8 @@
                 $body .= '<b style="color: green;">Selesai</b>';
             } elseif ($transaksi[0]["ht_status"] == 2) {
                 $body .= '<b style="color: orange;">Menunggu Pembayaran</b>';
+            } elseif ($transaksi[0]["ht_status"] == 3) {
+                $body .= '<b style="color: orange;">Menunggu Dikirim</b>';
             } else {
                 $body .= '<b style="color: red;">Dibatalkan</b>';
             }
@@ -62,7 +66,7 @@
                 <hr>
                 <div style="width: 100%; display: flex; flex-wrap: wrap;">
                     ';
-            if ($transaksi[0]["ht_status"] == 1) {
+            if ($transaksi[0]["ht_status"] == 1 || $transaksi[0]["ht_status"] == 3) {
                 $body .= '
                 <div style="width: 50%;">
                 <p>No. Invoice</p>

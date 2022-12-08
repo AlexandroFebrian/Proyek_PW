@@ -142,7 +142,7 @@
                 $query = mysqli_query($conn, "INSERT INTO dtrans VALUES('" . $value["co_id"] . "', '" . $value["ca_qty"] . "', '" . $value["ca_subtotal"] . "', '$new_htrans_id')");
             }
 
-            $_SESSION["email"] = "OK";
+            $_SESSION["email"] = $new_htrans_id;
             require_once("mailer.php");
 
             // Clear Cart
