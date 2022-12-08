@@ -21,6 +21,9 @@
         unset($_SESSION["harga-maximum"]);
         unset($_SESSION["search-val"]);
         $_SESSION["gender"] = "A";
+    }
+
+    if (!isset($_SESSION["urutkan"])) {
         $_SESSION["urutkan"] = "asc";
     }
     
